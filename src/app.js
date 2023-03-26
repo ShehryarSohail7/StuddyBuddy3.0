@@ -10,6 +10,22 @@ const tutor_db = require("./models/tutor")
 const student_db = require("./models/student")
 const admin_db = require("./models/admin")
 
+// check if admin_db collection is empty or not
+// add an admin if it is empty
+admin_db.find().then((result) => {
+    if (result.length == 0) {
+        // add an admin
+        const admin = new admin_db({
+            email: "admin123@gmail.com",
+            password: "admin123"
+        })
+        admin.save().then((result) => {
+        console.log(result) })}
+}
+).catch((error) => {
+    console.log(error)
+})
+
 const port = process.env.PORT || 3000
 
 const static_path = path.join(__dirname, "../public")
@@ -121,8 +137,9 @@ app.get ("/login" , (request,resolve) => {
 // create a new user for our database
 app.post ("/login" , async(request,resolve) => {
     try {
-        const { email, password , confirm_password } = request.body;
-        Signup.find({email}).then((result)=>{ 
+        const { email, password , confirm_password , user_type} = request.body;
+        if (user_type === "student"){
+        student_db.find({email}).then((result)=>{ 
             // const matchingEmails = result.filter((result) => result.email === email);
             // const emails = matchingEmails.map((matchingEmail) => matchingEmail.email);
             if (password !== confirm_password){
@@ -141,11 +158,68 @@ app.post ("/login" , async(request,resolve) => {
                         const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
                         resolve.send(script)
                     }else{
-                    resolve.send(email); //change this to render to new webpage (student,admin, tutor terminal)
+                    const message = " ==>Student login successful-here we enter the student terminal";
+                    resolve.send(email + message); //change this to render to new webpage (student terminal)
                     }
                 }
             }
-        })
+        })}else if (user_type === "tutor"){
+            tutor_db.find({email}).then((result)=>{ 
+                // const matchingEmails = result.filter((result) => result.email === email);
+                // const emails = matchingEmails.map((matchingEmail) => matchingEmail.email);
+                if (password !== confirm_password){
+                    const message = "your password and confirm password are different";
+                    const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
+                    resolve.send(script)
+                }else{
+                    if (result.length === 0){
+                        const message = "no such email exists";
+                        const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
+                        resolve.send(script)
+                    }else{
+                        const pass = result[0]
+                        if (pass.password !== password) {
+                            const message = "password is incorrect";
+                            const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
+                            resolve.send(script)
+                        }else{
+                        const message = " ==>Tutor login successful-here we enter the Tutor terminal";
+                        resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+                        }
+                    }
+                }
+            })
+
+
+        } else if (user_type === "admin"){
+            admin_db.find({email}).then((result)=>{ 
+                // const matchingEmails = result.filter((result) => result.email === email);
+                // const emails = matchingEmails.map((matchingEmail) => matchingEmail.email);
+                if (password !== confirm_password){
+                    const message = "your password and confirm password are different";
+                    const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
+                    resolve.send(script)
+                }else{
+                    if (result.length === 0){
+                        const message = "no such email exists";
+                        const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
+                        resolve.send(script)
+                    }else{
+                        const pass = result[0]
+                        if (pass.password !== password) {
+                            const message = "password is incorrect";
+                            const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
+                            resolve.send(script)
+                        }else{
+                        const message = " ==>Admin login successful-here we enter the Admin terminal";
+                        resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+                        }
+                    }
+                }
+            })
+
+            
+        }
     }catch(error){
     // Handle any errors
     resolve.status(500).send(error);
