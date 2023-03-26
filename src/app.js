@@ -165,7 +165,8 @@ app.post ("/login" , async(request,resolve) => {
                         resolve.send(script)
                     }else{
                     const message = " ==>Student login successful-here we enter the student terminal";
-                    resolve.send(email + message); //change this to render to new webpage (student terminal)
+                    // resolve.send(email + message); //change this to render to new webpage (student terminal)
+                    resolve.render("student_terminal")
                     }
                 }
             }
@@ -190,7 +191,8 @@ app.post ("/login" , async(request,resolve) => {
                             resolve.send(script)
                         }else{
                         const message = " ==>Tutor login successful-here we enter the Tutor terminal";
-                        resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+                        // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+                        resolve.render("tutor_terminal")
                         }
                     }
                 }
@@ -218,7 +220,8 @@ app.post ("/login" , async(request,resolve) => {
                             resolve.send(script)
                         }else{
                         const message = " ==>Admin login successful-here we enter the Admin terminal";
-                        resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+                        // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+                        resolve.render("admin_terminal")
                         }
                     }
                 }
