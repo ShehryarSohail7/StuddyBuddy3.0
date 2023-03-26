@@ -4,11 +4,17 @@ const app = express()
 const hbs = require("hbs")
 
 require("./db/conn")
-//databases
-// const Signup = require("./models/signups")
+// Databases connected (All collections)
 const tutor_db = require("./models/tutor")
 const student_db = require("./models/student")
 const admin_db = require("./models/admin")
+
+const ad_db = require("./models/ad")
+const ann_db = require("./models/ann")
+const appt_db = require("./models/appt")
+const notif_db = require("./models/notif")
+const resources_db = require("./models/resources")
+const review_db = require("./models/review")
 
 // check if admin_db collection is empty or not
 // add an admin if it is empty
