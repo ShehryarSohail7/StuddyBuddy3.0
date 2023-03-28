@@ -47,6 +47,19 @@ app.set("view engine" , "hbs")
 app.set("views", template_path)
 hbs.registerPartials(partials_path)
 
+
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, './signup_uploads');
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
+
+
 app.get ("/" , (request,resolve) => {
     resolve.render("index")
     })
@@ -59,13 +72,18 @@ app.get ("/signup_student" , (request,resolve) => { //to go to that page
     resolve.render("signup_student")
     })
 
+    
 // create a new user for our database
-app.post ("/signup_student" , async(request,resolve) => {
+app.post ("/signup_student" , upload.single('photo'), async(request,resolve) => {
     try{
         const capture_data = new student_db({
             name: request.body.name,
             email: request.body.email,
-            password:request.body.password
+            password:request.body.password,
+            // photo: request.file.path
+            photo: request.file ? request.file.path : 'signup_uploads\\default123.jpg' 
+            // Set the image attribute to the path of the uploaded file, or the
+            // default image path if no file was uploaded
         }) 
         const signup_saved = await capture_data.save()
         const message = "Sign up as Student Successful";
@@ -105,12 +123,14 @@ app.get ("/signup_tutor" , (request,resolve) => { //to go to that page
     })
 
 // create a new user for our database
-app.post ("/signup_tutor" , async(request,resolve) => {
+app.post ("/signup_tutor", upload.single('photo'), async(request,resolve) => {
     try{
+        console.log(request.file)
         const capture_data = new tutor_db({
             name: request.body.name,
             email: request.body.email,
-            password:request.body.password
+            password:request.body.password,
+            photo: request.file ? request.file.path : 'signup_uploads\\default123.jpg' 
         }) 
         const signup_saved = await capture_data.save()
         const message = "Sign up as Tutor Successful";

@@ -6,6 +6,7 @@ const student = new Schema({
   name: {type:String, required:true},
   email: {type:String, required:true,unique:true},
   password:{type:String, required:true},
+  photo: {type:String, required:false},
   ads: {type: [Schema.Types.ObjectId], required:false, default:[]},
   appoint :  {type: [Schema.Types.ObjectId], required:false, default:[]},
   review: {type: [Schema.Types.ObjectId], required:false, default:[]}
