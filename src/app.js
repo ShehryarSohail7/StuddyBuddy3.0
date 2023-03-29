@@ -59,7 +59,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-
+console.log("hello world")
 app.get ("/" , (request,resolve) => {
     resolve.render("index")
     })
