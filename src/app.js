@@ -184,9 +184,21 @@ app.post ("/login" , async(request,resolve) => {
                         const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
                         resolve.send(script)
                     }else{
-                    const message = " ==>Student login successful-here we enter the student terminal";
-                    // resolve.send(email + message); //change this to render to new webpage (student terminal)
-                    resolve.render("student_terminal")
+                        //storing login details
+                        store_email = pass.email;
+                        store_password = pass.password;
+                        console.log(store_email)
+                        console.log(store_password)
+                        // transfer of variables to another file
+                        module.exports = {
+                            store_email: store_email,
+                            store_password: store_password,
+                            user_type: user_type
+                        };
+                        // const { store_email, store_password } = require('./app');
+                        const message = " ==>Student login successful-here we enter the student terminal";
+                        // resolve.send(email + message); //change this to render to new webpage (student terminal)
+                        resolve.render("student_terminal")
                     }
                 }
             }
@@ -210,9 +222,19 @@ app.post ("/login" , async(request,resolve) => {
                             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
                             resolve.send(script)
                         }else{
-                        const message = " ==>Tutor login successful-here we enter the Tutor terminal";
-                        // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
-                        resolve.render("tutor_terminal")
+                            store_email = pass.email;
+                            store_password = pass.password;
+                            console.log(store_email)
+                            console.log(store_password)
+                            // transfer of variables to another file
+                            module.exports = {
+                            store_email: store_email,
+                            store_password: store_password,
+                            user_type: user_type
+                        };
+                            const message = " ==>Tutor login successful-here we enter the Tutor terminal";
+                            // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+                            resolve.render("tutor_terminal")
                         }
                     }
                 }
@@ -239,9 +261,19 @@ app.post ("/login" , async(request,resolve) => {
                             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
                             resolve.send(script)
                         }else{
-                        const message = " ==>Admin login successful-here we enter the Admin terminal";
-                        // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
-                        resolve.render("admin_terminal")
+                            store_email = pass.email;
+                            store_password = pass.password;
+                            console.log(store_email)
+                            console.log(store_password)
+                            // transfer of variables to another file
+                            module.exports = {
+                            store_email: store_email,
+                            store_password: store_password,
+                            user_type: user_type
+                        };
+                            const message = " ==>Admin login successful-here we enter the Admin terminal";
+                            // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+                            resolve.render("admin_terminal")
                         }
                     }
                 }
@@ -254,6 +286,75 @@ app.post ("/login" , async(request,resolve) => {
     resolve.status(500).send(error);
     }
 })  
+
+
+app.get ("/settings" , (request,resolve) => {
+    resolve.render("settings")
+    })
+
+app.get ("/tutor_terminal" , (request,resolve) => {
+    resolve.render("tutor_terminal")
+    })
+app.get ("/student_terminal" , (request,resolve) => {
+    resolve.render("student_terminal")
+    })
+app.get ("/admin_terminal" , (request,resolve) => {
+    resolve.render("admin_terminal")
+    })
+
+app.get ("/update_password" , (request,resolve) => {
+    resolve.render("update_password")
+    })
+
+app.post ("/update_password" , async(request,resolve) => {
+    try {
+        const {old_pass, new_pass , confirm_pass} = request.body;
+        console.log(old_pass, new_pass , confirm_pass)
+        const { store_password ,  store_email ,user_type} = require('./app');
+        console.log(store_email)
+        console.log(store_password)
+            if (store_password !== old_pass){
+                const message = "the old password you typed in is incorrect"
+                const script = `<script>alert('${message}'); window.location.href = '/update_password';</script>`
+                resolve.send(script)
+            }else{
+                if (new_pass !== confirm_pass){
+                    const message = "your new password and confirm password are different";
+                    const script = `<script>alert('${message}'); window.location.href = '/update_password';</script>`
+                    resolve.send(script)
+                }else{
+                    if (user_type === "student"){
+                    const updatedStudent = await student_db.findOneAndUpdate(
+                        { email: store_email },
+                        { password: new_pass },
+                        { new: true } // Return the updated document
+                      );}
+                    else if (user_type === "tutor"){
+                        const updatedTutor = await tutor_db.findOneAndUpdate(
+                            { email: store_email },
+                            { password: new_pass },
+                            { new: true } // Return the updated document
+                          );}
+                    else if (user_type === "admin"){
+                        const updatedAdmin = await admin_db.findOneAndUpdate(
+                            { email: store_email },
+                            { password: new_pass },
+                            { new: true } // Return the updated document
+                          );
+                    }
+                      const message = "password successfully updated, please login again with your new password";
+                      const script = `<script>alert('${message}'); window.location.href = '/login';</script>`
+                      resolve.send(script)
+                }
+            }
+        }catch(error){
+            // Handle any errors
+            resolve.status(500).send(error);
+            }
+        })
+
+
+
 
 app.listen(port , ()=> {
 console.log (`server is running at ${port}`)
