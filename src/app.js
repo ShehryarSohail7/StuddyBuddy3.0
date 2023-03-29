@@ -288,9 +288,16 @@ app.post ("/login" , async(request,resolve) => {
 })  
 
 
-app.get ("/settings" , (request,resolve) => {
-    resolve.render("settings")
-    })
+// app.get ("/settings" , (request,resolve) => {
+//     resolve.render("settings")
+//     })
+
+
+app.get("/settings", (req, res) => {
+    const { store_password ,  store_email ,user_type} = require('./app')
+    const userType = user_type; // e.g. "student", "tutor", or "admin"
+    res.render("settings", { userTypeIsStudent: userType === "student", userTypeIsTutor: userType === "tutor", userTypeIsAdmin: userType === "admin" });
+});
 
 app.get ("/tutor_terminal" , (request,resolve) => {
     resolve.render("tutor_terminal")
@@ -302,9 +309,16 @@ app.get ("/admin_terminal" , (request,resolve) => {
     resolve.render("admin_terminal")
     })
 
-app.get ("/update_password" , (request,resolve) => {
-    resolve.render("update_password")
-    })
+// app.get ("/update_password" , (request,resolve) => {
+//     resolve.render("update_password")
+//     })
+
+
+app.get("/update_password", (req, res) => {
+    const { store_password ,  store_email ,user_type} = require('./app')
+    const userType = user_type; // e.g. "student", "tutor", or "admin"
+    res.render("update_password", { userTypeIsStudent: userType === "student", userTypeIsTutor: userType === "tutor", userTypeIsAdmin: userType === "admin" });
+});
 
 app.post ("/update_password" , async(request,resolve) => {
     try {

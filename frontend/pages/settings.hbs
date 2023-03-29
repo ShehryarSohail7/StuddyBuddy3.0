@@ -8,7 +8,14 @@
 </head>
 <body>
     {{> header}}
-    {{> navbar_student}}
+    {{!-- {{> navbar_student}} --}}
+    {{#if userTypeIsStudent}}
+        {{> navbar_student}}
+    {{else if userTypeIsTutor}}
+        {{> navbar_tutor}}
+    {{else if userTypeIsAdmin}}
+        {{> navbar_admin}}
+    {{/if}}
 
     <div class="container">
         <h1>Settings</h1>
