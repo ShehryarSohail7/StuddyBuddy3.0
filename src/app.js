@@ -35,8 +35,8 @@ admin_db.find().then((result) => {
 const port = process.env.PORT || 3000
 
 const static_path = path.join(__dirname, "../public")
-const template_path = path.join(__dirname, "../templates/views")
-const partials_path = path.join(__dirname, "../templates/partials")
+const template_path = path.join(__dirname, "../frontend/pages")
+const partials_path = path.join(__dirname, "../frontend/components")
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
