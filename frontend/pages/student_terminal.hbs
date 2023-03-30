@@ -1,20 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tutors Data</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            width: calc(33.33% - 40px);
+            margin: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card p {
+            margin: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .tutors-header {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .tutors-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tutors-card {
+            width: calc(33.33% - 40px);
+            margin: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .tutors-card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .tutors-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .tutors-card p {
+            margin: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
-    {{> navbar_student}}
+    <br>
+    <br>
+    <h1 style="text-align: center;">Student Terminal</h1>
+    <!-- Search bar -->
+    <div class="search-container" style="text-align: center;">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button id="search-button">Search</button>
+    </div>
 
     <div class="container">
-        <h1>Student Terminal opened</h1>
+        <h1 class="tutors-header"></h1>
+        <div class="tutors-container" id="tutors-data">
+            <!-- tutors data will be displayed here -->
+        </div>
     </div>
-        <div class="container">
-        <h1>Welcome</h1>
-        {{!-- <a href="/settings">Student</a> --}}
-    
 </body>
-</html>
+<script>
+    // Function to fetch data from the /ads endpoint and display it on the page
+    const displayAds = () => {
+        fetch('/ads')
+            .then(response => response.json())
+            .then(data => {
+                let html = "";
+                data.forEach((ad, index) => {
+                    html += `
+            <div class="tutors-card">
+              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+              <h4 style="text-align: center;">${ad.time}</h4>
+              <p>${ad.subject} - ${ad.class}</p>
+              <p>${ad.price}</p>
+            </div>
+          `;
+                    if (index % 3 === 2 || index === data.length - 1) {
+                        html += '</div>';
+                    }
+                });
+                document.getElementById("tutors-data").innerHTML = html;
+            })
+            .catch(err => console.error(err));
+    };
+
+    // Call the displayAds function to initially display all ads
+    displayAds();
+
+    // Add event listener to search button
+    document.getElementById("search-button").addEventListener("click", () => {
+        const searchQuery = document.getElementById("search-input").value.toLowerCase();
+        fetch(`/search?q=${searchQuery}`)
+            .then(response => response.json())
+            .then(data => {
+                let html = "";
+                data.forEach((ad, index) => {
+                    html += `
+            <div class="tutors-card">
+              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+              <h4 style="text-align: center;">${ad.time}</h4>
+              <p>${ad.subject} - ${ad.class}</p>
+              <p>${ad.price}</p>
+            </div>
+          `;
+                    if (index % 3 === 2 || index === data.length - 1) {
+                        html += '</div>';
+                    }
+                });
+                document.getElementById("tutors-data").innerHTML = html;
+                // Add the current search query to the browser history
+                history.pushState({ searchQuery }, null, `/search?q=${searchQuery}`);
+            })
+            .catch(err => console.error(err));
+    });
+
+    // Add event listener to popstate event (back/forward buttons)
+    window.addEventListener("popstate", (event) => {
+        if (event.state == null) {
+            // If there is no search query in the history state, display all ads
+            displayAds();
+        } else {
+            // Otherwise, display the search results for the previous search query
+            const searchQuery = event.state.searchQuery;
+            document.getElementById("search-input").value = searchQuery;
+            fetch(`/search?q=${searchQuery}`)
+                .then(response => response.json())
+                .then(data => {
+                    let html = "";
+                    data.forEach((ad, index) => {
+                        html += `
+              <div class="tutors-card">
+                <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+                <h4 style="text-align: center;">${ad.time}</h4>
+                <p>${ad.subject} - ${ad.class}</p>
+                <p>${ad.price}</p>
+              </div>
+            `;
+                        if (index % 3 === 2 || index === data.length - 1) {
+                            html += '</div>';
+                        }
+                    });
+                    document.getElementById("tutors-data").innerHTML = html;
+                })
+                .catch(err => console.error(err));
+        }
+    });
+</script>
