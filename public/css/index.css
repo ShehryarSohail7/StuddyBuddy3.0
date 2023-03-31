@@ -1,0 +1,112 @@
+.navbar{
+position: absolute;
+width: 1280px;
+height: 35px;
+left: 0px;
+top: -3px;
+
+background: #FFD059;
+}
+
+.logo{
+position: absolute;
+width: 175px;
+height: 45px;
+left: 7px;
+top: 35px;
+
+}
+
+.screen{
+position: absolute;
+width: 500px;
+height: 450px;
+left: 600px;
+top: 140px;
+}
+
+h1{
+position: absolute;
+width: 469px;
+height: 276px;
+left: 60px;
+top: 150px;
+
+font-family: 'TS Safaa';
+font-style: normal;
+font-weight: 500;
+font-size: 40.0885px;
+line-height: 71px;
+
+color: #000000;
+}
+
+p1{
+position: absolute;
+width: 469px;
+height: 276px;
+left: 60px;
+top: 310px;
+
+font-family: 'TS Safaa';
+font-style: normal;
+font-weight: 500;
+font-size: 40.0885px;
+line-height: 71px;
+color: #FF90E8;
+}
+
+.button3{
+position: absolute;
+width: 154px;
+height: 47px;
+left: 60px;
+top: 400px;
+background: #FFA7E6;
+border-radius: 100px;
+font-family: 'TS Safaa';
+font-style: normal;
+font-weight: 500;
+font-size: 18px;
+line-height: 45px;
+border: none;
+text-align: center;
+color: #FFFFFF;
+text-decoration: none;
+}
+
+.button1{
+position: absolute;
+right: 130px;
+top: 45px;
+width: 120px;
+height: 43px;
+border: none;
+text-decoration: none;
+font-family: 'TS Safaa';
+font-style: normal;
+font-weight: 500;
+font-size: 18px;
+line-height: 32px;
+text-align: center;
+color: #000000;
+}
+
+.button2{
+position: absolute;
+right: 10px;
+top: 40px;
+width: 120px;
+height: 43px;
+text-decoration: none;
+background: #FFD059;
+border-radius: 100px;
+font-family: 'TS Safaa';
+font-style: normal;
+font-weight: 500;
+font-size: 18px;
+line-height: 40px;
+border: none;
+text-align: center;
+color: #000000;
+}
