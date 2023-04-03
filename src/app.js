@@ -474,16 +474,46 @@ app.post("/addann", async (req, res) => {
   }
 });
 
+// app.get("/viewann", async (req, res) => {
+//   try {
+//     // Find all the announcements in the database and sort them by createdAt date in descending order
+//     const announcements = await ann_db.find().select("content createdAt");
+
+//     // Send the announcements back as a response
+//     res.status(200).json({ announcements });
+//   } catch (err) {
+//     // Send a response indicating an error occurred
+//     res.status(500).json({ message: "Failed to get announcements." });
+//   }
+// });
 app.get("/viewann", async (req, res) => {
   try {
     // Find all the announcements in the database and sort them by createdAt date in descending order
-    const announcements = await ann_db.find().select("content createdAt");
+    const announcements = await ann_db
+      .find()
+      .select("content createdAt")
+      .sort({ createdAt: -1 });
 
     // Send the announcements back as a response
     res.status(200).json({ announcements });
   } catch (err) {
     // Send a response indicating an error occurred
     res.status(500).json({ message: "Failed to get announcements." });
+  }
+});
+
+app.delete("/deleteann", async (req, res) => {
+  // works greatly with id
+  try {
+    const adId = req.body._id;
+    const deletedAd = await ann_db.findByIdAndDelete(adId);
+    if (!deletedAd) {
+      return res.status(404).send("announcement not found");
+    }
+    res.send("announcement deleted successfully");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error");
   }
 });
 
