@@ -112,12 +112,7 @@
         <div class="tutors-row" id="announcement-data"></div>
     </div>
 
-    {{!-- <div id="content"></div> --}}
-
-
-    
-
-      
+    {{!-- <div id="content"></div> --}}   
 
 </body>
 
@@ -234,17 +229,21 @@
     }
 
     function displayAnnouncementsPage() {
-        document.getElementById("tutors-data").innerHTML = "";  // setting html other than annouuncements to null
+        document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
         fetch("/viewann")
             .then((response) => response.json())
             .then((data) => {
-                let html = ``;
+                let html = `
+            <button id="add-announcement-button" onclick="displayPopup()">Add Announcement</button>
+            `;
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
-                    <div class="announcement-card">
-                        <h1>${data.announcements[i].content}</h1>
-                        <p>${data.announcements[i].createdAt}</p>
-                    </div>`;
+          <div class="announcement-card">
+            <h1>${data.announcements[i].content}</h1>
+            <p>${data.announcements[i].createdAt}</p>
+            <br>
+            <button onclick="deleteAnnouncement('${data.announcements[i]._id}')">Delete announcement</button>
+          </div>`;
                 }
                 document.getElementById("announcement-data").innerHTML = html;
             })
@@ -253,6 +252,93 @@
                 console.log("failure");
             });
     }
+
+    function displayPopup() {
+        // disable the "Add Announcement" button
+        const addAnnouncementButton = document.getElementById("add-announcement-button");
+        addAnnouncementButton.disabled = true;
+
+        // create the pop-up dialog
+        const popup = document.createElement("div");
+        popup.classList.add("popup");
+
+        // create the input field
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Enter your announcement here...";
+        input.required = true; // add required attribute
+        popup.appendChild(input);
+
+        // create the submit button
+        const button = document.createElement("button");
+        button.textContent = "Submit";
+        button.onclick = () => {
+            const content = input.value.trim();
+            if (content.length === 0) {
+                // if the announcement is empty or whitespace-only, show an error message
+                const error = document.createElement("p");
+                error.textContent = "Announcement cannot be empty.";
+                error.classList.add("error-message");
+                popup.appendChild(error);
+                return;
+            }
+            saveAnnouncement(content);
+            popup.remove();
+            addAnnouncementButton.disabled = false; // enable the "Add Announcement" button
+        };
+        popup.appendChild(button);
+
+        // add the pop-up dialog to the page
+        const announcementsDiv = document.getElementById("announcement-data");
+        announcementsDiv.insertBefore(popup, announcementsDiv.firstChild);
+    }
+
+
+        function saveAnnouncement(content) {
+            // send a POST request to the backend to save the new announcement
+            fetch("/addann", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ contentt: content })
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // refresh the announcements list
+                    displayAnnouncementsPage();
+                })
+                .catch((err) => {
+                    // Display an error message if the request fails
+                    console.log("failure");
+                });
+        }
+
+
+
+
+    function deleteAnnouncement(id) {
+        fetch("/deleteann", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ _id: id }),
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                console.log(data);
+                displayAnnouncementsPage(); // refresh the list of announcements after successful deletion
+            })
+            .catch((err) => {
+                // Display an error message if the request fails
+                console.log("failure");
+            });
+    }
+
+
+
+
 
 
 
