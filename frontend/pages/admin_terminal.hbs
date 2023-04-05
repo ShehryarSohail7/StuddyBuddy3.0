@@ -123,7 +123,6 @@
         displayHomePage();
     }
 
-
     navbarLinks.forEach(link => {
         link.addEventListener("click", event => {
             event.preventDefault();
@@ -170,22 +169,26 @@
 
 
     ///////////////////
-    function displayAdsPage() {
+  function displayAdsPage() {
+        // Delete all existing HTML in the tutors-data element
+        displayHomePage();
+        document.getElementById("tutors-data").innerHTML = '';
+
         fetch('/ads')
             .then(response => response.json())
             .then(data => {
                 let html = ``;
                 data.forEach((ad, index) => {
                     html += `
-                <div class="tutors-card">
-                    <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
-                    <h4>${ad.time}</h4>
-                    <p>${ad.subject} - ${ad.class}</p>
-                    <p>${ad.price}</p>
-                    <form onsubmit="try { removeAd('${ad._id}'); } catch(err) { console.error(err); } return false;">
-                        <button type="submit" style="padding: 5px;margin-bottom:5px">Remove Ad</button>
-                    </form>
-                </div>`;
+            <div class="tutors-card">
+                <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+                <h4>${ad.time}</h4>
+                <p>${ad.subject} - ${ad.class}</p>
+                <p>${ad.price}</p>
+                <form onsubmit="try { removeAd('${ad._id}'); } catch(err) { console.error(err); } return false;">
+                    <button type="submit" style="padding: 5px;margin-bottom:5px">Remove Ad</button>
+                </form>
+            </div>`;
                     if (index % 3 === 2 || index === data.length - 1) {
                         html += '</div><div class="tutors-row">';
                     }
@@ -194,6 +197,7 @@
             })
             .catch(err => console.error(err));
     }
+
 
 
     function removeAd(adId) {
@@ -228,7 +232,8 @@
         // Add code to display resources page here
     }
 
-    function displayAnnouncementsPage() {
+    function displayAnnouncementsPage() 
+    {
         document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
         fetch("/viewann")
             .then((response) => response.json())
@@ -293,8 +298,8 @@
         announcementsDiv.insertBefore(popup, announcementsDiv.firstChild);
     }
 
-
-        function saveAnnouncement(content) {
+        function saveAnnouncement(content)
+        {
             // send a POST request to the backend to save the new announcement
             fetch("/addann", {
                 method: "POST",
@@ -314,9 +319,6 @@
                 });
         }
 
-
-
-
     function deleteAnnouncement(id) {
         fetch("/deleteann", {
             method: "DELETE",
@@ -335,18 +337,8 @@
                 console.log("failure");
             });
     }
-
-
-
-
-
-
-
+    
     function displaySettingsPage() {
       window.location.href = "/settings";
         }
-
-
-  
-
 </script>

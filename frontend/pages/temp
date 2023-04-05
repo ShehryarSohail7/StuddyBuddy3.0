@@ -147,16 +147,15 @@
         }
     </style>
 </head>
-home postad viewMyAds appointments requests reviews settings
+
 <body>
     <div class="navbar">
         <a class="active" href="#" id="home-link">Home</a>
-        <a href="#" id="ads-link">Post an Ad</a>
-        <a href="#" id="reviews-link">View My Ads</a>
-        <a href="#" id="reviews-link">My Appointments</a>
-        <a href="#" id="resources-link">Requests</a>
-        <a href="#" id="announcements-link">View Announcements</a>
-        <a href="#" id="announcements-link">View my reviews</a>
+        <a href="#" id="ads-link">Search a Tutor</a>
+        <a href="#" id="reviews-link">Add Reviews</a>
+        <a href="#" id="reviews-link">Delete Reviews</a>
+        <a href="#" id="resources-link">Resources</a>
+        <a href="#" id="announcements-link">Announcements</a>
         {{!-- <a href="#" id="settings-link">Settings</a> --}}
         <a href="/frontend/pages/settings.hbs">Settings</a>
     </div>
@@ -202,7 +201,23 @@ home postad viewMyAds appointments requests reviews settings
 
             if (page === "Home") {
                 displayHomePage();
-            } 
+            } else if (page === "Search a Tutor") {
+                displayAds();
+            }
+            else if (page === "Add Reviews") {
+                displayReviewsPage();
+            }
+            else if (page === "Resources") {
+                displayResourcesPage();
+            } else if (page === "Announcements") {
+                displayAnnouncementsPage();
+            }
+            else if (page === "Settings") {
+                displaySettingsPage();
+            }
+            else if (page == "Delete Reviews") {
+                displayDeleteReview();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -226,7 +241,7 @@ home postad viewMyAds appointments requests reviews settings
 
         document.getElementById("tutors-data").innerHTML = `
             <div class="container">
-                <h1 style="text-align: center;">Welcome Tutor</h1>
+                <h1 style="text-align: center;">Welcome Student</h1>
                 <p>ha bhai yeh bchal raha hy home</p>
                 <div class="tutors-row" id="tutors-data"></div>
             </div>

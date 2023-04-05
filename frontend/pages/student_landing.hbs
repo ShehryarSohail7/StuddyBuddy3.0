@@ -87,8 +87,7 @@
             margin: 10px;
             color: gray;
         }
-
-        .card {
+             .card {
             width: calc(33.33% - 40px);
             margin: 20px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -145,45 +144,45 @@
             font-size: 18px;
             text-align: center;
         }
+
     </style>
 </head>
-home postad viewMyAds appointments requests reviews settings
+
 <body>
     <div class="navbar">
         <a class="active" href="#" id="home-link">Home</a>
-        <a href="#" id="ads-link">Post an Ad</a>
-        <a href="#" id="reviews-link">View My Ads</a>
-        <a href="#" id="reviews-link">My Appointments</a>
-        <a href="#" id="resources-link">Requests</a>
-        <a href="#" id="announcements-link">View Announcements</a>
-        <a href="#" id="announcements-link">View my reviews</a>
+        <a href="#" id="ads-link">Search a Tutor</a>
+        <a href="#" id="reviews-link">Add Reviews</a>
+        <a href="#" id="reviews-link">Delete Reviews</a>
+        <a href="#" id="resources-link">Resources</a>
+        <a href="#" id="announcements-link">Announcements</a>
         {{!-- <a href="#" id="settings-link">Settings</a> --}}
         <a href="/frontend/pages/settings.hbs">Settings</a>
     </div>
 
     <!-- Content -->
-    <div class="search-container" style="text-align: center;margin: top 5px;">
-        <input type="text" id="search-input" placeholder="Search...">
-        <button id="search-button">Search</button>
+        <div class="search-container" style="text-align: center;margin: top 5px;">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button id="search-button">Search</button>
+        </div>
+        
+        <div class="container">
+            <h1 class="tutors-header"></h1>
+            <div class="tutors-container" id="tutors-data">
+                <!-- tutors data will be displayed here -->
+            </div>
+
+    <div class="container">
+        <h1 style="text-align: center;"></h1>
+        <div class="tutors-row" id="tutors-data"></div>
     </div>
 
     <div class="container">
-        <h1 class="tutors-header"></h1>
-        <div class="tutors-container" id="tutors-data">
-            <!-- tutors data will be displayed here -->
-        </div>
+        <h1 style="text-align: center;"></h1>
+        <div class="tutors-row" id="announcement-data"></div>
+    </div>
 
-        <div class="container">
-            <h1 style="text-align: center;"></h1>
-            <div class="tutors-row" id="tutors-data"></div>
-        </div>
-
-        <div class="container">
-            <h1 style="text-align: center;"></h1>
-            <div class="tutors-row" id="announcement-data"></div>
-        </div>
-
-        {{!-- <div id="content"></div> --}}
+    {{!-- <div id="content"></div> --}}
 
 </body>
 
@@ -202,7 +201,24 @@ home postad viewMyAds appointments requests reviews settings
 
             if (page === "Home") {
                 displayHomePage();
-            } 
+            } else if (page === "Search a Tutor") {
+                displayAds();
+            }
+             else if (page === "Add Reviews") {
+                displayReviewsPage();
+            }
+             else if (page === "Resources") {
+                displayResourcesPage();
+            } else if (page === "Announcements") {
+                displayAnnouncementsPage();
+            }
+            else if (page === "Settings") {
+                displaySettingsPage();
+            }
+            else if (page=="Delete Reviews")
+            {
+                displayDeleteReview();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -226,7 +242,7 @@ home postad viewMyAds appointments requests reviews settings
 
         document.getElementById("tutors-data").innerHTML = `
             <div class="container">
-                <h1 style="text-align: center;">Welcome Tutor</h1>
+                <h1 style="text-align: center;">Welcome Student</h1>
                 <p>ha bhai yeh bchal raha hy home</p>
                 <div class="tutors-row" id="tutors-data"></div>
             </div>
@@ -235,10 +251,10 @@ home postad viewMyAds appointments requests reviews settings
 
 
     ///////////////////
-    const displayAds = () => {
-
-        displayHomePage();
-        document.querySelector('.search-container').style.display = 'block';
+   const displayAds = () => {
+    
+    displayHomePage();
+     document.querySelector('.search-container').style.display = 'block';
         fetch('/ads')
             .then(response => response.json())
             .then(data => {
@@ -264,12 +280,12 @@ home postad viewMyAds appointments requests reviews settings
     };
 
     // Call the displayAds function to initially display all ads
-
+  
 
     // Add event listener to search button
     document.getElementById("search-button").addEventListener("click", () => {
         // To show the div with class "search-container"
-
+       
 
         const searchQuery = document.getElementById("search-input").value.toLowerCase();
         fetch(`/search?q=${searchQuery}`)
@@ -300,7 +316,7 @@ home postad viewMyAds appointments requests reviews settings
 
 
 
-
+    
     function displayReviewsPage() {
         // Add code to display reviews page here
     }
@@ -310,9 +326,9 @@ home postad viewMyAds appointments requests reviews settings
     }
 
     function displayDeleteReview() {
-
+        
     }
-
+    
     function displayAnnouncementsPage() {
         document.querySelector('.search-container').style.display = 'none';
         document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
@@ -342,16 +358,16 @@ home postad viewMyAds appointments requests reviews settings
     function displaySettingsPage() {
         window.location.href = "/settings";
     }
-    // Define a global variable to store the name of the last executed function
-    let lastFunctionName = 'displayHomePage';
+// Define a global variable to store the name of the last executed function
+let lastFunctionName = 'displayHomePage';
 
-    // Update the pushState function to store the name of the current function in the history state object
-    window.history.pushState({ functionName: lastFunctionName }, page, `/${page.toLowerCase()}`);
+// Update the pushState function to store the name of the current function in the history state object
+window.history.pushState({ functionName: lastFunctionName }, page, `/${page.toLowerCase()}`);
 
-    // Add code to the popstate event listener to execute the last executed function again
-    window.addEventListener('popstate', (event) => {
-        displayHomePage();
-    }
-    );
+// Add code to the popstate event listener to execute the last executed function again
+window.addEventListener('popstate', (event) => {
+ displayHomePage();
+}
+);
 
 </script>

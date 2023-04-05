@@ -206,7 +206,7 @@ app.post("/login", async (request, resolve) => {
               const message =
                 " ==>Student login successful-here we enter the student terminal";
               // resolve.send(email + message); //change this to render to new webpage (student terminal)
-              resolve.render("student_terminal");
+              resolve.render("student_landing");
             }
           }
         }
