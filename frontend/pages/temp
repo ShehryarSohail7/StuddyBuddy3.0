@@ -422,6 +422,25 @@ home postad viewMyAds appointments requests reviews settings
              alert("Username not found. Ad cannot be posted.");
              return;
          }
+
+         // Send a POST request to the server to post the ad
+         const adResponse = await fetch("/postad", {
+             method: "POST",
+             headers: {
+                 "Content-Type": "application/json",
+             },
+             body: JSON.stringify({
+                 subject: subjectsInput.value,
+                 class: gradeInput.value,
+                 time: nameInput.value,
+                 price: costInput.value,
+                 image: imageInput.value,
+             }),
+         });
+
+         // Get the response data and display it to the user
+         const responseData = await adResponse.json();
+         alert(responseData);
      });
  }
  // Add a submit event listener to the form

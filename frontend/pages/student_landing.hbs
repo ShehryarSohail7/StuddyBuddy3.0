@@ -87,14 +87,73 @@
             margin: 10px;
             color: gray;
         }
+             .card {
+            width: calc(33.33% - 40px);
+            margin: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card p {
+            margin: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .tutors-header {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .tutors-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tutors-card {
+            width: calc(33.33% - 40px);
+            margin: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .tutors-card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .tutors-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .tutors-card p {
+            margin: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+
     </style>
 </head>
 
 <body>
     <div class="navbar">
         <a class="active" href="#" id="home-link">Home</a>
-        <a href="#" id="ads-link">Ads</a>
-        <a href="#" id="reviews-link">Reviews</a>
+        <a href="#" id="ads-link">Search a Tutor</a>
+        <a href="#" id="reviews-link">Add Reviews</a>
+        <a href="#" id="reviews-link">Delete Reviews</a>
         <a href="#" id="resources-link">Resources</a>
         <a href="#" id="announcements-link">Announcements</a>
         {{!-- <a href="#" id="settings-link">Settings</a> --}}
@@ -102,6 +161,17 @@
     </div>
 
     <!-- Content -->
+        <div class="search-container" style="text-align: center;margin: top 5px;">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button id="search-button">Search</button>
+        </div>
+        
+        <div class="container">
+            <h1 class="tutors-header"></h1>
+            <div class="tutors-container" id="tutors-data">
+                <!-- tutors data will be displayed here -->
+            </div>
+
     <div class="container">
         <h1 style="text-align: center;"></h1>
         <div class="tutors-row" id="tutors-data"></div>
@@ -112,7 +182,7 @@
         <div class="tutors-row" id="announcement-data"></div>
     </div>
 
-    {{!-- <div id="content"></div> --}}   
+    {{!-- <div id="content"></div> --}}
 
 </body>
 
@@ -131,18 +201,24 @@
 
             if (page === "Home") {
                 displayHomePage();
-            } else if (page === "Ads") {
-                displayAdsPage();
-            } else if (page === "Reviews") {
+            } else if (page === "Search a Tutor") {
+                displayAds();
+            }
+             else if (page === "Add Reviews") {
                 displayReviewsPage();
-            } else if (page === "Resources") {
+            }
+             else if (page === "Resources") {
                 displayResourcesPage();
             } else if (page === "Announcements") {
                 displayAnnouncementsPage();
             }
             else if (page === "Settings") {
                 displaySettingsPage();
-            } 
+            }
+            else if (page=="Delete Reviews")
+            {
+                displayDeleteReview();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -150,18 +226,24 @@
     });
 
     window.addEventListener('popstate', () => {
-        if (!window.history.state) {
+        if (window.history.state) {
+            displayHomePage();
+        }
+        else {
             displayHomePage();
         }
     });
 
     function displayHomePage() {
+        // To hide the div with class "search-container"
+        document.querySelector('.search-container').style.display = 'none';
+
         document.getElementById("announcement-data").innerHTML = "";
 
         document.getElementById("tutors-data").innerHTML = `
             <div class="container">
-                <h1 style="text-align: center;">Welcome Admin</h1>
-                <p>ha bhai chal raha hy home</p>
+                <h1 style="text-align: center;">Welcome Student</h1>
+                <p>ha bhai yeh bchal raha hy home</p>
                 <div class="tutors-row" id="tutors-data"></div>
             </div>
         `;
@@ -169,61 +251,72 @@
 
 
     ///////////////////
-  function displayAdsPage() {
-        // Delete all existing HTML in the tutors-data element
-        displayHomePage();
-        document.getElementById("tutors-data").innerHTML = '';
-
+   const displayAds = () => {
+    
+    displayHomePage();
+     document.querySelector('.search-container').style.display = 'block';
         fetch('/ads')
             .then(response => response.json())
             .then(data => {
-                let html = ``;
+                let html = "";
                 data.forEach((ad, index) => {
                     html += `
             <div class="tutors-card">
-                <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
-                <h4>${ad.time}</h4>
-                <p>${ad.subject} - ${ad.class}</p>
-                <p>${ad.price}</p>
-                <form onsubmit="try { removeAd('${ad._id}'); } catch(err) { console.error(err); } return false;">
-                    <button type="submit" style="padding: 5px;margin-bottom:5px">Remove Ad</button>
-                </form>
-            </div>`;
+              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+              <h4 style="text-align: center;">${ad.time}</h4>
+              <p>${ad.subject} - ${ad.class}</p>
+              <p>${ad.price}</p>
+              <button>Book an appointment</button>
+              <button>View Reviews</button>
+            </div>
+          `;
                     if (index % 3 === 2 || index === data.length - 1) {
-                        html += '</div><div class="tutors-row">';
+                        html += '</div>';
                     }
                 });
                 document.getElementById("tutors-data").innerHTML = html;
             })
             .catch(err => console.error(err));
-    }
+    };
 
+    // Call the displayAds function to initially display all ads
+  
 
+    // Add event listener to search button
+    document.getElementById("search-button").addEventListener("click", () => {
+        // To show the div with class "search-container"
+       
 
-    function removeAd(adId) {
-        fetch('/deleteads', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ _id: adId })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                displayAdsPage();
-                console.log('Ad deleted successfully');
+        const searchQuery = document.getElementById("search-input").value.toLowerCase();
+        fetch(`/search?q=${searchQuery}`)
+            .then(response => response.json())
+            .then(data => {
+                let html = "";
+                data.forEach((ad, index) => {
+                    html += `
+            <div class="tutors-card">
+              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+              <h4 style="text-align: center;">${ad.time}</h4>
+              <p>${ad.subject} - ${ad.class}</p>
+              <p>${ad.price}</p>
+            </div>
+          `;
+                    if (index % 3 === 2 || index === data.length - 1) {
+                        html += '</div>';
+                    }
+                });
+                document.getElementById("tutors-data").innerHTML = html;
+                // Add the current search query to the browser history
+                history.pushState({ searchQuery }, null, `/search?q=${searchQuery}`);
             })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
-    }
+            .catch(err => console.error(err));
+    });
 
-    ///////
+    // Add event listener to popstate event (back/forward buttons)
 
 
 
+    
     function displayReviewsPage() {
         // Add code to display reviews page here
     }
@@ -232,14 +325,18 @@
         // Add code to display resources page here
     }
 
-    function displayAnnouncementsPage() 
-    {
+    function displayDeleteReview() {
+        
+    }
+    
+    function displayAnnouncementsPage() {
+        document.querySelector('.search-container').style.display = 'none';
         document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
         fetch("/viewann")
             .then((response) => response.json())
             .then((data) => {
                 let html = `
-            <button id="add-announcement-button" onclick="displayPopup()">Add Announcement</button>
+         
             `;
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
@@ -247,7 +344,7 @@
             <h1>${data.announcements[i].content}</h1>
             <p>${data.announcements[i].createdAt}</p>
             <br>
-            <button onclick="deleteAnnouncement('${data.announcements[i]._id}')">Delete announcement</button>
+          
           </div>`;
                 }
                 document.getElementById("announcement-data").innerHTML = html;
@@ -258,87 +355,19 @@
             });
     }
 
-    function displayPopup() {
-        // disable the "Add Announcement" button
-        const addAnnouncementButton = document.getElementById("add-announcement-button");
-        addAnnouncementButton.disabled = true;
-
-        // create the pop-up dialog
-        const popup = document.createElement("div");
-        popup.classList.add("popup");
-
-        // create the input field
-        const input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Enter your announcement here...";
-        input.required = true; // add required attribute
-        popup.appendChild(input);
-
-        // create the submit button
-        const button = document.createElement("button");
-        button.textContent = "Submit";
-        button.onclick = () => {
-            const content = input.value.trim();
-            if (content.length === 0) {
-                // if the announcement is empty or whitespace-only, show an error message
-                const error = document.createElement("p");
-                error.textContent = "Announcement cannot be empty.";
-                error.classList.add("error-message");
-                popup.appendChild(error);
-                return;
-            }
-            saveAnnouncement(content);
-            popup.remove();
-            addAnnouncementButton.disabled = false; // enable the "Add Announcement" button
-        };
-        popup.appendChild(button);
-
-        // add the pop-up dialog to the page
-        const announcementsDiv = document.getElementById("announcement-data");
-        announcementsDiv.insertBefore(popup, announcementsDiv.firstChild);
-    }
-
-        function saveAnnouncement(content)
-        {
-            // send a POST request to the backend to save the new announcement
-            fetch("/addann", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ contentt: content })
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    // refresh the announcements list
-                    displayAnnouncementsPage();
-                })
-                .catch((err) => {
-                    // Display an error message if the request fails
-                    console.log("failure");
-                });
-        }
-
-    function deleteAnnouncement(id) {
-        fetch("/deleteann", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ _id: id }),
-        })
-            .then((response) => response.text())
-            .then((data) => {
-                console.log(data);
-                displayAnnouncementsPage(); // refresh the list of announcements after successful deletion
-            })
-            .catch((err) => {
-                // Display an error message if the request fails
-                console.log("failure");
-            });
-    }
-    
     function displaySettingsPage() {
-      window.location.href = "/settings";
-        }
+        window.location.href = "/settings";
+    }
+// Define a global variable to store the name of the last executed function
+let lastFunctionName = 'displayHomePage';
+
+// Update the pushState function to store the name of the current function in the history state object
+window.history.pushState({ functionName: lastFunctionName }, page, `/${page.toLowerCase()}`);
+
+// Add code to the popstate event listener to execute the last executed function again
+window.addEventListener('popstate', (event) => {
+ displayHomePage();
+}
+);
+
 </script>
