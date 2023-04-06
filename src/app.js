@@ -474,18 +474,6 @@ app.post("/addann", async (req, res) => {
   }
 });
 
-// app.get("/viewann", async (req, res) => {
-//   try {
-//     // Find all the announcements in the database and sort them by createdAt date in descending order
-//     const announcements = await ann_db.find().select("content createdAt");
-
-//     // Send the announcements back as a response
-//     res.status(200).json({ announcements });
-//   } catch (err) {
-//     // Send a response indicating an error occurred
-//     res.status(500).json({ message: "Failed to get announcements." });
-//   }
-// });
 app.get("/viewann", async (req, res) => {
   try {
     // Find all the announcements in the database and sort them by createdAt date in descending order
@@ -528,7 +516,31 @@ app.get("/ads", async (req, res) => {
   }
 });
 
+app.post("/postad", async (req, res) => {
+  try {
+    // Create a new Ads object with data from the request body
+    const newAds = new ad_db({
+      subject: req.body.subject,
+      class: req.body.class,
+      time: req.body.time,
+      price: req.body.price,
+      image: req.body.image,
+    });
+
+    // Save the new Ads object to the database
+    const savedAds = await newAds.save();
+
+    // Send a success response with the saved object
+    res.status(201).json("Ad addedd successfully");
+  } catch (err) {
+    // Handle any errors and send an error response
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 app.get("/tutors", async (req, res) => {
+  ///
   // function to return all tutors
   try {
     const tutors = await tutor_db.find({});
@@ -536,6 +548,22 @@ app.get("/tutors", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Error fetching tutors");
+  }
+});
+
+app.get("/tutor/:name", async (req, res) => {
+  // returns specific tutor
+  const name = req.params.name;
+  try {
+    const tutor = await tutor_db.findOne({ name: name });
+    if (!tutor) {
+      res.status(404).send("username not found");
+      return;
+    }
+    res.send(`The name of the tutor with email ${name} is ${tutor.name}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 

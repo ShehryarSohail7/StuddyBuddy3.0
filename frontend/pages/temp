@@ -147,15 +147,16 @@
         }
     </style>
 </head>
-
+home postad viewMyAds appointments requests reviews settings
 <body>
     <div class="navbar">
         <a class="active" href="#" id="home-link">Home</a>
-        <a href="#" id="ads-link">Search a Tutor</a>
-        <a href="#" id="reviews-link">Add Reviews</a>
-        <a href="#" id="reviews-link">Delete Reviews</a>
-        <a href="#" id="resources-link">Resources</a>
-        <a href="#" id="announcements-link">Announcements</a>
+        <a href="#" id="ads-link">Post an Ad</a>
+        <a href="#" id="reviews-link">View My Ads</a>
+        <a href="#" id="reviews-link">My Appointments</a>
+        <a href="#" id="resources-link">Requests</a>
+        <a href="#" id="announcements-link">View Announcements</a>
+        <a href="#" id="announcements-link">View my reviews</a>
         {{!-- <a href="#" id="settings-link">Settings</a> --}}
         <a href="/frontend/pages/settings.hbs">Settings</a>
     </div>
@@ -165,6 +166,8 @@
         <input type="text" id="search-input" placeholder="Search...">
         <button id="search-button">Search</button>
     </div>
+
+    <div id="ad-form-container"></div>
 
     <div class="container">
         <h1 class="tutors-header"></h1>
@@ -201,22 +204,12 @@
 
             if (page === "Home") {
                 displayHomePage();
-            } else if (page === "Search a Tutor") {
-                displayAds();
-            }
-            else if (page === "Add Reviews") {
-                displayReviewsPage();
-            }
-            else if (page === "Resources") {
-                displayResourcesPage();
-            } else if (page === "Announcements") {
+            } 
+            if (page === "View Announcements") {
                 displayAnnouncementsPage();
             }
-            else if (page === "Settings") {
-                displaySettingsPage();
-            }
-            else if (page == "Delete Reviews") {
-                displayDeleteReview();
+            if (page ==="Post an Ad") {
+                showAdForm();
             }
 
             // Push state to browser history
@@ -235,13 +228,14 @@
 
     function displayHomePage() {
         // To hide the div with class "search-container"
+        document.getElementById("ad-form-container").innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';
 
         document.getElementById("announcement-data").innerHTML = "";
 
         document.getElementById("tutors-data").innerHTML = `
             <div class="container">
-                <h1 style="text-align: center;">Welcome Student</h1>
+                <h1 style="text-align: center;">Welcome Tutor</h1>
                 <p>ha bhai yeh bchal raha hy home</p>
                 <div class="tutors-row" id="tutors-data"></div>
             </div>
@@ -251,7 +245,7 @@
 
     ///////////////////
     const displayAds = () => {
-
+        document.getElementById("ad-form-container").innerHTML = "";
         displayHomePage();
         document.querySelector('.search-container').style.display = 'block';
         fetch('/ads')
@@ -313,7 +307,176 @@
 
     // Add event listener to popstate event (back/forward buttons)
 
+ function showAdForm() {
+        // Remove the contents of the tutors and announcement containers
+        document.getElementById("tutors-data").innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
 
+        // Clear the ad form container
+        document.getElementById("ad-form-container").innerHTML = "";
+
+        // Create the form elements
+        const form = document.createElement("form");
+        form.id = "ad-form";
+        form.style.marginTop = "20px";
+        form.style.textAlign = "center";
+
+        const nameDiv = document.createElement("div");
+        const nameLabel = document.createElement("label");
+        nameLabel.textContent = "Enter Your User Name: ";
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.name = "name";
+        nameDiv.appendChild(nameLabel);
+        nameDiv.appendChild(nameInput);
+
+        const subjectsDiv = document.createElement("div");
+        const subjectsLabel = document.createElement("label");
+        subjectsLabel.textContent = "Enter Subjects: ";
+        const subjectsInput = document.createElement("input");
+        subjectsInput.type = "text";
+        subjectsInput.name = "subject";
+        subjectsDiv.appendChild(subjectsLabel);
+        subjectsDiv.appendChild(subjectsInput);
+
+        const gradeDiv = document.createElement("div");
+        const gradeLabel = document.createElement("label");
+        gradeLabel.textContent = "Enter Grade: ";
+        const gradeInput = document.createElement("input");
+        gradeInput.type = "text";
+        gradeInput.name = "class";
+        gradeDiv.appendChild(gradeLabel);
+        gradeDiv.appendChild(gradeInput);
+
+        const costDiv = document.createElement("div");
+        const costLabel = document.createElement("label");
+        costLabel.textContent = "Enter Cost: ";
+        const costInput = document.createElement("input");
+        costInput.type = "text";
+        costInput.name = "price";
+        costDiv.appendChild(costLabel);
+        costDiv.appendChild(costInput);
+
+        const imageDiv = document.createElement("div");
+        const imageLabel = document.createElement("label");
+        imageLabel.textContent = "Enter Image Link: ";
+        const imageInput = document.createElement("input");
+        imageInput.type = "text";
+        imageInput.name = "image";
+        imageDiv.appendChild(imageLabel);
+        imageDiv.appendChild(imageInput);
+
+        const submitButton = document.createElement("button");
+        submitButton.type = "submit";
+        submitButton.textContent = "Submit";
+
+        // Add a submit event listener to the form
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            // Check if the entered username exists
+            const username = nameInput.value;
+            const tutorResponse = await fetch(`/tutor/${username}`);
+            if (tutorResponse.status === 404) {
+                alert("Username not found. Ad cannot be posted.");
+                return;
+            }
+
+            // Send a POST request to the server to post the ad
+            const adResponse = await fetch("/postad", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    subject: subjectsInput.value,
+                    class: gradeInput.value,
+                    time: nameInput.value,
+                    price: costInput.value,
+                    image: imageInput.value,
+                }),
+            });
+
+            // Get the response data and display it to the user
+            const responseData = await adResponse.json();
+            alert(responseData);
+        });
+
+        form.appendChild(nameDiv);
+        form.appendChild(subjectsDiv);
+        form.appendChild(gradeDiv);
+     form.appendChild(costDiv);
+     form.appendChild(imageDiv);
+     form.appendChild(submitButton);
+
+     document.getElementById("ad-form-container").appendChild(form);
+
+     // Add a submit event listener to the form
+     form.addEventListener("submit", async (event) => {
+         event.preventDefault(); // Prevent the default form submission behavior
+
+         // Check if the entered username exists
+         const username = nameInput.value;
+         const tutorResponse = await fetch(`/tutor/${username}`);
+         if (tutorResponse.status === 404) {
+             alert("Username not found. Ad cannot be posted.");
+             return;
+         }
+
+         // Send a POST request to the server to post the ad
+         const adResponse = await fetch("/postad", {
+             method: "POST",
+             headers: {
+                 "Content-Type": "application/json",
+             },
+             body: JSON.stringify({
+                 subject: subjectsInput.value,
+                 class: gradeInput.value,
+                 time: nameInput.value,
+                 price: costInput.value,
+                 image: imageInput.value,
+             }),
+         });
+
+         // Get the response data and display it to the user
+         const responseData = await adResponse.json();
+         alert(responseData);
+     });
+ }
+ // Add a submit event listener to the form
+    const onSubmit = async (event) => {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Check if the entered username exists
+        const username = nameInput.value;
+        const tutorResponse = await fetch(`/tutor/${username}`);
+        if (tutorResponse.status === 404) {
+            alert("Username not found. Ad cannot be posted.");
+            form.removeEventListener("submit", onSubmit); // Remove the event listener
+            return;
+        }
+
+        // Send a POST request to the server to post the ad
+        const adResponse = await fetch("/postad", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                subject: subjectsInput.value,
+                class: gradeInput.value,
+                time: nameInput.value,
+                price: costInput.value,
+                image: imageInput.value,
+            }),
+        });
+
+        // Get the response data and display it to the user
+        const responseData = await adResponse.json();
+        alert(responseData);
+    };
+
+    form.addEventListener("submit", onSubmit);
 
 
     function displayReviewsPage() {
@@ -329,6 +492,7 @@
     }
 
     function displayAnnouncementsPage() {
+         document.getElementById("ad-form-container").innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';
         document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
         fetch("/viewann")
