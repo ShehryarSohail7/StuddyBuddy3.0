@@ -583,6 +583,22 @@ app.get("/username/:email", async (req, res) => {
   }
 });
 
+app.get("/emailTutor/:username", async (req, res) => {
+  // receives a username, returns an email
+  try {
+    const { username } = req.params;
+    const tutor = await tutor_db.findOne({ name: username }, "email");
+    if (!tutor) {
+      return res.status(404).send("Tutor not found");
+    }
+    const { email } = tutor;
+    return res.status(200).json({ email });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
 app.get("/usernameStudent/:email", async (req, res) => {
   // receives an email, returns a username
   try {
@@ -611,6 +627,46 @@ app.get("/adss/:username", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post("/addappt", async (req, res) => {
+  // gets an email and adds relevant object to the appoint field of that object
+  const { email, appoint } = req.body;
+
+  try {
+    // Find the tutor by email
+    const tutor = await tutor_db.findOne({ email });
+
+    if (!tutor) {
+      return res.status(404).json({ message: "Tutor not found" });
+    }
+
+    // Update the tutor's appoint field with the passed object
+    tutor.appoint.push(appoint);
+    await tutor.save();
+
+    return res.status(200).json({ message: "Tutor updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/apptviaemail/:email", async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const tutor = await tutor_db.findOne({ email });
+    if (!tutor) {
+      return res.status(404).json({ message: "Tutor not found" });
+    }
+
+    const appointments = tutor.appoint;
+    res.status(200).json(appointments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

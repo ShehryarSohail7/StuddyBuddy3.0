@@ -152,6 +152,7 @@
     <div class="navbar">
         <a class="active" href="#" id="home-link">Home</a>
         <a href="#" id="ads-link">Search a Tutor</a>
+        <a href="#" id="confirmed-appointment">Confirmed Appointment</a>
         <a href="#" id="reviews-link">Delete Reviews</a>
         <a href="#" id="resources-link">Resources</a>
         <a href="#" id="announcements-link">Announcements</a>
@@ -280,7 +281,7 @@
               <h4 style="text-align: center;">${ad.time}</h4>
               <p>${ad.subject} - ${ad.class}</p>
               <p>${ad.price}</p>
-              <button>Book an appointment</button>
+              <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
               <button>View Reviews</button>
               <button>Add Reviews</button>
             </div>
@@ -294,8 +295,155 @@
             .catch(err => console.error(err));
     };
 
-    // Call the displayAds function to initially display all ads
-  
+    // Create close button
+   
+    showAppointmentPopup = async (adUsername) => {
+            const emailofStudent = window.localStorage.getItem("username");
+            const response = await fetch(`/emailTutor/${adUsername}`);
+             const data = await response.json();
+             const nam=data.email;
+             console.log(nam);
+          //  const { name } = data.email;    /// name contains the email of the tutor and emaill contains name of students
+          //  console.log("name whihc should be the email of the tutor", data.email);
+            //console.log("emaill which should be the name of the studnet", emailofStudent);
+        
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = 'X';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.width = '2%';
+        closeBtn.style.top = '-200px';
+        closeBtn.style.right = '-50px';
+        closeBtn.style.bottom = '100px';
+        closeBtn.style.left = '100px';
+        closeBtn.style.margin = 'auto';
+        closeBtn.style.fontSize = '20px';
+        closeBtn.style.border = 'none';
+        closeBtn.style.backgroundColor = 'transparent';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.addEventListener('click', () => {
+            popup.remove();
+        })
+        const popup = document.createElement('div');
+
+        popup.style.position = 'fixed';
+        popup.style.top = '0';
+        popup.style.left = '0';
+        popup.style.width = '100%';
+        popup.style.height = '100%';
+        popup.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        popup.style.display = 'flex';
+        popup.style.justifyContent = 'center';
+        popup.style.alignItems = 'center';
+
+        // Create popup content
+        const popupContent = document.createElement('div');
+        popupContent.style.backgroundColor = 'white';
+        popupContent.style.padding = '20px';
+        popupContent.style.borderRadius = '10px';
+
+        // Create form
+        const form = document.createElement('form');
+        form.style.display = 'flex';
+        form.style.flexDirection = 'column';
+
+        // Create form elements
+        const coursesLabel = document.createElement('label');
+        coursesLabel.textContent = 'Enter courses:';
+        const coursesInput = document.createElement('input');
+        coursesInput.type = 'text';
+
+        const daysLabel = document.createElement('label');
+        daysLabel.textContent = 'Enter days per week:';
+        const daysInput = document.createElement('input');
+        daysInput.type = 'number';
+        daysInput.min = 1;
+
+        const hoursLabel = document.createElement('label');
+        hoursLabel.textContent = 'Enter hours per day:';
+        const hoursInput = document.createElement('input');
+        hoursInput.type = 'number';
+        hoursInput.min = 1;
+
+        const bidLabel = document.createElement('label');
+        bidLabel.textContent = 'Offered bid:';
+        const bidInput = document.createElement('input');
+        bidInput.type = 'number';
+        bidInput.min = 1;
+
+        const descLabel = document.createElement('label');
+        descLabel.textContent = 'Description:';
+        const descTextarea = document.createElement('textarea');
+        descTextarea.rows = 5;
+        descTextarea.type = 'text';
+
+
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = 'Submit';
+        submitBtn.style.marginTop = '10px';
+        submitBtn.style.backgroundColor = 'blue';
+        submitBtn.style.color = 'white';
+        submitBtn.style.border = 'none';
+        submitBtn.style.padding = '10px';
+        submitBtn.style.borderRadius = '5px';
+        submitBtn.addEventListener('click', async (e) => {
+           e.preventDefault();
+
+           // Get the form data
+           const formData = {
+               username: emailofStudent,     
+               courses: coursesInput.value,
+               days: daysInput.value,
+               hours: hoursInput.value,
+               bid: bidInput.value,
+               desc: descTextarea.value,
+           };
+
+           // Send the form data to the backend
+           const response = await fetch('/addappt', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json'
+               },
+               body: JSON.stringify({
+                   email: nam,   // sends appointment according to the email of the tutor
+                   appoint: formData
+               })
+           });
+
+           const data = await response.json();
+
+           if (response.ok) {
+               console.log(data.message);
+               alert("Appointment request sent")
+               popup.remove();
+           } else {
+               console.error(data.message);
+               alert("Appointment request failed")
+           }
+       });
+
+
+        // Add form elements to the form
+        form.appendChild(coursesLabel);
+        form.appendChild(coursesInput);
+        form.appendChild(daysLabel);
+        form.appendChild(daysInput);
+        form.appendChild(hoursLabel);
+        form.appendChild(hoursInput);
+        form.appendChild(bidLabel);
+        form.appendChild(bidInput);
+        form.appendChild(descLabel);
+        form.appendChild(descTextarea);
+        form.appendChild(submitBtn);
+        popupContent.appendChild(form);
+        popup.appendChild(closeBtn);
+        popup.appendChild(popupContent);
+
+        document.body.appendChild(popup);
+        coursesInput.focus();
+
+    }
+
 
     // Add event listener to search button
     document.getElementById("search-button").addEventListener("click", () => {

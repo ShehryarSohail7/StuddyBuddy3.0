@@ -168,7 +168,7 @@ home postad viewMyAds appointments requests reviews settings
     </div>
 
     <div id="ad-form-container"></div>
-
+    <div id="requests-container"></div>
     <div class="container">
         <h1 class="tutors-header"></h1>
         <div class="tutors-container" id="tutors-data">
@@ -214,6 +214,9 @@ home postad viewMyAds appointments requests reviews settings
             if (page==="View My Ads") {
                 displayAds();
             }
+            if (page==="Requests") {
+                displayRequestsPage();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -230,6 +233,7 @@ home postad viewMyAds appointments requests reviews settings
     });
 
    async function displayHomePage() {
+     document.getElementById("requests-container").innerHTML = "";
         // To hide the div with class "search-container"
         document.getElementById("ad-form-container").innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';
@@ -266,6 +270,7 @@ home postad viewMyAds appointments requests reviews settings
 
     ///////////////////
   const displayAds = async () => {
+     document.getElementById("requests-container").innerHTML = "";
       document.getElementById("tutors-data").innerHTML = "";
       document.getElementById("announcement-data").innerHTML = "";
       document.querySelector('.search-container').style.display = 'none';
@@ -364,6 +369,7 @@ home postad viewMyAds appointments requests reviews settings
     // Add event listener to popstate event (back/forward buttons)
 
  function showAdForm() {
+     document.getElementById("requests-container").innerHTML = "";
         // Remove the contents of the tutors and announcement containers
         document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
@@ -519,6 +525,60 @@ home postad viewMyAds appointments requests reviews settings
     function displayReviewsPage() {
         // Add code to display reviews page here
     }
+    async function displayRequestsPage() {
+        // Clear other containers and elements on the page
+        document.getElementById("tutors-data").innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector(".search-container").style.display = "none";
+        document.getElementById("ad-form-container").innerHTML = "";
+
+        // Clear previous results from requests container
+        document.getElementById("requests-container").innerHTML = "";
+
+        const email = localStorage.getItem("username");
+        const response = await fetch(`/apptviaemail/${email}`);
+        const data = await response.json();
+
+        if (response.status === 200) {
+            const requestsContainer = document.getElementById("requests-container");
+            requestsContainer.style.display = "flex";
+            requestsContainer.style.flexWrap = "wrap";
+            requestsContainer.style.gap = "10px";
+
+            for (let i = 0; i < data.length; i++) {
+                const requestBox = document.createElement("div");
+                requestBox.style.backgroundColor = "#f5f5f5";
+                requestBox.style.border = "1px solid #ddd";
+                requestBox.style.padding = "10px";
+                requestBox.style.borderRadius = "5px";
+
+                const idRequest = document.createElement("p");
+                idRequest.textContent= `Request ID : ${data[i]._id}`;
+                const name= document.createElement("p");
+                name.textContent= `Name of student : ${data[i].username}`;
+                const coursesLabel = document.createElement("p");
+                coursesLabel.textContent = `Courses requested: ${data[i].courses}`;
+                const daysLabel = document.createElement("p");
+                daysLabel.textContent = `Days per week: ${data[i].days}`;
+                const hoursLabel = document.createElement("p");
+                hoursLabel.textContent = `Hours per day: ${data[i].hours}`;
+                const bidLabel = document.createElement("p");
+                bidLabel.textContent = `Bid: ${data[i].bid}`;
+                if (data[i].desc) {
+                    const descLabel = document.createElement("p");
+                    descLabel.textContent = `Description: ${data[i].desc}`;
+                    requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel, descLabel);
+                } else {
+                    requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel);
+                }
+                requestsContainer.appendChild(requestBox);
+            }
+        } else {
+            console.log("Error retrieving requests");
+        }
+    }
+
+
 
     function displayResourcesPage() {
         // Add code to display resources page here
@@ -529,6 +589,7 @@ home postad viewMyAds appointments requests reviews settings
     }
 
     function displayAnnouncementsPage() {
+         document.getElementById("requests-container").innerHTML = "";
          document.getElementById("ad-form-container").innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';
         document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
