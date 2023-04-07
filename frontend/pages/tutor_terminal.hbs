@@ -555,7 +555,7 @@ home postad viewMyAds appointments requests reviews settings
                 const idRequest = document.createElement("p");
                 idRequest.textContent= `Request ID : ${data[i]._id}`;
                 const name= document.createElement("p");
-                name.textContent= `Name of student : ${data[i].username}`;
+                name.textContent= `Email of student : ${data[i].username}`;
                 const coursesLabel = document.createElement("p");
                 coursesLabel.textContent = `Courses requested: ${data[i].courses}`;
                 const daysLabel = document.createElement("p");
@@ -564,15 +564,56 @@ home postad viewMyAds appointments requests reviews settings
                 hoursLabel.textContent = `Hours per day: ${data[i].hours}`;
                 const bidLabel = document.createElement("p");
                 bidLabel.textContent = `Bid: ${data[i].bid}`;
+             const acceptBtn = document.createElement('button');
+                acceptBtn.style.width = '100px';
+                acceptBtn.style.height = '50px';
+                const acceptText = document.createTextNode('Accept');
+                acceptBtn.appendChild(acceptText);
+                // ...
+                const declineBtn = document.createElement('button');
+           declineBtn.style.width = '100px';
+                declineBtn.style.height = '50px';
+                const declineText = document.createTextNode('Decline');
+                declineBtn.onclick = function () {
+                    const email = localStorage.getItem('username');
+                    const id = data[i]._id;
+
+                    fetch(`/requestsappt/${email}/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Something went wrong!');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            displayRequestsPage();
+                            // handle success response from backend
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            // handle error response from backend
+                        });
+                };
+                declineBtn.appendChild(declineText);
+
                 if (data[i].desc) {
                     const descLabel = document.createElement("p");
                     descLabel.textContent = `Description: ${data[i].desc}`;
-                    requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel, descLabel);
+                    requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel, descLabel, acceptBtn, declineBtn);
                 } else {
-                    requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel);
+                    requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel, acceptBtn, declineBtn);
                 }
                 requestsContainer.appendChild(requestBox);
             }
+           
+        
+
         } else {
             console.log("Error retrieving requests");
         }

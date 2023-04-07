@@ -654,6 +654,7 @@ app.post("/addappt", async (req, res) => {
 });
 
 app.get("/apptviaemail/:email", async (req, res) => {
+  // sends appointment to relevant email ig
   const { email } = req.params;
 
   try {
@@ -669,6 +670,71 @@ app.get("/apptviaemail/:email", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// app.delete("/appointments", async (req, res) => {   // code to delete all requests
+//   try {
+//     const result = await tutor_db.updateMany({}, { $set: { appoint: [] } }); // Set the 'appoint' field to an empty array for all documents
+//     res.json({ message: "All appointments deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error deleting appointments" });
+//   }
+// });
+
+// app.get("/requestsappt/:email/:id", async (req, res) => {  // temp
+//   try {
+//     const { email, id } = req.params;
+//     const tutor = await tutor_db.findOne({ email });
+
+//     let index = -1;
+//     for (let i = 0; i < tutor.appoint.length; i++) {
+//       if (tutor.appoint[i]._id == id) {
+//         // res.send(id);
+//         index=i;
+//         break;
+//         // res.send(tutor.appoint[i]._id);
+//       }
+//     }
+//   } catch (err) {
+//     //   if (index === -1) {
+//     //     res.status(404).json({ message: "Appointment not found" });
+//     //   } else {
+//     //     // tutor.appoint.splice(index, 1);
+//     //     // await tutor.save();
+//     //     res.json({ message: "Appointment deleted successfully" });
+//     //   }
+//     // }
+//     console.error(err);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
+
+app.delete("/requestsappt/:email/:id", async (req, res) => {
+  try {
+    const { email, id } = req.params;
+    const tutor = await tutor_db.findOne({ email });
+
+    let index = -1;
+    for (let i = 0; i < tutor.appoint.length; i++) {
+      if (tutor.appoint[i]._id == id) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index === -1) {
+      res.status(404).json({ message: "Appointment not found" });
+    } else {
+      tutor.appoint.splice(index, 1);
+      await tutor.save();
+      res.json({ message: "Appointment deleted successfully" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 app.delete("/deleteads", async (req, res) => {
   // works greatly with id
