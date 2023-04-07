@@ -285,10 +285,13 @@ home postad viewMyAds appointments requests reviews settings
                 adsHTML = ads.map(ad => `
         <div class="card">
           <img src="${ad.image}" alt="${ad.subject}">
-          <h2>${ad.time}</h2>
+          <p>${ad.time}</p>
           <p><b>Grade:</b> ${ad.class}</p>
           <p><b>Subject:</b> ${ad.subject}</p>
           <p><b>Price:</b> ${ad.price}</p>
+           <form onsubmit="try { removeAd('${ad._id}'); } catch(err) { console.error(err); } return false;">
+                    <button type="submit" style="padding: 5px;margin-bottom:5px">Remove Ad</button>
+                </form>
         </div>
       `).join('');
             } else {
@@ -306,7 +309,25 @@ home postad viewMyAds appointments requests reviews settings
         }
     };
 
-
+    function removeAd(adId) {
+        fetch('/deleteads', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ _id: adId })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                displayAds();
+                console.log('Ad deleted successfully');
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
     // Call the displayAds function to initially display all ads
 
 
