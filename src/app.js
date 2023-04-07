@@ -567,6 +567,53 @@ app.get("/tutor/:name", async (req, res) => {
   }
 });
 
+app.get("/username/:email", async (req, res) => {
+  // receives an email, returns a username
+  try {
+    const { email } = req.params;
+    const tutor = await tutor_db.findOne({ email }, "name");
+    if (!tutor) {
+      return res.status(404).send("Tutor not found");
+    }
+    const { name } = tutor;
+    return res.status(200).json({ name });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/usernameStudent/:email", async (req, res) => {
+  // receives an email, returns a username
+  try {
+    const { email } = req.params;
+    const tutor = await student_db.findOne({ email }, "name");
+    if (!tutor) {
+      return res.status(404).send("Student not found");
+    }
+    const { name } = tutor;
+    return res.status(200).json({ name });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/adss/:username", async (req, res) => {
+  // returns all ads associated to a particular email
+  try {
+    const { username } = req.params;
+    const ads = await ad_db.find({ time: username });
+    if (!ads) {
+      return res.status(404).send("No ads found for this username");
+    }
+    return res.status(200).json({ ads });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
 app.delete("/deleteads", async (req, res) => {
   // works greatly with id
   try {

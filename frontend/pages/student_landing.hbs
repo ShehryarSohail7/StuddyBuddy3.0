@@ -152,7 +152,6 @@
     <div class="navbar">
         <a class="active" href="#" id="home-link">Home</a>
         <a href="#" id="ads-link">Search a Tutor</a>
-        <a href="#" id="reviews-link">Add Reviews</a>
         <a href="#" id="reviews-link">Delete Reviews</a>
         <a href="#" id="resources-link">Resources</a>
         <a href="#" id="announcements-link">Announcements</a>
@@ -204,9 +203,7 @@
             } else if (page === "Search a Tutor") {
                 displayAds();
             }
-             else if (page === "Add Reviews") {
-                displayReviewsPage();
-            }
+           
              else if (page === "Resources") {
                 displayResourcesPage();
             } else if (page === "Announcements") {
@@ -234,21 +231,38 @@
         }
     });
 
-    function displayHomePage() {
+ 
+    
+    async function displayHomePage() {
         // To hide the div with class "search-container"
-        document.querySelector('.search-container').style.display = 'none';
+         document.querySelector('.search-container').style.display = 'none';
 
         document.getElementById("announcement-data").innerHTML = "";
 
-        document.getElementById("tutors-data").innerHTML = `
-            <div class="container">
-                <h1 style="text-align: center;">Welcome Student</h1>
-                <p>ha bhai yeh bchal raha hy home</p>
-                <div class="tutors-row" id="tutors-data"></div>
-            </div>
-        `;
+        try {
+            const email = window.localStorage.getItem("username");
+            const response = await fetch(`/usernameStudent/${email}`);
+            const data = await response.json();
+            const { name } = data;
+            document.getElementById("tutors-data").innerHTML = `
+      <div class="container">
+        <h1 style="text-align: center;">Welcome ${name}</h1>
+        <p>ha bhai yeh bchal raha hy home</p>
+        <div class="tutors-row" id="tutors-data"></div>
+      </div>
+    `;
+        } catch (error) {
+            console.error(error);
+            // Display error message
+            document.getElementById("tutors-data").innerHTML = `
+      <div class="container">
+        <h1 style="text-align: center;">Error</h1>
+        <p>Failed to retrieve username.</p>
+        <div class="tutors-row" id="tutors-data"></div>
+      </div>
+    `;
+        }
     }
-
 
     ///////////////////
    const displayAds = () => {
@@ -268,6 +282,7 @@
               <p>${ad.price}</p>
               <button>Book an appointment</button>
               <button>View Reviews</button>
+              <button>Add Reviews</button>
             </div>
           `;
                     if (index % 3 === 2 || index === data.length - 1) {
@@ -317,7 +332,7 @@
 
 
     
-    function displayReviewsPage() {
+    function displayAddReviewsPage() {
         // Add code to display reviews page here
     }
 

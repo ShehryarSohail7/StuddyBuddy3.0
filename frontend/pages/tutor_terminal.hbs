@@ -211,6 +211,9 @@ home postad viewMyAds appointments requests reviews settings
             if (page ==="Post an Ad") {
                 showAdForm();
             }
+            if (page==="View My Ads") {
+                displayAds();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -226,51 +229,83 @@ home postad viewMyAds appointments requests reviews settings
         }
     });
 
-    function displayHomePage() {
+   async function displayHomePage() {
         // To hide the div with class "search-container"
         document.getElementById("ad-form-container").innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';
 
         document.getElementById("announcement-data").innerHTML = "";
 
-        document.getElementById("tutors-data").innerHTML = `
-            <div class="container">
-                <h1 style="text-align: center;">Welcome Tutor</h1>
-                <p>ha bhai yeh bchal raha hy home</p>
-                <div class="tutors-row" id="tutors-data"></div>
-            </div>
-        `;
+        try {
+            const email = window.localStorage.getItem("username");
+            const response = await fetch(`/username/${email}`);
+            const data = await response.json();
+            const { name } = data;
+            document.getElementById("tutors-data").innerHTML = `
+      <div class="container">
+        <h1 style="text-align: center;">Welcome ${name}</h1>
+        <p>ha bhai yeh bchal raha hy home</p>
+        <div class="tutors-row" id="tutors-data"></div>
+      </div>
+    `;
+        } catch (error) {
+            console.error(error);
+            // Display error message
+            document.getElementById("tutors-data").innerHTML = `
+      <div class="container">
+        <h1 style="text-align: center;">Error</h1>
+        <p>Failed to retrieve username.</p>
+        <div class="tutors-row" id="tutors-data"></div>
+      </div>
+    `;
+        }
     }
 
 
+
+
     ///////////////////
-    const displayAds = () => {
-        document.getElementById("ad-form-container").innerHTML = "";
-        displayHomePage();
-        document.querySelector('.search-container').style.display = 'block';
-        fetch('/ads')
-            .then(response => response.json())
-            .then(data => {
-                let html = "";
-                data.forEach((ad, index) => {
-                    html += `
-            <div class="tutors-card">
-              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
-              <h4 style="text-align: center;">${ad.time}</h4>
-              <p>${ad.subject} - ${ad.class}</p>
-              <p>${ad.price}</p>
-              <button>Book an appointment</button>
-              <button>View Reviews</button>
-            </div>
-          `;
-                    if (index % 3 === 2 || index === data.length - 1) {
-                        html += '</div>';
-                    }
-                });
-                document.getElementById("tutors-data").innerHTML = html;
-            })
-            .catch(err => console.error(err));
+  const displayAds = async () => {
+      document.getElementById("tutors-data").innerHTML = "";
+      document.getElementById("announcement-data").innerHTML = "";
+      document.querySelector('.search-container').style.display = 'none';
+      // Clear the ad form container
+      document.getElementById("ad-form-container").innerHTML = "";
+         document.getElementById("announcement-data").innerHTML = "";
+        const email = window.localStorage.getItem("username");
+        try {
+            const response = await fetch(`/username/${email}`);
+            const data = await response.json();
+            const username = data.name;
+            const adsResponse = await fetch(`/adss/${username}`);
+            const adsData = await adsResponse.json();
+            const ads = adsData.ads;
+            let adsHTML = '';
+            if (ads.length > 0) {
+                adsHTML = ads.map(ad => `
+        <div class="card">
+          <img src="${ad.image}" alt="${ad.subject}">
+          <h2>${ad.time}</h2>
+          <p><b>Grade:</b> ${ad.class}</p>
+          <p><b>Subject:</b> ${ad.subject}</p>
+          <p><b>Price:</b> ${ad.price}</p>
+        </div>
+      `).join('');
+            } else {
+                adsHTML = '<p>No ads found for this username</p>';
+            }
+            document.getElementById("tutors-data").innerHTML = `
+      <div class="container">
+        <h1 style="text-align: center;">${username}, Your all Ads are below</h1>
+        <div class="tutors-row" id="ads-data">${adsHTML}</div>
+      </div>
+    `;
+        } catch (error) {
+            console.error(error);
+            alert('Error fetching ads data');
+        }
     };
+
 
     // Call the displayAds function to initially display all ads
 
@@ -311,7 +346,7 @@ home postad viewMyAds appointments requests reviews settings
         // Remove the contents of the tutors and announcement containers
         document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
-
+     document.querySelector('.search-container').style.display = 'none';
         // Clear the ad form container
         document.getElementById("ad-form-container").innerHTML = "";
 
