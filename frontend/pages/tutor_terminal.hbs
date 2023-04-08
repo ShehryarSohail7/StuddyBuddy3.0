@@ -198,9 +198,8 @@ home postad viewMyAds appointments requests reviews settings
         </div>
 
         <div class="appointments-container"></div>  
-        {{!-- div for showing confirmed appointments --}}
-
-        {{!-- <div id="content"></div> --}}
+        <div class="deletereviews"> </div>
+      
 
 </body>
 
@@ -236,6 +235,9 @@ home postad viewMyAds appointments requests reviews settings
             {
                 displayAppointmentsPage();
             }
+            if (page==="View my reviews"){
+                displayDeleteReview();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -252,6 +254,9 @@ home postad viewMyAds appointments requests reviews settings
     });
 
    async function displayHomePage() {
+      const appointmentsContainer = document.querySelector(".appointments-container");
+       appointmentsContainer.innerHTML = "";
+     document.querySelector('.deletereviews').innerHTML = "";
      document.getElementById("requests-container").innerHTML = "";
         // To hide the div with class "search-container"
         document.getElementById("ad-form-container").innerHTML = "";
@@ -289,6 +294,9 @@ home postad viewMyAds appointments requests reviews settings
 
     ///////////////////
   const displayAds = async () => {
+      const appointmentsContainer = document.querySelector(".appointments-container");
+      appointmentsContainer.innerHTML = "";
+     document.querySelector('.deletereviews').innerHTML = "";
      document.getElementById("requests-container").innerHTML = "";
       document.getElementById("tutors-data").innerHTML = "";
       document.getElementById("announcement-data").innerHTML = "";
@@ -388,6 +396,7 @@ home postad viewMyAds appointments requests reviews settings
     // Add event listener to popstate event (back/forward buttons)
 
  function showAdForm() {
+     document.querySelector('.deletereviews').innerHTML = "";
             document.getElementById("requests-container").innerHTML = "";
      document.getElementById("tutors-data").innerHTML = "";
      document.getElementById("announcement-data").innerHTML = "";
@@ -545,10 +554,7 @@ home postad viewMyAds appointments requests reviews settings
         // Add code to display reviews page here
     }
     async function displayRequestsPage() {
-        // Clear other containers and elements on the page
-
-
-        // Clear previous results from requests container
+         document.querySelector('.deletereviews').innerHTML = "";
         document.getElementById("requests-container").innerHTML = "";
            document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
@@ -711,6 +717,7 @@ home postad viewMyAds appointments requests reviews settings
     }
 
  function displayAppointmentsPage() {
+     document.querySelector('.deletereviews').innerHTML = "";
         document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.querySelector(".search-container").style.display = "none";
@@ -769,6 +776,7 @@ home postad viewMyAds appointments requests reviews settings
 
 
     function displayResourcesPage() {
+         document.querySelector('.deletereviews').innerHTML = "";
            document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.querySelector(".search-container").style.display = "none";
@@ -777,11 +785,88 @@ home postad viewMyAds appointments requests reviews settings
         appointmentsContainer.innerHTML = "";
     }
 
-    function displayDeleteReview() {
+    async function displayDeleteReview() {
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        document.querySelector('.search-container').style.display = 'none';
+        document.getElementById("tutors-data").innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = '<h1 style="text-align: center;">All Reviews</h1><br>';
 
+        const email = localStorage.getItem("username");
+        if (!email) {
+            console.error("Email of tutor not found in database, database error");
+            return;
+        }
+
+        const reviewsResponse = await fetch(`/returnRelevantReviews/${email}`);
+        const reviewsData = await reviewsResponse.json();
+
+        const reviewsContainer = document.querySelector(".deletereviews");
+        reviewsContainer.innerHTML = "";
+
+        reviewsData.forEach((review) => {
+            const reviewCard = document.createElement("div");
+            reviewCard.classList.add("review-card");
+
+            const content = document.createElement("p");
+            content.innerText = review.content;
+            reviewCard.appendChild(content);
+
+            const tutorEmail = document.createElement("p");
+            tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
+            reviewCard.appendChild(tutorEmail);
+
+            const studentEmail = document.createElement("p");
+            studentEmail.innerText = `Student email: ${review.studentEmail}`;
+            reviewCard.appendChild(studentEmail);
+            reviewsContainer.appendChild(reviewCard);
+        });
+
+        // Add styles to the reviews container
+        reviewsContainer.style.display = "flex";
+        reviewsContainer.style.flexWrap = "wrap";
+        reviewsContainer.style.justifyContent = "center";
+
+        // Add styles to the review cards
+        const reviewCards = document.querySelectorAll(".review-card");
+        reviewCards.forEach((card) => {
+            card.style.width = "300px";
+            card.style.height = "300px";
+            card.style.backgroundColor = "#fff";
+            card.style.border = "1px solid #ccc";
+            card.style.borderRadius = "10px";
+            card.style.boxShadow = "2px 2px 10px #ccc";
+            card.style.margin = "20px";
+            card.style.padding = "10px";
+            card.style.display = "flex";
+            card.style.flexDirection = "column";
+            card.style.justifyContent = "space-between";
+        });
+
+        // Add styles to the review content
+        const contents = document.querySelectorAll(".review-card p:first-child");
+        contents.forEach((content) => {
+            content.style.fontSize = "16px";
+            content.style.fontWeight = "bold";
+            content.style.marginBottom = "10px";
+            content.style.overflow = "hidden";
+            content.style.textOverflow = "ellipsis";
+            content.style.whiteSpace = "nowrap";
+        });
+
+        // Add styles to the review emails
+        const emails = document.querySelectorAll(".review-card p:not(:first-child)");
+        emails.forEach((email) => {
+            email.style.fontSize = "14px";
+            email.style.color = "#888";
+            email.style.marginTop = "10px";
+        });
     }
 
     function displayAnnouncementsPage() {
+         document.querySelector('.deletereviews').innerHTML = "";
           document.getElementById("requests-container").innerHTML = "";
            document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
