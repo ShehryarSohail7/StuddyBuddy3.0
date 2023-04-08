@@ -172,9 +172,13 @@
 
     <!-- Content -->
         <div class="search-container" style="text-align: center;margin: top 5px;">
-            <input type="text" id="search-input" placeholder="Search...">
-            <button id="search-button">Search</button>
+            <input type="text" id="search-input" style="width: 30%;" placeholder="Search...">
+            <button id="search-button" style="width:max-content;margin:5px;">Search</button>
         </div>
+        <div class="search-containerr" style="text-align: center;margin: 5px;"></div>  
+        {{!-- filter for grade  --}}
+        <div class="search-cost" style="text-align:center;margin:5px;"></div>
+        {{!-- filter for coast --}}
         
         <div class="container">
             <h1 class="tutors-header"></h1>
@@ -255,7 +259,9 @@
  
     
     async function displayHomePage() {
-
+        document.querySelector('.search-cost').innerHTML = "";
+        document.querySelector('.search-containerr').innerHTML = "";
+         document.querySelector('.search-cost').innerHTML = "";
      document.querySelector('.deletereviews').innerHTML = "";  // query selector used for divs without ids
                const appointmentsContainer = document.querySelector(".appointments-container");
         appointmentsContainer.innerHTML = "";
@@ -291,13 +297,130 @@
 
     ///////////////////
    const displayAds = () => {
-    
-    displayHomePage();
+        document.querySelector('.search-cost').innerHTML = "";
+       document.querySelector('.deletereviews').innerHTML = "";  // query selector used for divs without ids
+       const appointmentsContainer = document.querySelector(".appointments-container");
+       appointmentsContainer.innerHTML = "";
+       document.getElementById("announcement-data").innerHTML = "";
     document.querySelector('.deletereviews').innerHTML = "";
      document.querySelector('.search-container').style.display = 'block';
+
+       const searchContainer = document.querySelector(".search-containerr");
+       searchContainer.style.display = "block";
+       searchContainer.innerHTML = `
+    <label for="grade-select" style="text-align: center;">Search by Grade:</label>
+    <select id="grade-select" style="text-align: center;">
+      <option value="">all grades</option>
+      <option value="grade 6-8">Grade 6-8</option>
+      <option value="grade 6">Grade 6</option>
+      <option value="grade 7">Grade 7</option>
+      <option value="grade 8">Grade 8</option>
+      <option value="olevels">Olevels</option>
+      <option value="alevels">Alevels</option>
+      <option value="fsc">FSC</option>
+      <option value="matric">Matric</option>
+      <option value="olevels 1">Olevels 1</option>
+      <option value="olevels 2">Olevels 2</option>
+      <option value="fsc 1">FSC 1</option>
+      <option value="fsc 2">FSC 2</option>
+      <option value="matric 1">Matric 1</option>
+      <option value="matric 2">Matric 2</option>
+      <option value="bachelors">Bachelors</option>
+      <option value="masters">Masters</option>
+      <option value="gre">GRE</option>
+      <option value="sat">SAT</option>
+      <option value="others">Others</option>
+    </select>
+  `;
+  const searchCost = document.querySelector(".search-cost");
+  searchCost.style.display="block";
+  searchCost.innerHTML=`
+     <label for="cost-select" style="text-align: center;">Search by Cost:</label>
+    <select id="cost-select" style="text-align: center;">
+      <option value="">all costs</option>
+      <option value="5000 pkr per month">5000 PKR per month</option>
+      <option value="10000 pkr per month">10000 PKR per month</option>
+      <option value="15000 pkr per month">15000 PKR per month</option>
+      <option value="20000 pkr per month">20000 PKR per month</option>
+      <option value="25000 pkr per month">25000 PKR per month</option>
+      <option value="30000 pkr per month">30000 PKR per month</option>
+      <option value="35000 pkr per month">35000 PKR per month</option>
+      <option value="40000 pkr per month">40000 PKR per month</option>
+      <option value="50000 pkr per month">50000 PKR per month</option>
+      <option value="above pkr per month">Above 50000 PKR</option>
+    </select>
+  `;
+  
+       const gradeSelect = document.getElementById("grade-select");
+        const costSelect = document.getElementById("cost-select");
+
+       gradeSelect.addEventListener("change", () => {   // event listener for gradeselect starts
+           const selectedGrade = gradeSelect.value;
+           fetch(`/search?q=${selectedGrade}`)
+               .then((response) => response.json())
+               .then((data) => {
+                
+                   let html = "";
+                   data.forEach((ad, index) => {
+                       html += `
+            <div class="tutors-card">
+              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+              <h4 style="text-align: center;">${ad.time}</h4>
+              <p>${ad.subject} - ${ad.class}</p>
+              <p>${ad.price}</p>
+              <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
+              <button onclick="showReviewPopup('${ad.time}')">Add Reviews</button>
+              <button onclick="showAllReviews('${ad.time}')">View Reviews</button>
+              <br></br>
+            </div>
+          `;
+                       if (index % 3 === 2 || index === data.length - 1) {
+                           html += "</div>";
+                       }
+                   });
+                   document.getElementById("tutors-data").innerHTML = html;
+               })
+               .catch((err) => console.error(err));
+       });   /// event listener for gradeselect ends
+
+              costSelect.addEventListener("change", () => {   // event listener for costSelect starts
+           const selectedcost = costSelect.value;
+           fetch(`/search?q=${selectedcost}`)
+               .then((response) => response.json())
+               .then((data) => {
+
+                   let html = "";
+                   data.forEach((ad, index) => {
+                       html += `
+            <div class="tutors-card">
+              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+              <h4 style="text-align: center;">${ad.time}</h4>
+              <p>${ad.subject} - ${ad.class}</p>
+              <p>${ad.price}</p>
+              <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
+              <button onclick="showReviewPopup('${ad.time}')">Add Reviews</button>
+              <button onclick="showAllReviews('${ad.time}')">View Reviews</button>
+              <br></br>
+            </div>
+          `;
+                       if (index % 3 === 2 || index === data.length - 1) {
+                           html += "</div>";
+                       }
+                   });
+                   document.getElementById("tutors-data").innerHTML = html;
+               })
+               .catch((err) => console.error(err));
+       });   /// event listener for costSelect ends
+
+
+
+
+
+
         fetch('/ads')
             .then(response => response.json())
             .then(data => {
+                
                 let html = "";
                 data.forEach((ad, index) => {
                     html += `
@@ -324,6 +447,7 @@
     // Create close button
    
     showAppointmentPopup = async (adUsername) => {
+        
             const emailofStudent = window.localStorage.getItem("username");
             const response = await fetch(`/emailTutor/${adUsername}`);
              const data = await response.json();
@@ -586,6 +710,7 @@
         }
 
  showAllReviews = async (adUsername) => {
+    
         const emailofStudent = window.localStorage.getItem("username");
         const response = await fetch(`/emailTutor/${adUsername}`);
         const data = await response.json();
@@ -678,7 +803,7 @@
     document.getElementById("search-button").addEventListener("click", () => {
         // To show the div with class "search-container"
        
-
+        document.querySelector(".search-containerr").innerHTML = "";
         const searchQuery = document.getElementById("search-input").value.toLowerCase();
         fetch(`/search?q=${searchQuery}`)
             .then(response => response.json())
@@ -724,6 +849,8 @@
     }
 
     async function displayDeleteReview() {
+            document.querySelector('.search-cost').innerHTML = "";
+         document.querySelector('.search-containerr').innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.querySelector('.deletereviews').innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';
@@ -826,6 +953,8 @@
 
     function displayConfirmedAppts()
     {                 document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector('.search-cost').innerHTML = "";
+     document.querySelector('.search-containerr').innerHTML = "";
          document.querySelector('.search-container').style.display = 'none';
          document.querySelector('.deletereviews').innerHTML = "";
            document.getElementById("tutors-data").innerHTML ="";
@@ -878,6 +1007,8 @@
     }
 
     function displayAnnouncementsPage() {
+            document.querySelector('.search-cost').innerHTML = "";
+         document.querySelector('.search-containerr').innerHTML = "";
         document.querySelector('.deletereviews').innerHTML = "";
                const appointmentsContainer = document.querySelector(".appointments-container");
         appointmentsContainer.innerHTML = "";

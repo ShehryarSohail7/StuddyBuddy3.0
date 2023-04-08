@@ -428,24 +428,49 @@ home postad viewMyAds appointments requests reviews settings
         subjectsInput.name = "subject";
         subjectsDiv.appendChild(subjectsLabel);
         subjectsDiv.appendChild(subjectsInput);
-
         const gradeDiv = document.createElement("div");
-        const gradeLabel = document.createElement("label");
-        gradeLabel.textContent = "Enter Grade: ";
-        const gradeInput = document.createElement("input");
-        gradeInput.type = "text";
-        gradeInput.name = "class";
-        gradeDiv.appendChild(gradeLabel);
-        gradeDiv.appendChild(gradeInput);
+     const gradeLabel = document.createElement("label");
+     gradeLabel.textContent = "Select Grade: ";
+     const gradeSelect = document.createElement("select");
+     const options = ["grade 6-8", "grade 6", "grade 7", "grade 8", "olevels", "alevels", "fsc", "matric", "olevels 1", "olevels 2", "fsc 1", "fsc 2", "matric 1", "matric 2", "bachelors", "masters", "gre", "sat","all grades","others"];
 
-        const costDiv = document.createElement("div");
-        const costLabel = document.createElement("label");
-        costLabel.textContent = "Enter Cost: ";
-        const costInput = document.createElement("input");
-        costInput.type = "text";
-        costInput.name = "price";
-        costDiv.appendChild(costLabel);
-        costDiv.appendChild(costInput);
+     options.forEach(function (option) {
+         const gradeOption = document.createElement("option");
+         gradeOption.value = option;
+         gradeOption.textContent = option;
+         gradeSelect.appendChild(gradeOption);
+     });
+
+     gradeSelect.name = "classs";
+     gradeDiv.appendChild(gradeLabel);
+     gradeDiv.appendChild(gradeSelect);
+
+
+      const costDiv = document.createElement("div");
+const costLabel = document.createElement("label");
+costLabel.textContent = "Select Cost: ";
+const costSelect = document.createElement("select");
+costSelect.name = "pricee";
+const optionss = [
+  "5000 pkr per month",
+  "10000 pkr per month",
+  "15000 pkr per month",
+  "20000 pkr per month",
+  "25000 pkr per month",
+  "30000 pkr per month",
+  "35000 pkr per month",
+  "40000 pkr per month",
+  "50000 pkr per month",
+  "Above 50000 pkr",
+];
+optionss.forEach((option) => {
+  const optionElem = document.createElement("option");
+  optionElem.textContent = option;
+  costSelect.appendChild(optionElem);
+});
+costDiv.appendChild(costLabel);
+costDiv.appendChild(costSelect);
+
 
         const imageDiv = document.createElement("div");
         const imageLabel = document.createElement("label");
@@ -471,7 +496,8 @@ home postad viewMyAds appointments requests reviews settings
                 alert("Username not found. Ad cannot be posted.");
                 return;
             }
-
+    const gradeSelect = document.querySelector("select[name='classs']");
+    const pricc = document.querySelector("select[name='pricee']")
             // Send a POST request to the server to post the ad
             const adResponse = await fetch("/postad", {
                 method: "POST",
@@ -480,9 +506,9 @@ home postad viewMyAds appointments requests reviews settings
                 },
                 body: JSON.stringify({
                     subject: subjectsInput.value,
-                    class: gradeInput.value,
+                    class: gradeSelect.options[gradeSelect.selectedIndex].value,
                     time: nameInput.value,
-                    price: costInput.value,
+                    price: pricc.options[pricc.selectedIndex].value,
                     image: imageInput.value,
                 }),
             });
@@ -514,6 +540,7 @@ home postad viewMyAds appointments requests reviews settings
          }
      });
  }
+
  // Add a submit event listener to the form
     const onSubmit = async (event) => {
         event.preventDefault(); // Prevent the default form submission behavior
