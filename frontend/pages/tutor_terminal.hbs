@@ -45,6 +45,18 @@
             padding: 20px;
         }
 
+.appointment-box {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+  width: 30%;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+
+
         .announcement-card h1 {
             font-size: 28px;
             color: #333;
@@ -168,7 +180,7 @@ home postad viewMyAds appointments requests reviews settings
     </div>
 
     <div id="ad-form-container"></div>
-
+    <div id="requests-container"></div>
     <div class="container">
         <h1 class="tutors-header"></h1>
         <div class="tutors-container" id="tutors-data">
@@ -184,6 +196,9 @@ home postad viewMyAds appointments requests reviews settings
             <h1 style="text-align: center;"></h1>
             <div class="tutors-row" id="announcement-data"></div>
         </div>
+
+        <div class="appointments-container"></div>  
+        {{!-- div for showing confirmed appointments --}}
 
         {{!-- <div id="content"></div> --}}
 
@@ -211,6 +226,16 @@ home postad viewMyAds appointments requests reviews settings
             if (page ==="Post an Ad") {
                 showAdForm();
             }
+            if (page==="View My Ads") {
+                displayAds();
+            }
+            if (page==="Requests") {
+                displayRequestsPage();
+            }
+            if (page==="My Appointments")
+            {
+                displayAppointmentsPage();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -226,52 +251,107 @@ home postad viewMyAds appointments requests reviews settings
         }
     });
 
-    function displayHomePage() {
+   async function displayHomePage() {
+     document.getElementById("requests-container").innerHTML = "";
         // To hide the div with class "search-container"
         document.getElementById("ad-form-container").innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';
 
         document.getElementById("announcement-data").innerHTML = "";
 
-        document.getElementById("tutors-data").innerHTML = `
-            <div class="container">
-                <h1 style="text-align: center;">Welcome Tutor</h1>
-                <p>ha bhai yeh bchal raha hy home</p>
-                <div class="tutors-row" id="tutors-data"></div>
-            </div>
-        `;
+        try {
+            const email = window.localStorage.getItem("username");
+            const response = await fetch(`/username/${email}`);
+            const data = await response.json();
+            const { name } = data;
+            document.getElementById("tutors-data").innerHTML = `
+      <div class="container">
+        <h1 style="text-align: center;">Welcome ${name}</h1>
+        <p>ha bhai yeh bchal raha hy home</p>
+        <div class="tutors-row" id="tutors-data"></div>
+      </div>
+    `;
+        } catch (error) {
+            console.error(error);
+            // Display error message
+            document.getElementById("tutors-data").innerHTML = `
+      <div class="container">
+        <h1 style="text-align: center;">Error</h1>
+        <p>Failed to retrieve username.</p>
+        <div class="tutors-row" id="tutors-data"></div>
+      </div>
+    `;
+        }
     }
 
 
+
+
     ///////////////////
-    const displayAds = () => {
-        document.getElementById("ad-form-container").innerHTML = "";
-        displayHomePage();
-        document.querySelector('.search-container').style.display = 'block';
-        fetch('/ads')
-            .then(response => response.json())
-            .then(data => {
-                let html = "";
-                data.forEach((ad, index) => {
-                    html += `
-            <div class="tutors-card">
-              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
-              <h4 style="text-align: center;">${ad.time}</h4>
-              <p>${ad.subject} - ${ad.class}</p>
-              <p>${ad.price}</p>
-              <button>Book an appointment</button>
-              <button>View Reviews</button>
-            </div>
-          `;
-                    if (index % 3 === 2 || index === data.length - 1) {
-                        html += '</div>';
-                    }
-                });
-                document.getElementById("tutors-data").innerHTML = html;
-            })
-            .catch(err => console.error(err));
+  const displayAds = async () => {
+     document.getElementById("requests-container").innerHTML = "";
+      document.getElementById("tutors-data").innerHTML = "";
+      document.getElementById("announcement-data").innerHTML = "";
+      document.querySelector('.search-container').style.display = 'none';
+      // Clear the ad form container
+      document.getElementById("ad-form-container").innerHTML = "";
+         document.getElementById("announcement-data").innerHTML = "";
+        const email = window.localStorage.getItem("username");
+        try {
+            const response = await fetch(`/username/${email}`);
+            const data = await response.json();
+            const username = data.name;
+            const adsResponse = await fetch(`/adss/${username}`);
+            const adsData = await adsResponse.json();
+            const ads = adsData.ads;
+            let adsHTML = '';
+            if (ads.length > 0) {
+                adsHTML = ads.map(ad => `
+        <div class="card">
+          <img src="${ad.image}" alt="${ad.subject}">
+          <p>${ad.time}</p>
+          <p><b>Grade:</b> ${ad.class}</p>
+          <p><b>Subject:</b> ${ad.subject}</p>
+          <p><b>Price:</b> ${ad.price}</p>
+           <form onsubmit="try { removeAd('${ad._id}'); } catch(err) { console.error(err); } return false;">
+                    <button type="submit" style="padding: 5px;margin-bottom:5px">Remove Ad</button>
+                </form>
+        </div>
+      `).join('');
+            } else {
+                adsHTML = '<p>No ads found for this username</p>';
+            }
+            document.getElementById("tutors-data").innerHTML = `
+      <div class="container">
+        <h1 style="text-align: center;">${username}, Your all Ads are below</h1>
+        <div class="tutors-row" id="ads-data">${adsHTML}</div>
+      </div>
+    `;
+        } catch (error) {
+            console.error(error);
+            alert('Error fetching ads data');
+        }
     };
 
+    function removeAd(adId) {
+        fetch('/deleteads', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ _id: adId })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                displayAds();
+                console.log('Ad deleted successfully');
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
     // Call the displayAds function to initially display all ads
 
 
@@ -308,12 +388,13 @@ home postad viewMyAds appointments requests reviews settings
     // Add event listener to popstate event (back/forward buttons)
 
  function showAdForm() {
-        // Remove the contents of the tutors and announcement containers
-        document.getElementById("tutors-data").innerHTML = "";
-        document.getElementById("announcement-data").innerHTML = "";
-
-        // Clear the ad form container
-        document.getElementById("ad-form-container").innerHTML = "";
+            document.getElementById("requests-container").innerHTML = "";
+     document.getElementById("tutors-data").innerHTML = "";
+     document.getElementById("announcement-data").innerHTML = "";
+     document.querySelector(".search-container").style.display = "none";
+     document.getElementById("ad-form-container").innerHTML = "";
+     const appointmentsContainer = document.querySelector(".appointments-container");
+     appointmentsContainer.innerHTML = "";
 
         // Create the form elements
         const form = document.createElement("form");
@@ -463,9 +544,237 @@ home postad viewMyAds appointments requests reviews settings
     function displayReviewsPage() {
         // Add code to display reviews page here
     }
+    async function displayRequestsPage() {
+        // Clear other containers and elements on the page
+
+
+        // Clear previous results from requests container
+        document.getElementById("requests-container").innerHTML = "";
+           document.getElementById("tutors-data").innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector(".search-container").style.display = "none";
+        document.getElementById("ad-form-container").innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
+
+        const email = localStorage.getItem("username");
+        const response = await fetch(`/apptviaemail/${email}`);
+        const data = await response.json();
+
+        if (response.status === 200) {
+            const requestsContainer = document.getElementById("requests-container");
+            requestsContainer.style.display = "flex";
+            requestsContainer.style.flexWrap = "wrap";
+            requestsContainer.style.gap = "10px";
+
+            for (let i = 0; i < data.length; i++) {
+                const requestBox = document.createElement("div");
+                requestBox.style.backgroundColor = "#f5f5f5";
+                requestBox.style.border = "1px solid #ddd";
+                requestBox.style.padding = "10px";
+                requestBox.style.borderRadius = "5px";
+
+                const idRequest = document.createElement("p");
+                idRequest.textContent= `Request ID : ${data[i]._id}`;
+                const name= document.createElement("p");
+                name.textContent= `Email of student : ${data[i].username}`;
+                const coursesLabel = document.createElement("p");
+                coursesLabel.textContent = `Courses requested: ${data[i].courses}`;
+                const daysLabel = document.createElement("p");
+                daysLabel.textContent = `Days per week: ${data[i].days}`;
+                const hoursLabel = document.createElement("p");
+                hoursLabel.textContent = `Hours per day: ${data[i].hours}`;
+                const bidLabel = document.createElement("p");
+                bidLabel.textContent = `Bid: ${data[i].bid}`;
+             const acceptBtn = document.createElement('button');
+                acceptBtn.style.width = '100px';
+                acceptBtn.style.height = '50px';
+                const acceptText = document.createTextNode('Accept');
+                acceptBtn.appendChild(acceptText);
+                 acceptBtn.onclick = async () => {
+                    try {
+                        const tutorEmail = localStorage.getItem("username");
+                        const requestBody = {
+                            requestId: data[i]._id,
+                            courses: data[i].courses,
+                            days: data[i].days,
+                            hours: data[i].hours,
+                            bid: data[i].bid,
+                            studentEmail: data[i].username,
+                            desc: data[i].desc,
+                        };
+                         const requestBody2 = {
+                            requestId: data[i]._id,
+                            courses: data[i].courses,
+                            days: data[i].days,
+                            hours: data[i].hours,
+                            bid: data[i].bid,
+                            studentEmail: tutorEmail,
+                            desc: data[i].desc,
+                        };
+                        const tutorResponse = await fetch(`/confirmedappts/${tutorEmail}/ads`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(requestBody),
+                        });
+                        const tutorData = await tutorResponse.json();
+                        if (tutorResponse.status === 404) {
+                            throw new Error("Tutor not found");
+                        }
+
+                        const studentResponse = await fetch(
+                            `/confirmedapptsStudent/${data[i].username}/ads`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(requestBody2),
+                            }
+                        );
+                        const studentData = await studentResponse.json();
+                        if (studentResponse.status === 404) {
+                            throw new Error("Student not found");
+                        }
+
+                        const deleteResponse = await fetch(
+                            `/requestsappt/${tutorEmail}/${data[i]._id}`,
+                            {
+                                method: "DELETE",
+                            }
+                        );
+                        if (deleteResponse.status === 404) {
+                            throw new Error("Appointment not found");
+                        }
+
+                        // Remove request box from the UI
+                        alert("Appointment approved successfully!");
+                        requestsContainer.removeChild(requestBox);
+                    } catch (err) {
+                        console.error(err);
+                        alert("Something went wrong, please try again later.");
+                    }
+                };
+              
+                /// decline function functionality
+                const declineBtn = document.createElement('button');
+           declineBtn.style.width = '100px';
+                declineBtn.style.height = '50px';
+                const declineText = document.createTextNode('Decline');
+                declineBtn.onclick = function () {
+                    const email = localStorage.getItem('username');
+                    const id = data[i]._id;
+
+                    fetch(`/requestsappt/${email}/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Something went wrong!');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            alert("Appointment declined successfully")
+                            displayRequestsPage();
+                            // handle success response from backend
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            // handle error response from backend
+                        });
+                };
+                declineBtn.appendChild(declineText);
+                //////////// decline function ended
+
+                if (data[i].desc) {
+                    const descLabel = document.createElement("p");
+                    descLabel.textContent = `Description: ${data[i].desc}`;
+                    requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel, descLabel, acceptBtn, declineBtn);
+                } else {
+                    requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel, acceptBtn, declineBtn);
+                }
+                requestsContainer.appendChild(requestBox);
+            }
+           
+        
+
+        } else {
+            console.log("Error retrieving requests");
+        }
+    }
+
+ function displayAppointmentsPage() {
+        document.getElementById("tutors-data").innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector(".search-container").style.display = "none";
+        document.getElementById("ad-form-container").innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
+
+        // Clear previous results from requests container
+        document.getElementById("requests-container").innerHTML = "";
+
+        const email = localStorage.getItem("username");
+        if (!email) {
+            console.error("Email not found in local storage");
+            return;
+        }
+
+        fetch(`/returningConfirmedAppts/${email}`)
+            .then(res => res.json())
+            .then(data => {
+                const ads = data.ads;
+                const appointmentBoxes = ads.map(ad => {
+                    const checkboxId = `ad-${ad._id}-checkbox`;
+                    return `
+                    <div class="appointment-box">
+                  
+                        <p>Student email: ${ad.studentEmail}</p>
+                        <p>Courses: ${ad.courses}</p>
+                        <p>Days: ${ad.days}</p>
+                        <p>Hours: ${ad.hours}</p>
+                        <p>Bid: ${ad.bid}</p>
+                        <p>Description: ${ad.desc}</p>
+                        <h2>Appointment confirmed</h2>
+                        <input type="checkbox" id="${checkboxId}" name="${checkboxId}">
+                    </div>
+                `;
+                });
+
+                // Group appointments into rows with a maximum of three boxes per row
+              const rows = [];
+                for (let i = 0; i < appointmentBoxes.length; i += 3) {
+                    const row = appointmentBoxes.slice(i, i + 3).join("");
+                    rows.push(`<div class="row" style="width:100%;">${row}</div>`);
+                }
+
+
+                appointmentsContainer.innerHTML = rows.join("");
+            })
+            .catch(err => {
+                console.error(err);
+                alert("An error occurred while fetching appointments.");
+            });
+    }
+
+
+
+
 
     function displayResourcesPage() {
-        // Add code to display resources page here
+           document.getElementById("tutors-data").innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector(".search-container").style.display = "none";
+        document.getElementById("ad-form-container").innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
     }
 
     function displayDeleteReview() {
@@ -473,9 +782,13 @@ home postad viewMyAds appointments requests reviews settings
     }
 
     function displayAnnouncementsPage() {
-         document.getElementById("ad-form-container").innerHTML = "";
-        document.querySelector('.search-container').style.display = 'none';
-        document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
+          document.getElementById("requests-container").innerHTML = "";
+           document.getElementById("tutors-data").innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector(".search-container").style.display = "none";
+        document.getElementById("ad-form-container").innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
         fetch("/viewann")
             .then((response) => response.json())
             .then((data) => {

@@ -551,6 +551,18 @@ app.get("/tutors", async (req, res) => {
   }
 });
 
+app.get("/students", async (req, res) => {
+  ///
+  // function to return all tutors
+  try {
+    const tutors = await student_db.find({});
+    res.send(tutors);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching tutors");
+  }
+});
+
 app.get("/tutor/:name", async (req, res) => {
   // returns specific tutor
   const name = req.params.name;
@@ -566,6 +578,243 @@ app.get("/tutor/:name", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+app.get("/username/:email", async (req, res) => {
+  // receives an email, returns a username
+  try {
+    const { email } = req.params;
+    const tutor = await tutor_db.findOne({ email }, "name");
+    if (!tutor) {
+      return res.status(404).send("Tutor not found");
+    }
+    const { name } = tutor;
+    return res.status(200).json({ name });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/emailTutor/:username", async (req, res) => {
+  // receives a username, returns an email
+  try {
+    const { username } = req.params;
+    const tutor = await tutor_db.findOne({ name: username }, "email");
+    if (!tutor) {
+      return res.status(404).send("Tutor not found");
+    }
+    const { email } = tutor;
+    return res.status(200).json({ email });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/usernameStudent/:email", async (req, res) => {
+  // receives an email, returns a username
+  try {
+    const { email } = req.params;
+    const tutor = await student_db.findOne({ email }, "name");
+    if (!tutor) {
+      return res.status(404).send("Student not found");
+    }
+    const { name } = tutor;
+    return res.status(200).json({ name });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/adss/:username", async (req, res) => {
+  // returns all ads associated to a particular email
+  try {
+    const { username } = req.params;
+    const ads = await ad_db.find({ time: username });
+    if (!ads) {
+      return res.status(404).send("No ads found for this username");
+    }
+    return res.status(200).json({ ads });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+////////////////////////////// appt field //////////////////////////
+
+// app.delete("/appointments", async (req, res) => {
+//   // code to delete all appoint objects of tutors
+//   try {
+//     const result = await tutor_db.updateMany({}, { $set: { appoint: [] } }); // Set the 'appoint' field to an empty array for all documents
+//     res.json({ message: "All appointments deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error deleting appointments" });
+//   }
+// });
+
+// app.delete("/appointments", async (req, res) => {
+//   // delete all appoint objects of students
+//   // code to delete all requests
+//   try {
+//     const result = await student_db.updateMany({}, { $set: { appoint: [] } }); // Set the 'appoint' field to an empty array for all documents
+//     res.json({ message: "All appointments deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error deleting appointments" });
+//   }
+// });
+
+// app.delete("/appointments", async (req, res) => {
+//   // function to delete all ads objects of students
+//   // delete all ads objects of students
+//   // code to delete all requests
+//   try {
+//     const result = await tutor_db.updateMany({}, { $set: { ads: [] } }); // Set the 'appoint' field to an empty array for all documents
+//     res.json({ message: "All appointments deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error deleting appointments" });
+//   }
+// });
+
+app.post("/addappt", async (req, res) => {
+  // gets an email and adds relevant object which is the request to the appoint field of that object
+  const { email, appoint } = req.body;
+
+  try {
+    // Find the tutor by email
+    const tutor = await tutor_db.findOne({ email });
+
+    if (!tutor) {
+      return res.status(404).json({ message: "Tutor not found" });
+    }
+
+    // Update the tutor's appoint field with the passed object
+    tutor.appoint.push(appoint);
+    await tutor.save();
+
+    return res.status(200).json({ message: "Tutor updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/apptviaemail/:email", async (req, res) => {
+  // sends appointment to relevant email ig
+  const { email } = req.params;
+
+  try {
+    const tutor = await tutor_db.findOne({ email });
+    if (!tutor) {
+      return res.status(404).json({ message: "Tutor not found" });
+    }
+
+    const appointments = tutor.appoint;
+    res.status(200).json(appointments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.delete("/requestsappt/:email/:id", async (req, res) => {
+  /// deletes a particular appointment after getting email of tutor and id of appt.
+  try {
+    const { email, id } = req.params;
+    const tutor = await tutor_db.findOne({ email });
+
+    let index = -1;
+    for (let i = 0; i < tutor.appoint.length; i++) {
+      if (tutor.appoint[i]._id == id) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index === -1) {
+      res.status(404).json({ message: "Appointment not found" });
+    } else {
+      tutor.appoint.splice(index, 1);
+      await tutor.save();
+      res.json({ message: "Appointment deleted successfully" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+app.post("/confirmedappts/:email/ads", async (req, res) => {
+  // takes an email and adds an entire appointment object to the ads field of that email  (for tutor)
+  try {
+    const tutor = await tutor_db.findOneAndUpdate(
+      { email: req.params.email },
+      { $push: { ads: req.body } },
+      { new: true }
+    );
+    if (!tutor) {
+      return res.status(404).json({ error: "Tutor not found" });
+    }
+    return res.json(tutor);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+//// keep in mind that we are storing confirmed appts for both students and tutors in ads field of their db.
+
+app.post("/confirmedapptsStudent/:email/ads", async (req, res) => {
+  // takes an email of a student and adds an entire appointment object to the ads field of that email (for student)
+  try {
+    const student = await student_db.findOneAndUpdate(
+      { email: req.params.email },
+      { $push: { ads: req.body } },
+      { new: true }
+    );
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+    return res.json(student);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
+
+app.get("/returningConfirmedAppts/:email", async (req, res) => {
+  try {
+    const tutor = await tutor_db.findOne({ email: req.params.email });
+    if (!tutor) {
+      return res.status(404).json({ error: "Tutor not found" });
+    }
+    const ads = tutor.ads;
+    res.json({ ads });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+app.get("/returningConfirmedApptsStudents/:email", async (req, res) => {
+  // returns all confirmed appts of students
+  try {
+    const tutor = await student_db.findOne({ email: req.params.email });
+    if (!tutor) {
+      return res.status(404).json({ error: "student not found" });
+    }
+    const ads = tutor.ads;
+    res.json({ ads });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+//////////////////////// appt field ended ///////////////////////
 
 app.delete("/deleteads", async (req, res) => {
   // works greatly with id
