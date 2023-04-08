@@ -98,6 +98,16 @@
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
         }
 
+
+.appointment-box {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px;
+  width: 30%;
+  box-sizing: border-box;
+  display: inline-block;
+}
         .card img {
             width: 100%;
             height: auto;
@@ -182,6 +192,7 @@
         <div class="tutors-row" id="announcement-data"></div>
     </div>
 
+<div class="appointments-container"></div>
     {{!-- <div id="content"></div> --}}
 
 </body>
@@ -217,6 +228,10 @@
             {
                 displayDeleteReview();
             }
+            else if (page == "Confirmed Appointment") 
+            {
+                displayConfirmedAppts();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -235,6 +250,8 @@
  
     
     async function displayHomePage() {
+               const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
         // To hide the div with class "search-container"
          document.querySelector('.search-container').style.display = 'none';
 
@@ -462,6 +479,10 @@
               <h4 style="text-align: center;">${ad.time}</h4>
               <p>${ad.subject} - ${ad.class}</p>
               <p>${ad.price}</p>
+
+               <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
+              <button>View Reviews</button>
+              <button>Add Reviews</button>
             </div>
           `;
                     if (index % 3 === 2 || index === data.length - 1) {
@@ -492,7 +513,61 @@
         
     }
     
+    function displayConfirmedAppts()
+    {                 document.getElementById("announcement-data").innerHTML = "";
+         document.querySelector('.search-container').style.display = 'none';
+         
+           document.getElementById("tutors-data").innerHTML ="";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
+
+
+        const email = localStorage.getItem("username");
+        if (!email) {
+            console.error("Email not found in local storage");
+            return;
+        }
+
+        fetch(`/returningConfirmedApptsStudents/${email}`)
+            .then(res => res.json())
+            .then(data => {
+                const ads = data.ads;
+                const appointmentBoxes = ads.map(ad => {
+                    const checkboxId = `ad-${ad._id}-checkbox`;
+                    return `
+                    <div class="appointment-box">
+                  
+                        <p>Tutor email: ${ad.studentEmail}</p>
+                        <p>Courses: ${ad.courses}</p>
+                        <p>Days: ${ad.days}</p>
+                        <p>Hours: ${ad.hours}</p>
+                        <p>Bid: ${ad.bid}</p>
+                        <p>Description: ${ad.desc}</p>
+                        <h2>Appointment confirmed</h2>
+                        <input type="checkbox" id="${checkboxId}" name="${checkboxId}">
+                    </div>
+                `;
+                });
+
+                // Group appointments into rows with a maximum of three boxes per row
+              const rows = [];
+                for (let i = 0; i < appointmentBoxes.length; i += 3) {
+                    const row = appointmentBoxes.slice(i, i + 3).join("");
+                    rows.push(`<div class="row" style="width:100%;">${row}</div>`);
+                }
+
+
+                appointmentsContainer.innerHTML = rows.join("");
+            })
+            .catch(err => {
+                console.error(err);
+                alert("An error occurred while fetching appointments.");
+            });
+    }
+
     function displayAnnouncementsPage() {
+               const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';
         document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
         fetch("/viewann")

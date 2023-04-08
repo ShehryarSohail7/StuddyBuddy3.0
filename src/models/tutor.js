@@ -7,7 +7,15 @@ const tutor = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   photo: { type: String, required: false },
-  ads: { type: [Schema.Types.ObjectId], required: false, default: [] },
+  ads: {
+    requestId: { type: Schema.Types.ObjectId, required: false },
+    studentEmail: { type: String, required: false },
+    courses: { type: String, required: false },
+    days: { type: Number, required: false },
+    hours: { type: Number, required: false },
+    bid: { type: Number, required: false },
+    desc: { type: String, required: false },
+  },
   appoint: [
     {
       username: { type: String, required: true },
