@@ -804,6 +804,7 @@
         // To show the div with class "search-container"
        
         document.querySelector(".search-containerr").innerHTML = "";
+          document.querySelector('.search-cost').innerHTML = "";
         const searchQuery = document.getElementById("search-input").value.toLowerCase();
         fetch(`/search?q=${searchQuery}`)
             .then(response => response.json())
