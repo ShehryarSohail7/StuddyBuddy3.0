@@ -505,10 +505,20 @@ app.delete("/deleteann", async (req, res) => {
   }
 });
 
+// app.get("/ads", async (req, res) => {
+//   // gives all ads
+//   try {
+//     const tutors = await ad_db.find({});
+//     res.send(tutors);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Error fetching ads");
+//   }
+// });
+
 app.get("/ads", async (req, res) => {
-  // gives all ads
   try {
-    const tutors = await ad_db.find({});
+    const tutors = await ad_db.find({}).sort({ createdAt: -1 }); // sort ads by descending order of createdAt field
     res.send(tutors);
   } catch (err) {
     console.error(err);
@@ -642,7 +652,7 @@ app.get("/adss/:username", async (req, res) => {
   }
 });
 
-////////////////////////////// appt field //////////////////////////
+////////////////////////////// appt field ////////////////////////////////////////////////////////////////////appt field ////////////////////
 
 // app.delete("/appointments", async (req, res) => {
 //   // code to delete all appoint objects of tutors
@@ -787,6 +797,7 @@ app.post("/confirmedapptsStudent/:email/ads", async (req, res) => {
 });
 
 app.get("/returningConfirmedAppts/:email", async (req, res) => {
+  /// returns all confirmed appts of tutors
   try {
     const tutor = await tutor_db.findOne({ email: req.params.email });
     if (!tutor) {
@@ -814,9 +825,66 @@ app.get("/returningConfirmedApptsStudents/:email", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-//////////////////////// appt field ended ///////////////////////
+//////////////////////// appt field ended ////////////////////////////////////////////////////////////////////// appt field ended //////////////
+
+/////////////////////// reviews field started //////////////////////////////////////////////////////////////////// review field started ////////
+
+app.get("/returnRelevantReviews/:email", async (req, res) => {
+  // takes an email of tutor and returns all reviews
+  try {
+    const reviews = await review_db.find({ tutorEmail: req.params.email });
+    res.json(reviews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+app.post("/addreview", async (req, res) => {
+  // simply adds a review to the db (for student)
+  try {
+    const { tutorEmail, studentEmail, content } = req.body;
+
+    const newReview = new review_db({
+      content,
+      tutorEmail,
+      studentEmail,
+    });
+
+    const savedReview = await newReview.save();
+    res.json("Review posted successfully");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+app.get("/viewallreviews", async (req, res) => {
+  // returns all reviews - for admin
+  try {
+    const reviews = await review_db.find({});
+    res.json({ reviews });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching reviews");
+  }
+});
+
+app.delete("/deleteallreviews", async (req, res) => {
+  /// deletes all reviews in the db
+  try {
+    const result = await review_db.deleteMany({});
+    res.json({ message: `${result.deletedCount} reviews deleted.` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting reviews");
+  }
+});
+
+/////////////////////// reviews field ended //////////////////////////////////////////////////////////////////// review field ended ////////
 
 app.delete("/deleteads", async (req, res) => {
+  /// deletes an ad when given an id
   // works greatly with id
   try {
     const adId = req.body._id;

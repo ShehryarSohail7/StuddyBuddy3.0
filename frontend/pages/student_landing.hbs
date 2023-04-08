@@ -299,8 +299,9 @@
               <p>${ad.subject} - ${ad.class}</p>
               <p>${ad.price}</p>
               <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
-              <button>View Reviews</button>
-              <button>Add Reviews</button>
+               <button onclick="showReviewPopup('${ad.time}')">Add Reviews</button>
+              <button  onclick="showAllReviews('${ad.time}')">View Reviews</button>
+              <br></br>
             </div>
           `;
                     if (index % 3 === 2 || index === data.length - 1) {
@@ -461,6 +462,209 @@
 
     }
 
+      showReviewPopup = async (adUsername) => {
+
+            const emailofStudent = window.localStorage.getItem("username");
+            const response = await fetch(`/emailTutor/${adUsername}`);
+            console.log('email of sudent', emailofStudent);
+
+            const data = await response.json();
+            const nam = data.email;
+            console.log('email of tutor', nam);
+
+              const closeBtn = document.createElement('button');
+          closeBtn.textContent = 'X';
+          closeBtn.style.position = 'absolute';
+          closeBtn.style.width = '2%';
+          closeBtn.style.top = '-100px';
+          closeBtn.style.right = '-90px';
+          closeBtn.style.bottom = '100px';
+          closeBtn.style.left = '100px';
+          closeBtn.style.margin = 'auto';
+          closeBtn.style.fontSize = '20px';
+          closeBtn.style.border = 'none';
+          closeBtn.style.backgroundColor = 'transparent';
+          closeBtn.style.cursor = 'pointer';
+          closeBtn.addEventListener('click', () => {
+              popup.remove();
+          })
+          
+            // Create popup container
+            const popup = document.createElement('div');
+            popup.style.position = 'fixed';
+            popup.style.top = '0';
+            popup.style.left = '0';
+            popup.style.width = '100%';
+            popup.style.height = '100%';
+            popup.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            popup.style.display = 'flex';
+            popup.style.justifyContent = 'center';
+            popup.style.alignItems = 'center';
+
+            // Create popup content
+            const popupContent = document.createElement('div');
+            popupContent.style.backgroundColor = 'white';
+            popupContent.style.padding = '40px';
+            popupContent.style.borderRadius = '10px';
+            popupContent.style.display = 'flex';
+            popupContent.style.flexDirection = 'column';
+            popupContent.style.alignItems = 'center';
+
+            // Create heading
+            const heading = document.createElement('h2');
+            heading.textContent = 'Write Your Review';
+            heading.style.marginBottom = '20px';
+
+            // Create form
+            const form = document.createElement('form');
+            form.style.display = 'flex';
+            form.style.flexDirection = 'column';
+            form.style.width = '100%';
+
+            // Create form elements
+            const coursesLabel = document.createElement('label');
+            coursesLabel.textContent = 'Enter Review:';
+            coursesLabel.style.marginBottom = '10px';
+            const coursesInput = document.createElement('textarea');
+            coursesInput.style.height = '100px';
+            coursesInput.style.resize = 'none';
+
+            const submitBtn = document.createElement('button');
+            submitBtn.textContent = 'Submit';
+            submitBtn.style.marginTop = '20px';
+            submitBtn.style.backgroundColor = 'blue';
+            submitBtn.style.color = 'white';
+            submitBtn.style.border = 'none';
+            submitBtn.style.padding = '10px 20px';
+            submitBtn.style.borderRadius = '5px';
+            submitBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const response = await fetch('/addreview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        tutorEmail: nam,
+                        studentEmail: emailofStudent,
+                        content: coursesInput.value,
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log(data.message);
+                    alert("Review posted successfully!")
+                    popup.remove();
+                } else {
+                    console.error(data.message);
+                    alert("Review failed!")
+                }
+            });
+
+            // Add form elements to the form
+            form.appendChild(coursesLabel);
+            form.appendChild(coursesInput);
+            form.appendChild(submitBtn);
+
+            popupContent.appendChild(form);
+            popup.appendChild(closeBtn);
+            popup.appendChild(popupContent);
+
+            document.body.appendChild(popup);
+            coursesInput.focus();
+
+        }
+
+ showAllReviews = async (adUsername) => {
+        const emailofStudent = window.localStorage.getItem("username");
+        const response = await fetch(`/emailTutor/${adUsername}`);
+        const data = await response.json();
+        const nam = data.email;
+        console.log("email of tutor", nam);
+
+        const reviewsResponse = await fetch(`/returnRelevantReviews/${nam}`);
+        const reviewsData = await reviewsResponse.json();
+        const popup = document.createElement("div");
+        popup.classList.add("popup");
+        document.body.appendChild(popup);
+
+        const popupContent = document.createElement("div");
+        popupContent.classList.add("popup-content");
+        popup.appendChild(popupContent);
+
+        const closeButton = document.createElement("button");
+        closeButton.classList.add("close-button");
+        closeButton.innerText = "Close";
+        popupContent.appendChild(closeButton);
+
+        const heading = document.createElement("h2");
+        heading.innerText = "All Reviews";
+        heading.style.textAlign = "center";
+        popupContent.appendChild(heading);
+
+        const reviewsContainer = document.createElement("div");
+        reviewsContainer.classList.add("reviews-container");
+        popupContent.appendChild(reviewsContainer);
+
+        reviewsData.forEach((review) => {
+            const reviewBox = document.createElement("div");
+            reviewBox.classList.add("review-box");
+
+            const reviewCard = document.createElement("div");
+            reviewCard.classList.add("review-card");
+
+            const content = document.createElement("p");
+            content.innerText = review.content;
+            reviewCard.appendChild(content);
+
+            const tutorEmail = document.createElement("p");
+            tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
+            reviewCard.appendChild(tutorEmail);
+
+            const studentEmail = document.createElement("p");
+            studentEmail.innerText = `Student email: ${review.studentEmail}`;
+            reviewCard.appendChild(studentEmail);
+
+            reviewBox.appendChild(reviewCard);
+            reviewsContainer.appendChild(reviewBox);
+        });
+
+        closeButton.addEventListener("click", () => {
+            document.body.removeChild(popup);
+        });
+
+        // Add styles to the popup
+        popup.style.display = "block";
+        popup.style.position = "fixed";
+        popup.style.top = 0;
+        popup.style.left = 0;
+        popup.style.width = "100%";
+        popup.style.height = "100%";
+        popup.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        popup.style.zIndex = 1;
+        popupContent.style.backgroundColor = "#fff";
+        popupContent.style.borderRadius = "10px";
+        popupContent.style.padding = "20px";
+        popupContent.style.position = "absolute";
+        popupContent.style.top = "50%";
+        popupContent.style.left = "50%";
+          popupContent.style.width = "70%";
+     popupContent.style.height = "70%";
+        popupContent.style.transform = "translate(-50%, -50%)";
+
+        // Add styles to the review boxes
+        const reviewBoxes = document.querySelectorAll(".review-box");
+        reviewBoxes.forEach((box) => {
+            box.style.display = "inline-block";
+            box.style.padding = "10px";
+            box.style.margin = "10px";
+            box.style.border = "1px solid #ccc";
+            box.style.borderRadius = "5px";
+            box.style.boxSizing = "border-box";
+        });
+    };
 
     // Add event listener to search button
     document.getElementById("search-button").addEventListener("click", () => {
@@ -481,8 +685,10 @@
               <p>${ad.price}</p>
 
                <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
-              <button>View Reviews</button>
-              <button>Add Reviews</button>
+                <button onclick="showReviewPopup('${ad.time}')">Add Reviews</button>
+              <button onclick="showAllReviews('${ad.time}')">View Reviews</button>
+           
+              
             </div>
           `;
                     if (index % 3 === 2 || index === data.length - 1) {
