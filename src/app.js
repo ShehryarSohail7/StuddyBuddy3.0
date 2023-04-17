@@ -69,6 +69,59 @@ app.get("/signup_follow", (request, resolve) => {
   resolve.render("signup_follow");
 });
 
+// app.get("/signup_student", (request, resolve) => {
+//   //to go to that page
+//   resolve.render("signup_student");
+// });
+
+// // create a new user for our database
+// app.post("/signup_student", async (request, resolve) => {
+//   try {
+//     console.log("kasdjfakdsfj", request.body);
+//     const capture_data = new student_db({
+//       name: request.body.name,
+//       email: request.body.email,
+//       password: request.body.password,
+//       // photo: request.file.path
+//       photo: request.file
+//         ? request.file.path
+//         : "signup_uploads\\default123.jpg",
+//       // Set the image attribute to the path of the uploaded file, or the
+//       // default image path if no file was uploaded
+//     });
+//     const signup_saved = await capture_data.save();
+//     const message = "Sign up as Student Successful";
+//     const script = `<script>alert('${message}'); window.location.href = '/';</script>`;
+
+//     // resolve.status(201).render(script)
+//     resolve.send(script);
+//   } catch (error) {
+//     console.log(error);
+//     //error response design
+//     // resolve.status(400).send(error)                         //one way
+
+//     // console.error(error);                                   //second way
+//     // if (error.code === 11000) {
+//     //     resolve.status(400).send("Email already exists");
+//     // } else {
+//     //     resolve.status(400).send("Signup failed");
+//     // }
+
+//     if (error.code === 11000) {
+//       // third way
+//       // display an alert message to the user
+//       const message = "Email already exists";
+//       const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
+//       resolve.send(script);
+//     } else {
+//       // display an alert message to the user
+//       const message = "Signup failed";
+//       const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
+//       resolve.send(script);
+//     }
+//   }
+// });
+
 app.get("/signup_student", (request, resolve) => {
   //to go to that page
   resolve.render("signup_student");
@@ -80,36 +133,25 @@ app.post(
   upload.single("photo"),
   async (request, resolve) => {
     try {
+      console.log("yeh hai request", request.name);
+      console.log(request.file);
       const capture_data = new student_db({
         name: request.body.name,
         email: request.body.email,
         password: request.body.password,
-        // photo: request.file.path
         photo: request.file
           ? request.file.path
           : "signup_uploads\\default123.jpg",
-        // Set the image attribute to the path of the uploaded file, or the
-        // default image path if no file was uploaded
       });
       const signup_saved = await capture_data.save();
-      const message = "Sign up as Student Successful";
+      const message = "Sign up as studnet Successful";
       const script = `<script>alert('${message}'); window.location.href = '/';</script>`;
 
       // resolve.status(201).render(script)
       resolve.send(script);
     } catch (error) {
       //error response design
-      // resolve.status(400).send(error)                         //one way
-
-      // console.error(error);                                   //second way
-      // if (error.code === 11000) {
-      //     resolve.status(400).send("Email already exists");
-      // } else {
-      //     resolve.status(400).send("Signup failed");
-      // }
-
       if (error.code === 11000) {
-        // third way
         // display an alert message to the user
         const message = "Email already exists";
         const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
@@ -850,7 +892,8 @@ app.get("/returnRelevantReviewsStudent/:email", async (req, res) => {
   }
 });
 
-app.delete("/deleteReviewById/:id", async (req, res) => {   // takes an id and deletes the review
+app.delete("/deleteReviewById/:id", async (req, res) => {
+  // takes an id and deletes the review
   try {
     const result = await review_db.deleteOne({ _id: req.params.id });
     console.log(result);

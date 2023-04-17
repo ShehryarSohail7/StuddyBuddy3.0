@@ -1047,9 +1047,6 @@ home postad viewMyAds appointments requests reviews settings
     }
 
 
-
-
-
     function displayResourcesPage() {
          document.querySelector('.deletereviews').innerHTML = "";
            document.getElementById("tutors-data").innerHTML = "";
@@ -1153,7 +1150,7 @@ home postad viewMyAds appointments requests reviews settings
         fetch("/viewann")
             .then((response) => response.json())
             .then((data) => {
-                let html = `
+                let html = ` 
          
             `;
                 for (let i = 0; i < data.announcements.length; i++) {
