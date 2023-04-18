@@ -16,14 +16,13 @@
             height: 35px;
             left: 0px;
             top: -3px;
-
-background: #FFD059;
+            background: #FFD059;
         }
         .navbar {
-           position: absolute;
+            position: absolute;
             width: 1280px;
             height: 35px;
-            left: 490px;
+            left: 350px;
             top: 30px;
         }
 
@@ -51,13 +50,41 @@ background: #FFD059;
 
         /* Style for Announcement Cards */
         .announcement-card {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            width: 100%;
+            position: relative;
+            top: 50px;
+            width: 1000px;
+            height: 100px;
             margin: 10px;
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #fff;
+            font-family: "TS Safaa";
+            font-style: normal;
+            background-color: #ffd0598b;
             padding: 20px;
+            border-radius: 20px;
+        }
+        .announcments_heading{
+            position: absolute;
+            top: 80px;
+            text-align: center;
+            font-family: "Inter";
+            font-size: 10px;
+            font-weight: 200;
+            font-style: medium;
+            align-items: center;
+        }
+
+    
+        .announcement-card h1 {
+            font-size: 15px;
+            font-style: normal;
+            font-weight: 500;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+
+        .announcement-card p {
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 0;
         }
 
         .appointment-box {
@@ -68,20 +95,6 @@ background: #FFD059;
         width: 30%;
         box-sizing: border-box;
         display: inline-block;
-        }
-
-
-
-        .announcement-card h1 {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .announcement-card p {
-            font-size: 16px;
-            color: #999;
-            margin-bottom: 0;
         }
 
         /* Style for Tutors Cards */
@@ -272,7 +285,6 @@ home postad viewMyAds appointments requests reviews settings
     </div>
 
             
-
     <div class="navbar">
         
         <a href="#" id="home-link" >Home</a>
@@ -1160,6 +1172,9 @@ home postad viewMyAds appointments requests reviews settings
             `;
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
+            <div class="announcments_heading">
+                <h1>Announcements</h1>
+                </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>
             <p>${data.announcements[i].createdAt}</p>
