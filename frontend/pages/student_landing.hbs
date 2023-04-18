@@ -172,9 +172,13 @@
 
     <!-- Content -->
         <div class="search-container" style="text-align: center;margin: top 5px;">
-            <input type="text" id="search-input" placeholder="Search...">
-            <button id="search-button">Search</button>
+            <input type="text" id="search-input" style="width: 30%;" placeholder="Search...">
+            <button id="search-button" style="width:max-content;margin:5px;">Search</button>
         </div>
+        <div class="search-containerr" style="text-align: center;margin: 5px;"></div>  
+        {{!-- filter for grade  --}}
+        <div class="search-cost" style="text-align:center;margin:5px;"></div>
+        {{!-- filter for coast --}}
         
         <div class="container">
             <h1 class="tutors-header"></h1>
@@ -193,6 +197,8 @@
     </div>
 
 <div class="appointments-container"></div>
+
+<div class="deletereviews"> </div>
     {{!-- <div id="content"></div> --}}
 
 </body>
@@ -232,6 +238,9 @@
             {
                 displayConfirmedAppts();
             }
+            else if (page == "Delete Reviews") {
+                displayDeleteReview();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -250,6 +259,10 @@
  
     
     async function displayHomePage() {
+        document.querySelector('.search-cost').innerHTML = "";
+        document.querySelector('.search-containerr').innerHTML = "";
+         document.querySelector('.search-cost').innerHTML = "";
+     document.querySelector('.deletereviews').innerHTML = "";  // query selector used for divs without ids
                const appointmentsContainer = document.querySelector(".appointments-container");
         appointmentsContainer.innerHTML = "";
         // To hide the div with class "search-container"
@@ -284,12 +297,130 @@
 
     ///////////////////
    const displayAds = () => {
-    
-    displayHomePage();
+        document.querySelector('.search-cost').innerHTML = "";
+       document.querySelector('.deletereviews').innerHTML = "";  // query selector used for divs without ids
+       const appointmentsContainer = document.querySelector(".appointments-container");
+       appointmentsContainer.innerHTML = "";
+       document.getElementById("announcement-data").innerHTML = "";
+    document.querySelector('.deletereviews').innerHTML = "";
      document.querySelector('.search-container').style.display = 'block';
+
+       const searchContainer = document.querySelector(".search-containerr");
+       searchContainer.style.display = "block";
+       searchContainer.innerHTML = `
+    <label for="grade-select" style="text-align: center;">Search by Grade:</label>
+    <select id="grade-select" style="text-align: center;">
+      <option value="">all grades</option>
+      <option value="grade 6-8">Grade 6-8</option>
+      <option value="grade 6">Grade 6</option>
+      <option value="grade 7">Grade 7</option>
+      <option value="grade 8">Grade 8</option>
+      <option value="olevels">Olevels</option>
+      <option value="alevels">Alevels</option>
+      <option value="fsc">FSC</option>
+      <option value="matric">Matric</option>
+      <option value="olevels 1">Olevels 1</option>
+      <option value="olevels 2">Olevels 2</option>
+      <option value="fsc 1">FSC 1</option>
+      <option value="fsc 2">FSC 2</option>
+      <option value="matric 1">Matric 1</option>
+      <option value="matric 2">Matric 2</option>
+      <option value="bachelors">Bachelors</option>
+      <option value="masters">Masters</option>
+      <option value="gre">GRE</option>
+      <option value="sat">SAT</option>
+      <option value="others">Others</option>
+    </select>
+  `;
+  const searchCost = document.querySelector(".search-cost");
+  searchCost.style.display="block";
+  searchCost.innerHTML=`
+     <label for="cost-select" style="text-align: center;">Search by Cost:</label>
+    <select id="cost-select" style="text-align: center;">
+      <option value="">all costs</option>
+      <option value="5000 pkr per month">5000 PKR per month</option>
+      <option value="10000 pkr per month">10000 PKR per month</option>
+      <option value="15000 pkr per month">15000 PKR per month</option>
+      <option value="20000 pkr per month">20000 PKR per month</option>
+      <option value="25000 pkr per month">25000 PKR per month</option>
+      <option value="30000 pkr per month">30000 PKR per month</option>
+      <option value="35000 pkr per month">35000 PKR per month</option>
+      <option value="40000 pkr per month">40000 PKR per month</option>
+      <option value="50000 pkr per month">50000 PKR per month</option>
+      <option value="above pkr per month">Above 50000 PKR</option>
+    </select>
+  `;
+  
+       const gradeSelect = document.getElementById("grade-select");
+        const costSelect = document.getElementById("cost-select");
+
+       gradeSelect.addEventListener("change", () => {   // event listener for gradeselect starts
+           const selectedGrade = gradeSelect.value;
+           fetch(`/search?q=${selectedGrade}`)
+               .then((response) => response.json())
+               .then((data) => {
+                
+                   let html = "";
+                   data.forEach((ad, index) => {
+                       html += `
+            <div class="tutors-card">
+              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+              <h4 style="text-align: center;">${ad.time}</h4>
+              <p>${ad.subject} - ${ad.class}</p>
+              <p>${ad.price}</p>
+              <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
+              <button onclick="showReviewPopup('${ad.time}')">Add Reviews</button>
+              <button onclick="showAllReviews('${ad.time}')">View Reviews</button>
+              <br></br>
+            </div>
+          `;
+                       if (index % 3 === 2 || index === data.length - 1) {
+                           html += "</div>";
+                       }
+                   });
+                   document.getElementById("tutors-data").innerHTML = html;
+               })
+               .catch((err) => console.error(err));
+       });   /// event listener for gradeselect ends
+
+              costSelect.addEventListener("change", () => {   // event listener for costSelect starts
+           const selectedcost = costSelect.value;
+           fetch(`/search?q=${selectedcost}`)
+               .then((response) => response.json())
+               .then((data) => {
+
+                   let html = "";
+                   data.forEach((ad, index) => {
+                       html += `
+            <div class="tutors-card">
+              <img src="${ad.image}" alt="${ad.subject} - ${ad.class}">
+              <h4 style="text-align: center;">${ad.time}</h4>
+              <p>${ad.subject} - ${ad.class}</p>
+              <p>${ad.price}</p>
+              <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
+              <button onclick="showReviewPopup('${ad.time}')">Add Reviews</button>
+              <button onclick="showAllReviews('${ad.time}')">View Reviews</button>
+              <br></br>
+            </div>
+          `;
+                       if (index % 3 === 2 || index === data.length - 1) {
+                           html += "</div>";
+                       }
+                   });
+                   document.getElementById("tutors-data").innerHTML = html;
+               })
+               .catch((err) => console.error(err));
+       });   /// event listener for costSelect ends
+
+
+
+
+
+
         fetch('/ads')
             .then(response => response.json())
             .then(data => {
+                
                 let html = "";
                 data.forEach((ad, index) => {
                     html += `
@@ -299,8 +430,9 @@
               <p>${ad.subject} - ${ad.class}</p>
               <p>${ad.price}</p>
               <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
-              <button>View Reviews</button>
-              <button>Add Reviews</button>
+               <button onclick="showReviewPopup('${ad.time}')">Add Reviews</button>
+              <button  onclick="showAllReviews('${ad.time}')">View Reviews</button>
+              <br></br>
             </div>
           `;
                     if (index % 3 === 2 || index === data.length - 1) {
@@ -315,6 +447,7 @@
     // Create close button
    
     showAppointmentPopup = async (adUsername) => {
+        
             const emailofStudent = window.localStorage.getItem("username");
             const response = await fetch(`/emailTutor/${adUsername}`);
              const data = await response.json();
@@ -461,12 +594,217 @@
 
     }
 
+      showReviewPopup = async (adUsername) => {
+
+            const emailofStudent = window.localStorage.getItem("username");
+            const response = await fetch(`/emailTutor/${adUsername}`);
+            console.log('email of sudent', emailofStudent);
+
+            const data = await response.json();
+            const nam = data.email;
+            console.log('email of tutor', nam);
+
+              const closeBtn = document.createElement('button');
+          closeBtn.textContent = 'X';
+          closeBtn.style.position = 'absolute';
+          closeBtn.style.width = '2%';
+          closeBtn.style.top = '-100px';
+          closeBtn.style.right = '-90px';
+          closeBtn.style.bottom = '100px';
+          closeBtn.style.left = '100px';
+          closeBtn.style.margin = 'auto';
+          closeBtn.style.fontSize = '20px';
+          closeBtn.style.border = 'none';
+          closeBtn.style.backgroundColor = 'transparent';
+          closeBtn.style.cursor = 'pointer';
+          closeBtn.addEventListener('click', () => {
+              popup.remove();
+          })
+          
+            // Create popup container
+            const popup = document.createElement('div');
+            popup.style.position = 'fixed';
+            popup.style.top = '0';
+            popup.style.left = '0';
+            popup.style.width = '100%';
+            popup.style.height = '100%';
+            popup.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            popup.style.display = 'flex';
+            popup.style.justifyContent = 'center';
+            popup.style.alignItems = 'center';
+
+            // Create popup content
+            const popupContent = document.createElement('div');
+            popupContent.style.backgroundColor = 'white';
+            popupContent.style.padding = '40px';
+            popupContent.style.borderRadius = '10px';
+            popupContent.style.display = 'flex';
+            popupContent.style.flexDirection = 'column';
+            popupContent.style.alignItems = 'center';
+
+            // Create heading
+            const heading = document.createElement('h2');
+            heading.textContent = 'Write Your Review';
+            heading.style.marginBottom = '20px';
+
+            // Create form
+            const form = document.createElement('form');
+            form.style.display = 'flex';
+            form.style.flexDirection = 'column';
+            form.style.width = '100%';
+
+            // Create form elements
+            const coursesLabel = document.createElement('label');
+            coursesLabel.textContent = 'Enter Review:';
+            coursesLabel.style.marginBottom = '10px';
+            const coursesInput = document.createElement('textarea');
+            coursesInput.style.height = '100px';
+            coursesInput.style.resize = 'none';
+
+            const submitBtn = document.createElement('button');
+            submitBtn.textContent = 'Submit';
+            submitBtn.style.marginTop = '20px';
+            submitBtn.style.backgroundColor = 'blue';
+            submitBtn.style.color = 'white';
+            submitBtn.style.border = 'none';
+            submitBtn.style.padding = '10px 20px';
+            submitBtn.style.borderRadius = '5px';
+            submitBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const response = await fetch('/addreview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        tutorEmail: nam,
+                        studentEmail: emailofStudent,
+                        content: coursesInput.value,
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log(data.message);
+                    alert("Review posted successfully!")
+                    popup.remove();
+                } else {
+                    console.error(data.message);
+                    alert("Review failed!")
+                }
+            });
+
+            // Add form elements to the form
+            form.appendChild(coursesLabel);
+            form.appendChild(coursesInput);
+            form.appendChild(submitBtn);
+
+            popupContent.appendChild(form);
+            popup.appendChild(closeBtn);
+            popup.appendChild(popupContent);
+
+            document.body.appendChild(popup);
+            coursesInput.focus();
+
+        }
+
+ showAllReviews = async (adUsername) => {
+    
+        const emailofStudent = window.localStorage.getItem("username");
+        const response = await fetch(`/emailTutor/${adUsername}`);
+        const data = await response.json();
+        const nam = data.email;
+        console.log("email of tutor", nam);
+
+        const reviewsResponse = await fetch(`/returnRelevantReviews/${nam}`);
+        const reviewsData = await reviewsResponse.json();
+        const popup = document.createElement("div");
+        popup.classList.add("popup");
+        document.body.appendChild(popup);
+
+        const popupContent = document.createElement("div");
+        popupContent.classList.add("popup-content");
+        popup.appendChild(popupContent);
+
+        const closeButton = document.createElement("button");
+        closeButton.classList.add("close-button");
+        closeButton.innerText = "Close";
+        popupContent.appendChild(closeButton);
+
+        const heading = document.createElement("h2");
+        heading.innerText = "All Reviews";
+        heading.style.textAlign = "center";
+        popupContent.appendChild(heading);
+
+        const reviewsContainer = document.createElement("div");
+        reviewsContainer.classList.add("reviews-container");
+        popupContent.appendChild(reviewsContainer);
+
+        reviewsData.forEach((review) => {
+            const reviewBox = document.createElement("div");
+            reviewBox.classList.add("review-box");
+
+            const reviewCard = document.createElement("div");
+            reviewCard.classList.add("review-card");
+
+            const content = document.createElement("p");
+            content.innerText = review.content;
+            reviewCard.appendChild(content);
+
+            const tutorEmail = document.createElement("p");
+            tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
+            reviewCard.appendChild(tutorEmail);
+
+            const studentEmail = document.createElement("p");
+            studentEmail.innerText = `Student email: ${review.studentEmail}`;
+            reviewCard.appendChild(studentEmail);
+
+            reviewBox.appendChild(reviewCard);
+            reviewsContainer.appendChild(reviewBox);
+        });
+
+        closeButton.addEventListener("click", () => {
+            document.body.removeChild(popup);
+        });
+
+        // Add styles to the popup
+        popup.style.display = "block";
+        popup.style.position = "fixed";
+        popup.style.top = 0;
+        popup.style.left = 0;
+        popup.style.width = "100%";
+        popup.style.height = "100%";
+        popup.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        popup.style.zIndex = 1;
+        popupContent.style.backgroundColor = "#fff";
+        popupContent.style.borderRadius = "10px";
+        popupContent.style.padding = "20px";
+        popupContent.style.position = "absolute";
+        popupContent.style.top = "50%";
+        popupContent.style.left = "50%";
+          popupContent.style.width = "70%";
+     popupContent.style.height = "70%";
+        popupContent.style.transform = "translate(-50%, -50%)";
+
+        // Add styles to the review boxes
+        const reviewBoxes = document.querySelectorAll(".review-box");
+        reviewBoxes.forEach((box) => {
+            box.style.display = "inline-block";
+            box.style.padding = "10px";
+            box.style.margin = "10px";
+            box.style.border = "1px solid #ccc";
+            box.style.borderRadius = "5px";
+            box.style.boxSizing = "border-box";
+        });
+    };
 
     // Add event listener to search button
     document.getElementById("search-button").addEventListener("click", () => {
         // To show the div with class "search-container"
        
-
+        document.querySelector(".search-containerr").innerHTML = "";
+          document.querySelector('.search-cost').innerHTML = "";
         const searchQuery = document.getElementById("search-input").value.toLowerCase();
         fetch(`/search?q=${searchQuery}`)
             .then(response => response.json())
@@ -481,8 +819,10 @@
               <p>${ad.price}</p>
 
                <button onclick="showAppointmentPopup('${ad.time}')">Book an appointment</button>
-              <button>View Reviews</button>
-              <button>Add Reviews</button>
+                <button onclick="showReviewPopup('${ad.time}')">Add Reviews</button>
+              <button onclick="showAllReviews('${ad.time}')">View Reviews</button>
+           
+              
             </div>
           `;
                     if (index % 3 === 2 || index === data.length - 1) {
@@ -509,15 +849,117 @@
         // Add code to display resources page here
     }
 
-    function displayDeleteReview() {
-        
+    async function displayDeleteReview() {
+            document.querySelector('.search-cost').innerHTML = "";
+         document.querySelector('.search-containerr').innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        document.querySelector('.search-container').style.display = 'none';
+        document.getElementById("tutors-data").innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = '<h1 style="text-align: center;">All Reviews</h1><br>';
+
+        const email = localStorage.getItem("username");
+        if (!email) {
+            console.error("Email of student not found in database, database error");
+            return;
+        }
+
+        const reviewsResponse = await fetch(`/returnRelevantReviewsStudent/${email}`);
+        const reviewsData = await reviewsResponse.json();
+
+        const reviewsContainer = document.querySelector(".deletereviews");
+        reviewsContainer.innerHTML = "";
+
+        reviewsData.forEach((review) => {
+            const reviewCard = document.createElement("div");
+            reviewCard.classList.add("review-card");
+
+            const content = document.createElement("p");
+            content.innerText = review.content;
+            reviewCard.appendChild(content);
+
+            const tutorEmail = document.createElement("p");
+            tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
+            reviewCard.appendChild(tutorEmail);
+
+            const studentEmail = document.createElement("p");
+            studentEmail.innerText = `Student email: ${review.studentEmail}`;
+            reviewCard.appendChild(studentEmail);
+
+            const removeReviewBtn = document.createElement("button");
+            removeReviewBtn.innerText = "Remove Review";
+            removeReviewBtn.addEventListener("click", async () => {
+                try {
+                    const deleteResponse = await fetch(`/deleteReviewById/${review._id}`, { method: "DELETE" });
+                    const deleteData = await deleteResponse;
+                   alert("Review deletion successful");
+                    displayDeleteReview();
+                } catch (error) {
+                    console.log(error);
+                    
+                    alert("Review deletion failed");
+                }
+            });
+            reviewCard.appendChild(removeReviewBtn);
+
+            reviewsContainer.appendChild(reviewCard);
+        });
+
+        // Add styles to the reviews container
+        reviewsContainer.style.display = "flex";
+        reviewsContainer.style.flexWrap = "wrap";
+        reviewsContainer.style.justifyContent = "center";
+
+        // Add styles to the review cards
+        const reviewCards = document.querySelectorAll(".review-card");
+        reviewCards.forEach((card) => {
+            card.style.width = "300px";
+            card.style.height = "300px";
+            card.style.backgroundColor = "#fff";
+            card.style.border = "1px solid #ccc";
+            card.style.borderRadius = "10px";
+            card.style.boxShadow = "2px 2px 10px #ccc";
+            card.style.margin = "20px";
+            card.style.padding = "10px";
+            card.style.display = "flex";
+            card.style.flexDirection = "column";
+            card.style.justifyContent = "space-between";
+        });
+
+        // Add styles to the review content
+        const contents = document.querySelectorAll(".review-card p:first-child");
+        contents.forEach((content) => {
+            content.style.fontSize = "16px";
+            content.style.fontWeight = "bold";
+            content.style.marginBottom = "10px";
+            content.style.overflow = "hidden";
+            content.style.textOverflow = "ellipsis";
+            content.style.whiteSpace = "nowrap";
+        });
+
+        // Add styles to the review emails
+        const emails = document.querySelectorAll(".review-card p:not(:first-child)");
+        emails.forEach((email) => {
+            email.style.fontSize = "14px";
+            email.style.color = "#888";
+            email.style.marginTop = "10px";
+        });
     }
-    
+
+
+       
+
+
     function displayConfirmedAppts()
     {                 document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector('.search-cost').innerHTML = "";
+     document.querySelector('.search-containerr').innerHTML = "";
          document.querySelector('.search-container').style.display = 'none';
-         
+         document.querySelector('.deletereviews').innerHTML = "";
            document.getElementById("tutors-data").innerHTML ="";
+           document.querySelector('.deletereviews').innerHTML = "";
         const appointmentsContainer = document.querySelector(".appointments-container");
         appointmentsContainer.innerHTML = "";
 
@@ -566,6 +1008,9 @@
     }
 
     function displayAnnouncementsPage() {
+            document.querySelector('.search-cost').innerHTML = "";
+         document.querySelector('.search-containerr').innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
                const appointmentsContainer = document.querySelector(".appointments-container");
         appointmentsContainer.innerHTML = "";
         document.querySelector('.search-container').style.display = 'none';

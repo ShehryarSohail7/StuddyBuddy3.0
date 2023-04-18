@@ -1,11 +1,12 @@
-// import mongoose, { SchemaType } from 'mongoose';
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const review = new Schema({
-  content: {type:String, required:false}
-  
+  content: { type: String, required: true },
+  tutorEmail: { type: String, required: true },
+  studentEmail: { type: String, required: true },
 });
-// module.exports = mongoose.model('review',review)
-const Review = new mongoose.model("Review" , review)
-module.exports = Review
+
+const Review = mongoose.model("Review", review);
+
+module.exports = Review;

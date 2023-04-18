@@ -10,28 +10,51 @@
 
     <style>
         /* Style for Navbar */
+         .top_border{
+            position: absolute;
+            width: 1280px;
+            height: 35px;
+            left: 0px;
+            top: -3px;
+
+background: #FFD059;
+        }
         .navbar {
-            background-color: #333;
+            position: absolute;
+            width: 1280px;
+            height: 35px;
+            left: 490px;
+            top: 30px;
+            background-color: #ffffff;
             overflow: hidden;
         }
+.review-box {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
 
         .navbar a {
             float: left;
-            color: white;
+            color: rgb(0, 0, 0);
             text-align: center;
             padding: 14px 16px;
             text-decoration: none;
-            font-size: 17px;
+            font-size: 10px;
+            font-family: 'TS Safaa';
+            font-style: normal;
         }
 
         .navbar a:hover {
-            background-color: #ddd;
+            background-color: #FFD059;
             color: black;
         }
 
         .navbar a.active {
-            background-color: #04AA6D;
-            color: white;
+            background-color: #FFD059;
+            color: rgb(0, 0, 0);
+            font-style: bold;
         }
 
         /* Style for Announcement Cards */
@@ -87,12 +110,58 @@
             margin: 10px;
             color: gray;
         }
+        .Add_announcement_button{
+            position: absolute;
+            top: 400px;
+        }
+        .logo{
+            position: absolute;
+            width: 175px;
+            height: 45px;
+            left: 7px;
+            top: 35px;
+
+            }
+         .admin{
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            left: 200px;
+            top: 150px;
+
+            }
+        .hp_background{
+            position: absolute;
+            width: 1280px;
+            height: 450px;
+            top: 80px;
+            background-color: #ffd0595a;
+            opacity: 0.5;
+        }
+        .homepage h1{
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            left: 600px;
+            top: 210px;
+            text-decoration: none;
+            font-size: 30px;
+            font-family: 'Inter';
+            font-style: bold;
+            text-align: center;
+        
+        }
     </style>
 </head>
 
 <body>
+    <div class="top_border">
+
+        <img src="/logo.png" alt="Image description" class="logo">
+       
+    </div>
     <div class="navbar">
-        <a class="active" href="#" id="home-link">Home</a>
+        <a href="#" id="home-link">Home</a>
         <a href="#" id="ads-link">Ads</a>
         <a href="#" id="reviews-link">Reviews</a>
         <a href="#" id="resources-link">Resources</a>
@@ -112,7 +181,7 @@
         <div class="tutors-row" id="announcement-data"></div>
     </div>
 
-    {{!-- <div id="content"></div> --}}   
+  <div class="reviews"></div>
 
 </body>
 
@@ -134,7 +203,7 @@
             } else if (page === "Ads") {
                 displayAdsPage();
             } else if (page === "Reviews") {
-                displayReviewsPage();
+                getAllReviews();
             } else if (page === "Resources") {
                 displayResourcesPage();
             } else if (page === "Announcements") {
@@ -156,12 +225,16 @@
     });
 
     function displayHomePage() {
+         document.getElementById("announcement-data").innerHTML = "";
+         document.querySelector('.reviews').innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
 
         document.getElementById("tutors-data").innerHTML = `
-            <div class="container">
-                <h1 style="text-align: center;">Welcome Admin</h1>
-                <p>ha bhai chal raha hy home</p>
+        <div class="hp_background">
+                </div>
+            <div class="homepage">
+                <img src="/admin.png" alt="Image description" class="admin">
+                <h1 style="text-align: center;">Welcome Admin!</h1>
                 <div class="tutors-row" id="tutors-data"></div>
             </div>
         `;
@@ -170,6 +243,7 @@
 
     ///////////////////
   function displayAdsPage() {
+    document.getElementById("announcement-data").innerHTML = "";
         // Delete all existing HTML in the tutors-data element
         displayHomePage();
         document.getElementById("tutors-data").innerHTML = '';
@@ -223,23 +297,84 @@
     ///////
 
 
+    // create review container
+    async function getAllReviews() {
+        document.getElementById("announcement-data").innerHTML = "";
+        document.getElementById("tutors-data").innerHTML = "";
+        document.querySelector('.reviews').innerHTML = "";
+        try {
+            const response = await fetch('/viewallreviews');
+            const data = await response.json();
+            const reviews = data.reviews;
+            const reviewsContainer = document.querySelector('.reviews');
+            reviews.forEach(review => {
+                const reviewBox = document.createElement('div');
+                reviewBox.classList.add('card', 'mb-3', 'review-box');
+                reviewBox.innerHTML = `
+        <div class="card-body">
+          <h4 class="card-title">Tutor email: ${review.tutorEmail}</h5>
+          <h4 class="card-subtitle mb-2 text-muted">Student email: ${review.studentEmail}</h6>
+          <p class="card-text">Review Content: ${review.content}</p>
+          <button class="btn btn-danger btn-sm remove-review" data-review-id="${review._id}">Remove Review</button>
+        </div>
+      `;
+                reviewsContainer.appendChild(reviewBox);
+            });
 
-    function displayReviewsPage() {
-        // Add code to display reviews page here
+            // Add click event listener to all remove review buttons
+            const removeReviewButtons = document.querySelectorAll('.remove-review');
+            removeReviewButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const reviewId = button.dataset.reviewId;
+                    const confirmation = confirm("Are you sure you want to remove this review?");
+                    if (confirmation) {
+                        try {
+                            const response = await fetch(`/deleteReviewById/${reviewId}`, {
+                                method: 'DELETE'
+                            });
+                            if (response.ok) {
+                                button.closest('.review-box').remove();
+                                alert('Review removed successfully');
+                            } else {
+                                alert('An error occurred while removing the review');
+                            }
+                        } catch (error) {
+                            console.error(error);
+                            alert('An error occurred while removing the review');
+                        }
+                    }
+                });
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
     }
+
+
+
+
+
+
+
+        
+
 
     function displayResourcesPage() {
         // Add code to display resources page here
+        document.querySelector('.reviews').innerHTML="";
+         document.getElementById("announcement-data").innerHTML = "";
     }
 
     function displayAnnouncementsPage() 
     {
+        document.querySelector('.reviews').innerHTML="";
         document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
         fetch("/viewann")
             .then((response) => response.json())
             .then((data) => {
                 let html = `
-            <button id="add-announcement-button" onclick="displayPopup()">Add Announcement</button>
+            <button id="add-announcement-button" onclick="displayPopup()" class="Add_announcement_button">Add Announcement</button>
             `;
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
@@ -266,6 +401,8 @@
         // create the pop-up dialog
         const popup = document.createElement("div");
         popup.classList.add("popup");
+        popup.style.position = "relative";
+        popup.style.top = "200px";
 
         // create the input field
         const input = document.createElement("input");

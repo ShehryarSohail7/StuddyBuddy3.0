@@ -10,28 +10,43 @@
 
     <style>
         /* Style for Navbar */
+          .top_border{
+            position: absolute;
+            width: 1280px;
+            height: 35px;
+            left: 0px;
+            top: -3px;
+
+background: #FFD059;
+        }
         .navbar {
-            background-color: #333;
-            overflow: hidden;
+           position: absolute;
+            width: 1280px;
+            height: 35px;
+            left: 490px;
+            top: 30px;
         }
 
         .navbar a {
             float: left;
-            color: white;
+            color: black;
             text-align: center;
             padding: 14px 16px;
             text-decoration: none;
-            font-size: 17px;
+            font-size: 10px;
+            font-family: 'TS Safaa';
+            font-style: normal;
         }
 
         .navbar a:hover {
-            background-color: #ddd;
+            background-color: #FFD059;
             color: black;
         }
 
         .navbar a.active {
-            background-color: #04AA6D;
-            color: white;
+            background-color: #FFD059;
+            color: rgb(0, 0, 0);
+            font-style: bold;
         }
 
         /* Style for Announcement Cards */
@@ -45,15 +60,15 @@
             padding: 20px;
         }
 
-.appointment-box {
-  background-color: #f2f2f2;
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px;
-  width: 30%;
-  box-sizing: border-box;
-  display: inline-block;
-}
+        .appointment-box {
+        background-color: #f2f2f2;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 10px;
+        width: 30%;
+        box-sizing: border-box;
+        display: inline-block;
+        }
 
 
 
@@ -101,27 +116,62 @@
         }
 
         .card {
-            width: calc(33.33% - 40px);
+            width: calc(33.33% - 10px);
             margin: 20px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             transition: 0.3s;
+            background:  linear-gradient(to bottom, white 50%, rgba(128, 128, 128, 0.31) 50%) no-repeat;
+            border-radius: 10px;
+            
         }
+        {{!-- .view_backgound{
+            position: absolute;
+            width: 1280px;
+            height: 450px;
+            top: 80px;
+            background-color: #ffd0595a;
+            opacity: 0.5;
+        } --}}
 
         .card:hover {
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
         }
 
         .card img {
-            width: 100%;
-            height: auto;
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
         }
 
         .card p {
-            margin: 10px;
-            font-size: 18px;
+            font-family: "TS Safaa";
+            font-size: 10px;
+            font-style: normal;
             text-align: center;
+            margin: 0;
         }
-
+        .remove_ad_button{
+            position: relative;
+            left: 25px;
+            top: 0px;
+            width: 70px;
+            height: 20px;
+            background: #FFA7E6;
+            border-radius: 100px;
+            font-family: 'TS Safaa';
+            font-size: 5px;
+            font-style: normal;
+            text-align: center;
+            border: none;
+            color: white;
+            text-decoration: none;
+            padding: 5px;
+            margin-bottom:5px
+        }
+        .remove_ad_text{
+            position: absolute; 
+            top: 100px
+        }
         .tutors-header {
             margin-bottom: 20px;
             text-align: center;
@@ -157,18 +207,81 @@
             font-size: 18px;
             text-align: center;
         }
+        .logo{
+            position: absolute;
+            width: 175px;
+            height: 45px;
+            left: 7px;
+            top: 35px;
+
+            }
+        .homepage h1{
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            left: 600px;
+            top: 210px;
+            text-decoration: none;
+            font-size: 30px;
+            font-family: 'Inter';
+            font-style: bold;
+        }
+        .homepage p{
+            position: absolute;
+            width: 400px;
+            height: 150px;
+            left: 600px;
+            top: 250px;
+            text-decoration: none;
+            font-size: 15px;
+            font-family: 'TS Safaa';
+            font-style: normal;
+        }
+        .hp_error {
+            border: 2px solid #FFD059;
+            border-radius: 10px;
+            padding: 10px; 
+            background: #FFF1CD;
+            position: absolute;
+            top : 200px;
+            width: 500px;
+            height: 100px;
+            text-align: center;
+        }
+
+        .hp_error h1{
+            text-decoration: none;
+            font-size: 15px;
+            font-family: 'TS Safaa';
+            font-style: normal;
+        }
+
+        .hp_error p{
+            text-decoration: none;
+            font-size: 15px;
+            font-family: 'TS Safaa';
+            font-style: normal;
+        }
     </style>
 </head>
 home postad viewMyAds appointments requests reviews settings
 <body>
+    <div class="top_border">
+
+        <img src="/logo.png" alt="Image description" class="logo">
+    </div>
+
+            
+
     <div class="navbar">
-        <a class="active" href="#" id="home-link">Home</a>
-        <a href="#" id="ads-link">Post an Ad</a>
-        <a href="#" id="reviews-link">View My Ads</a>
-        <a href="#" id="reviews-link">My Appointments</a>
-        <a href="#" id="resources-link">Requests</a>
+        
+        <a href="#" id="home-link" >Home</a>
+        <a href="#" id="post-ads-link">Post an Ad</a>
+        <a href="#" id="view-ads-link">View My Ads</a>
+        <a href="#" id="appointments-link">My Appointments</a>
+        <a href="#" id="requests-link">Requests</a>
         <a href="#" id="announcements-link">View Announcements</a>
-        <a href="#" id="announcements-link">View my reviews</a>
+        <a href="#" id="reviews-link">View my reviews</a>
         {{!-- <a href="#" id="settings-link">Settings</a> --}}
         <a href="/frontend/pages/settings.hbs">Settings</a>
     </div>
@@ -198,9 +311,8 @@ home postad viewMyAds appointments requests reviews settings
         </div>
 
         <div class="appointments-container"></div>  
-        {{!-- div for showing confirmed appointments --}}
-
-        {{!-- <div id="content"></div> --}}
+        <div class="deletereviews"> </div>
+      
 
 </body>
 
@@ -236,6 +348,9 @@ home postad viewMyAds appointments requests reviews settings
             {
                 displayAppointmentsPage();
             }
+            if (page==="View my reviews"){
+                displayDeleteReview();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -252,6 +367,9 @@ home postad viewMyAds appointments requests reviews settings
     });
 
    async function displayHomePage() {
+      const appointmentsContainer = document.querySelector(".appointments-container");
+       appointmentsContainer.innerHTML = "";
+     document.querySelector('.deletereviews').innerHTML = "";
      document.getElementById("requests-container").innerHTML = "";
         // To hide the div with class "search-container"
         document.getElementById("ad-form-container").innerHTML = "";
@@ -265,9 +383,11 @@ home postad viewMyAds appointments requests reviews settings
             const data = await response.json();
             const { name } = data;
             document.getElementById("tutors-data").innerHTML = `
-      <div class="container">
-        <h1 style="text-align: center;">Welcome ${name}</h1>
-        <p>ha bhai yeh bchal raha hy home</p>
+      <div class="homepage">
+        {{!-- <img src="${tutor.photo}" alt="${tutor.photo} class="pfp""> --}}
+        <h1 style="text-align: center;">Welcome, ${name}!</h1>
+        <p >You’re just a few steps away from finding students 
+        for yourself. Decide what you want to teach and post an advertisement for it to get started!</p>
         <div class="tutors-row" id="tutors-data"></div>
       </div>
     `;
@@ -275,7 +395,7 @@ home postad viewMyAds appointments requests reviews settings
             console.error(error);
             // Display error message
             document.getElementById("tutors-data").innerHTML = `
-      <div class="container">
+      <div class="hp_error">
         <h1 style="text-align: center;">Error</h1>
         <p>Failed to retrieve username.</p>
         <div class="tutors-row" id="tutors-data"></div>
@@ -289,6 +409,9 @@ home postad viewMyAds appointments requests reviews settings
 
     ///////////////////
   const displayAds = async () => {
+      const appointmentsContainer = document.querySelector(".appointments-container");
+      appointmentsContainer.innerHTML = "";
+     document.querySelector('.deletereviews').innerHTML = "";
      document.getElementById("requests-container").innerHTML = "";
       document.getElementById("tutors-data").innerHTML = "";
       document.getElementById("announcement-data").innerHTML = "";
@@ -307,23 +430,28 @@ home postad viewMyAds appointments requests reviews settings
             let adsHTML = '';
             if (ads.length > 0) {
                 adsHTML = ads.map(ad => `
+        {{!-- <div class="view_background">
+        </div>   --}}
+
         <div class="card">
           <img src="${ad.image}" alt="${ad.subject}">
-          <p>${ad.time}</p>
+          <p>${ad.time} </p>
           <p><b>Grade:</b> ${ad.class}</p>
           <p><b>Subject:</b> ${ad.subject}</p>
           <p><b>Price:</b> ${ad.price}</p>
            <form onsubmit="try { removeAd('${ad._id}'); } catch(err) { console.error(err); } return false;">
-                    <button type="submit" style="padding: 5px;margin-bottom:5px">Remove Ad</button>
+                    <button type="submit" class="remove_ad_button">Remove Ad</button>
                 </form>
         </div>
+      
       `).join('');
             } else {
                 adsHTML = '<p>No ads found for this username</p>';
             }
             document.getElementById("tutors-data").innerHTML = `
-      <div class="container">
-        <h1 style="text-align: center;">${username}, Your all Ads are below</h1>
+      
+      <div class="remove_ad_text">
+        <h1 style="text-align: center;">${username}, Your Ads</h1>
         <div class="tutors-row" id="ads-data">${adsHTML}</div>
       </div>
     `;
@@ -388,6 +516,7 @@ home postad viewMyAds appointments requests reviews settings
     // Add event listener to popstate event (back/forward buttons)
 
  function showAdForm() {
+     document.querySelector('.deletereviews').innerHTML = "";
             document.getElementById("requests-container").innerHTML = "";
      document.getElementById("tutors-data").innerHTML = "";
      document.getElementById("announcement-data").innerHTML = "";
@@ -396,60 +525,210 @@ home postad viewMyAds appointments requests reviews settings
      const appointmentsContainer = document.querySelector(".appointments-container");
      appointmentsContainer.innerHTML = "";
 
+        
         // Create the form elements
+
         const form = document.createElement("form");
+        const formLabel = document.createElement("label");
         form.id = "ad-form";
+        formLabel.textContent = "Post Ad";
         form.style.marginTop = "20px";
         form.style.textAlign = "center";
+        form.style.position = "absolute";
+        form.style.top = "150px";
+        form.style.left = "200px";
+        formLabel.style.fontFamily = "TS Safaa";
+        formLabel.style.fontSize = "20px";
+        formLabel.style.fontStyle = "bold";
+        formLabel.style.position = "absolute"
+        formLabel.style.left = "380px"
+        formLabel.style.top = "-50px"
+        formLabel.style.width = "100px"
 
         const nameDiv = document.createElement("div");
         const nameLabel = document.createElement("label");
-        nameLabel.textContent = "Enter Your User Name: ";
+        nameLabel.textContent = "Name ";
         const nameInput = document.createElement("input");
         nameInput.type = "text";
         nameInput.name = "name";
         nameDiv.appendChild(nameLabel);
         nameDiv.appendChild(nameInput);
+        nameInput.style.height = "30px";
+        nameInput.style.width = "350px";
+        nameInput.style.borderRadius ="5px";
+        nameInput.style.borderStyle = "solid";
+        nameInput.style.borderColor = "grey";
+        nameInput.style.fontFamily = "TS Safaa";
+        nameInput.style.fontSize = "15px";
+        nameInput.style.fontStyle = "normal";
+        nameInput.style.marginBottom = "10px";
+        nameLabel.style.fontFamily = "TS Safaa";
+        nameLabel.style.fontSize = "15px";
+        nameLabel.style.fontStyle = "normal";
+        nameLabel.style.position = "relative";
+        nameLabel.style.right = "150px";
+        nameLabel.style.top = "0px";
+        nameLabel,nameInput.style.display = "block";
+
+    
 
         const subjectsDiv = document.createElement("div");
         const subjectsLabel = document.createElement("label");
-        subjectsLabel.textContent = "Enter Subjects: ";
+        subjectsLabel.textContent = "Subjects";
         const subjectsInput = document.createElement("input");
         subjectsInput.type = "text";
         subjectsInput.name = "subject";
         subjectsDiv.appendChild(subjectsLabel);
         subjectsDiv.appendChild(subjectsInput);
+        subjectsInput.style.height = "30px";
+        subjectsInput.style.width = "350px";
+        subjectsInput.style.borderRadius ="5px";
+        subjectsInput.style.borderStyle = "solid";
+        subjectsInput.style.borderColor = "grey";
+        subjectsInput.style.fontFamily = "TS Safaa";
+        subjectsInput.style.fontSize = "15px";
+        subjectsInput.style.fontStyle = "normal";
+        subjectsInput.style.marginBottom = "10px";
+        subjectsLabel.style.fontFamily = "TS Safaa";
+        subjectsLabel.style.fontSize = "15px";
+        subjectsLabel.style.fontStyle = "normal";
+        subjectsLabel.style.position = "relative";
+        subjectsLabel.style.right = "140px";
+        subjectsLabel.style.top = "0px";
+        subjectsLabel,subjectsInput.style.display = "block";
 
         const gradeDiv = document.createElement("div");
         const gradeLabel = document.createElement("label");
-        gradeLabel.textContent = "Enter Grade: ";
-        const gradeInput = document.createElement("input");
-        gradeInput.type = "text";
-        gradeInput.name = "class";
+        gradeLabel.textContent = "Select Grade ";
+        const gradeSelect = document.createElement("select");
+        const options = ["grade 6-8", "grade 6", "grade 7", "grade 8", "olevels", "alevels", "fsc", "matric", "olevels 1", "olevels 2", "fsc 1", "fsc 2", "matric 1", "matric 2", "bachelors", "masters", "gre", "sat","all grades","others"];
+
+        options.forEach(function (option) {
+            const gradeOption = document.createElement("option");
+            gradeOption.value = option;
+            gradeOption.textContent = option;
+            gradeSelect.appendChild(gradeOption);
+        });
+
+        gradeSelect.name = "classs";
         gradeDiv.appendChild(gradeLabel);
-        gradeDiv.appendChild(gradeInput);
+        gradeDiv.appendChild(gradeSelect);
+        gradeDiv.style.position = "absolute";
+        gradeDiv.style.left = "500px";
+        gradeDiv.style.top = "0px";
+        gradeSelect.style.height = "30px";
+        gradeSelect.style.width = "350px";
+        gradeSelect.style.borderRadius ="5px";
+        gradeSelect.style.borderStyle = "solid";
+        gradeSelect.style.borderColor = "grey";
+        gradeSelect.style.fontFamily = "TS Safaa";
+        gradeSelect.style.fontSize = "15px";
+        gradeSelect.style.fontStyle = "normal";
+        gradeSelect.style.marginBottom = "10px";
+        gradeLabel.style.fontFamily = "TS Safaa";
+        gradeLabel.style.fontSize = "15px";
+        gradeLabel.style.fontStyle = "normal";
+        gradeLabel.style.position = "relative";
+        gradeLabel.style.right = "118px";
+        gradeLabel.style.top = "0px";
+        gradeLabel,gradeSelect.style.display = "block";
+
 
         const costDiv = document.createElement("div");
         const costLabel = document.createElement("label");
-        costLabel.textContent = "Enter Cost: ";
-        const costInput = document.createElement("input");
-        costInput.type = "text";
-        costInput.name = "price";
+        costLabel.textContent = "Select Cost ";
+        const costSelect = document.createElement("select");
+        costSelect.name = "pricee";
+        const optionss = [
+        "5000 pkr per month",
+        "10000 pkr per month",
+        "15000 pkr per month",
+        "20000 pkr per month",
+        "25000 pkr per month",
+        "30000 pkr per month",
+        "35000 pkr per month",
+        "40000 pkr per month",
+        "50000 pkr per month",
+        "Above 50000 pkr",
+        ];
+        optionss.forEach((option) => {
+        const optionElem = document.createElement("option");
+        optionElem.textContent = option;
+        costSelect.appendChild(optionElem);
+        });
         costDiv.appendChild(costLabel);
-        costDiv.appendChild(costInput);
+        costDiv.appendChild(costSelect);
+        costDiv.style.position = "absolute";
+        costDiv.style.left = "500px";
+        costDiv.style.top = "70px";
+        costSelect.style.height = "30px";
+        costSelect.style.width = "350px";
+        costSelect.style.borderRadius ="5px";
+        costSelect.style.borderStyle = "solid";
+        costSelect.style.borderColor = "grey";
+        costSelect.style.fontFamily = "TS Safaa";
+        costSelect.style.fontSize = "15px";
+        costSelect.style.fontStyle = "normal";
+        costSelect.style.marginBottom = "10px";
+        costLabel.style.fontFamily = "TS Safaa";
+        costLabel.style.fontSize = "15px";
+        costLabel.style.fontStyle = "normal";
+        costLabel.style.position = "relative";
+        costLabel.style.right = "125px";
+        costLabel.style.top = "0px";
+        costLabel,costSelect.style.display = "block";
 
         const imageDiv = document.createElement("div");
         const imageLabel = document.createElement("label");
-        imageLabel.textContent = "Enter Image Link: ";
+        imageLabel.textContent = "Image Link";
         const imageInput = document.createElement("input");
         imageInput.type = "text";
         imageInput.name = "image";
         imageDiv.appendChild(imageLabel);
         imageDiv.appendChild(imageInput);
+        imageInput.style.height = "30px";
+        imageInput.style.width = "350px";
+        imageInput.style.borderRadius ="5px";
+        imageInput.style.borderStyle = "solid";
+        imageInput.style.borderColor = "grey";
+        imageInput.style.fontFamily = "TS Safaa";
+        imageInput.style.fontSize = "15px";
+        imageInput.style.fontStyle = "normal";
+        imageInput.style.marginBottom = "10px";
+        imageLabel.style.fontFamily = "TS Safaa";
+        imageLabel.style.fontSize = "15px";
+        imageLabel.style.fontStyle = "normal";
+        imageLabel.style.position = "relative";
+        imageLabel.style.right = "130px";
+        imageLabel.style.top = "0px";
+        imageLabel,imageInput.style.display = "block";
+
 
         const submitButton = document.createElement("button");
         submitButton.type = "submit";
         submitButton.textContent = "Submit";
+        submitButton.style.position = "absolute";
+        submitButton.style.left = "300px";
+        submitButton.style.top = "230px";
+        submitButton.style.width = "300px";
+        submitButton.style.height = "47px";
+        submitButton.style.background = "#FFA7E6";
+        submitButton.style.borderRadius = "100px";
+        submitButton.style.fontFamily = "TS Safaa";
+        submitButton.style.fontSize = "15px";
+        submitButton.style.fontWeight = "500";
+        submitButton.style.fontStyle = "normal";
+        submitButton.style.textAlign = "center";
+        submitButton.style.border = "none";
+        submitButton.style.color = "white";
+        submitButton.style.textDecoration = "none";
+
+        submitButton.addEventListener("mouseover", function() {
+            submitButton.style.background = "#FFD059";
+        });
+        submitButton.addEventListener("mouseout", function() {
+            submitButton.style.background = "#FFA7E6";
+        });
 
         // Add a submit event listener to the form
         form.addEventListener("submit", async (event) => {
@@ -462,7 +741,8 @@ home postad viewMyAds appointments requests reviews settings
                 alert("Username not found. Ad cannot be posted.");
                 return;
             }
-
+    const gradeSelect = document.querySelector("select[name='classs']");
+    const pricc = document.querySelector("select[name='pricee']")
             // Send a POST request to the server to post the ad
             const adResponse = await fetch("/postad", {
                 method: "POST",
@@ -471,9 +751,9 @@ home postad viewMyAds appointments requests reviews settings
                 },
                 body: JSON.stringify({
                     subject: subjectsInput.value,
-                    class: gradeInput.value,
+                    class: gradeSelect.options[gradeSelect.selectedIndex].value,
                     time: nameInput.value,
-                    price: costInput.value,
+                    price: pricc.options[pricc.selectedIndex].value,
                     image: imageInput.value,
                 }),
             });
@@ -483,12 +763,14 @@ home postad viewMyAds appointments requests reviews settings
             alert(responseData);
         });
 
+        form.appendChild(formLabel);
         form.appendChild(nameDiv);
         form.appendChild(subjectsDiv);
         form.appendChild(gradeDiv);
-     form.appendChild(costDiv);
-     form.appendChild(imageDiv);
-     form.appendChild(submitButton);
+        form.appendChild(costDiv);
+        form.appendChild(imageDiv);
+        form.appendChild(submitButton);
+        
 
      document.getElementById("ad-form-container").appendChild(form);
 
@@ -500,11 +782,12 @@ home postad viewMyAds appointments requests reviews settings
          const username = nameInput.value;
          const tutorResponse = await fetch(`/tutor/${username}`);
          if (tutorResponse.status === 404) {
-             alert("Username not found. Ad cannot be posted.");
+            alert("Username not found. Ad cannot be posted.");
              return;
          }
      });
  }
+
  // Add a submit event listener to the form
     const onSubmit = async (event) => {
         event.preventDefault(); // Prevent the default form submission behavior
@@ -517,6 +800,7 @@ home postad viewMyAds appointments requests reviews settings
             form.removeEventListener("submit", onSubmit); // Remove the event listener
             return;
         }
+
 
         // Send a POST request to the server to post the ad
         const adResponse = await fetch("/postad", {
@@ -545,10 +829,7 @@ home postad viewMyAds appointments requests reviews settings
         // Add code to display reviews page here
     }
     async function displayRequestsPage() {
-        // Clear other containers and elements on the page
-
-
-        // Clear previous results from requests container
+         document.querySelector('.deletereviews').innerHTML = "";
         document.getElementById("requests-container").innerHTML = "";
            document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
@@ -569,6 +850,8 @@ home postad viewMyAds appointments requests reviews settings
 
             for (let i = 0; i < data.length; i++) {
                 const requestBox = document.createElement("div");
+                requestBox.style.position = "relative";
+                requestBox.style.top = "200px";
                 requestBox.style.backgroundColor = "#f5f5f5";
                 requestBox.style.border = "1px solid #ddd";
                 requestBox.style.padding = "10px";
@@ -711,6 +994,7 @@ home postad viewMyAds appointments requests reviews settings
     }
 
  function displayAppointmentsPage() {
+     document.querySelector('.deletereviews').innerHTML = "";
         document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.querySelector(".search-container").style.display = "none";
@@ -765,10 +1049,8 @@ home postad viewMyAds appointments requests reviews settings
     }
 
 
-
-
-
     function displayResourcesPage() {
+         document.querySelector('.deletereviews').innerHTML = "";
            document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.querySelector(".search-container").style.display = "none";
@@ -777,11 +1059,89 @@ home postad viewMyAds appointments requests reviews settings
         appointmentsContainer.innerHTML = "";
     }
 
-    function displayDeleteReview() {
+    async function displayDeleteReview() {
+         document.getElementById("ad-form-container").innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        document.querySelector('.search-container').style.display = 'none';
+        document.getElementById("tutors-data").innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = '<h1 style="text-align: center;">All Reviews</h1><br>';
 
+        const email = localStorage.getItem("username");
+        if (!email) {
+            console.error("Email of tutor not found in database, database error");
+            return;
+        }
+
+        const reviewsResponse = await fetch(`/returnRelevantReviews/${email}`);
+        const reviewsData = await reviewsResponse.json();
+
+        const reviewsContainer = document.querySelector(".deletereviews");
+        reviewsContainer.innerHTML = "";
+
+        reviewsData.forEach((review) => {
+            const reviewCard = document.createElement("div");
+            reviewCard.classList.add("review-card");
+
+            const content = document.createElement("p");
+            content.innerText = review.content;
+            reviewCard.appendChild(content);
+
+            const tutorEmail = document.createElement("p");
+            tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
+            reviewCard.appendChild(tutorEmail);
+
+            const studentEmail = document.createElement("p");
+            studentEmail.innerText = `Student email: ${review.studentEmail}`;
+            reviewCard.appendChild(studentEmail);
+            reviewsContainer.appendChild(reviewCard);
+        });
+
+        // Add styles to the reviews container
+        reviewsContainer.style.display = "flex";
+        reviewsContainer.style.flexWrap = "wrap";
+        reviewsContainer.style.justifyContent = "center";
+
+        // Add styles to the review cards
+        const reviewCards = document.querySelectorAll(".review-card");
+        reviewCards.forEach((card) => {
+            card.style.width = "300px";
+            card.style.height = "300px";
+            card.style.backgroundColor = "#fff";
+            card.style.border = "1px solid #ccc";
+            card.style.borderRadius = "10px";
+            card.style.boxShadow = "2px 2px 10px #ccc";
+            card.style.margin = "20px";
+            card.style.padding = "10px";
+            card.style.display = "flex";
+            card.style.flexDirection = "column";
+            card.style.justifyContent = "space-between";
+        });
+
+        // Add styles to the review content
+        const contents = document.querySelectorAll(".review-card p:first-child");
+        contents.forEach((content) => {
+            content.style.fontSize = "16px";
+            content.style.fontWeight = "bold";
+            content.style.marginBottom = "10px";
+            content.style.overflow = "hidden";
+            content.style.textOverflow = "ellipsis";
+            content.style.whiteSpace = "nowrap";
+        });
+
+        // Add styles to the review emails
+        const emails = document.querySelectorAll(".review-card p:not(:first-child)");
+        emails.forEach((email) => {
+            email.style.fontSize = "14px";
+            email.style.color = "#888";
+            email.style.marginTop = "10px";
+        });
     }
 
     function displayAnnouncementsPage() {
+         document.querySelector('.deletereviews').innerHTML = "";
           document.getElementById("requests-container").innerHTML = "";
            document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
@@ -792,7 +1152,7 @@ home postad viewMyAds appointments requests reviews settings
         fetch("/viewann")
             .then((response) => response.json())
             .then((data) => {
-                let html = `
+                let html = ` 
          
             `;
                 for (let i = 0; i < data.announcements.length; i++) {

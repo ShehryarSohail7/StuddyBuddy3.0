@@ -69,6 +69,59 @@ app.get("/signup_follow", (request, resolve) => {
   resolve.render("signup_follow");
 });
 
+// app.get("/signup_student", (request, resolve) => {
+//   //to go to that page
+//   resolve.render("signup_student");
+// });
+
+// // create a new user for our database
+// app.post("/signup_student", async (request, resolve) => {
+//   try {
+//     console.log("kasdjfakdsfj", request.body);
+//     const capture_data = new student_db({
+//       name: request.body.name,
+//       email: request.body.email,
+//       password: request.body.password,
+//       // photo: request.file.path
+//       photo: request.file
+//         ? request.file.path
+//         : "signup_uploads\\default123.jpg",
+//       // Set the image attribute to the path of the uploaded file, or the
+//       // default image path if no file was uploaded
+//     });
+//     const signup_saved = await capture_data.save();
+//     const message = "Sign up as Student Successful";
+//     const script = `<script>alert('${message}'); window.location.href = '/';</script>`;
+
+//     // resolve.status(201).render(script)
+//     resolve.send(script);
+//   } catch (error) {
+//     console.log(error);
+//     //error response design
+//     // resolve.status(400).send(error)                         //one way
+
+//     // console.error(error);                                   //second way
+//     // if (error.code === 11000) {
+//     //     resolve.status(400).send("Email already exists");
+//     // } else {
+//     //     resolve.status(400).send("Signup failed");
+//     // }
+
+//     if (error.code === 11000) {
+//       // third way
+//       // display an alert message to the user
+//       const message = "Email already exists";
+//       const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
+//       resolve.send(script);
+//     } else {
+//       // display an alert message to the user
+//       const message = "Signup failed";
+//       const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
+//       resolve.send(script);
+//     }
+//   }
+// });
+
 app.get("/signup_student", (request, resolve) => {
   //to go to that page
   resolve.render("signup_student");
@@ -80,36 +133,25 @@ app.post(
   upload.single("photo"),
   async (request, resolve) => {
     try {
+      console.log("yeh hai request", request.name);
+      console.log(request.file);
       const capture_data = new student_db({
         name: request.body.name,
         email: request.body.email,
         password: request.body.password,
-        // photo: request.file.path
         photo: request.file
           ? request.file.path
           : "signup_uploads\\default123.jpg",
-        // Set the image attribute to the path of the uploaded file, or the
-        // default image path if no file was uploaded
       });
       const signup_saved = await capture_data.save();
-      const message = "Sign up as Student Successful";
+      const message = "Sign up as studnet Successful";
       const script = `<script>alert('${message}'); window.location.href = '/';</script>`;
 
       // resolve.status(201).render(script)
       resolve.send(script);
     } catch (error) {
       //error response design
-      // resolve.status(400).send(error)                         //one way
-
-      // console.error(error);                                   //second way
-      // if (error.code === 11000) {
-      //     resolve.status(400).send("Email already exists");
-      // } else {
-      //     resolve.status(400).send("Signup failed");
-      // }
-
       if (error.code === 11000) {
-        // third way
         // display an alert message to the user
         const message = "Email already exists";
         const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
@@ -505,10 +547,20 @@ app.delete("/deleteann", async (req, res) => {
   }
 });
 
+// app.get("/ads", async (req, res) => {
+//   // gives all ads
+//   try {
+//     const tutors = await ad_db.find({});
+//     res.send(tutors);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Error fetching ads");
+//   }
+// });
+
 app.get("/ads", async (req, res) => {
-  // gives all ads
   try {
-    const tutors = await ad_db.find({});
+    const tutors = await ad_db.find({}).sort({ createdAt: -1 }); // sort ads by descending order of createdAt field
     res.send(tutors);
   } catch (err) {
     console.error(err);
@@ -642,7 +694,7 @@ app.get("/adss/:username", async (req, res) => {
   }
 });
 
-////////////////////////////// appt field //////////////////////////
+////////////////////////////// appt field ////////////////////////////////////////////////////////////////////appt field ////////////////////
 
 // app.delete("/appointments", async (req, res) => {
 //   // code to delete all appoint objects of tutors
@@ -787,6 +839,7 @@ app.post("/confirmedapptsStudent/:email/ads", async (req, res) => {
 });
 
 app.get("/returningConfirmedAppts/:email", async (req, res) => {
+  /// returns all confirmed appts of tutors
   try {
     const tutor = await tutor_db.findOne({ email: req.params.email });
     if (!tutor) {
@@ -814,9 +867,88 @@ app.get("/returningConfirmedApptsStudents/:email", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-//////////////////////// appt field ended ///////////////////////
+//////////////////////// appt field ended ////////////////////////////////////////////////////////////////////// appt field ended //////////////
+
+/////////////////////// reviews field started //////////////////////////////////////////////////////////////////// review field started ////////
+
+app.get("/returnRelevantReviews/:email", async (req, res) => {
+  // takes an email of tutor and returns all reviews
+  try {
+    const reviews = await review_db.find({ tutorEmail: req.params.email });
+    res.json(reviews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+app.get("/returnRelevantReviewsStudent/:email", async (req, res) => {
+  // takes an email of student and returns all reviews
+  try {
+    const reviews = await review_db.find({ studentEmail: req.params.email });
+    res.json(reviews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+app.delete("/deleteReviewById/:id", async (req, res) => {
+  // takes an id and deletes the review
+  try {
+    const result = await review_db.deleteOne({ _id: req.params.id });
+    console.log(result);
+    res.status(200).send("Review deleted successfully");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred while deleting the review");
+  }
+});
+
+app.post("/addreview", async (req, res) => {
+  // simply adds a review to the db (for student)
+  try {
+    const { tutorEmail, studentEmail, content } = req.body;
+
+    const newReview = new review_db({
+      content,
+      tutorEmail,
+      studentEmail,
+    });
+
+    const savedReview = await newReview.save();
+    res.json("Review posted successfully");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+app.get("/viewallreviews", async (req, res) => {
+  // returns all reviews - for admin
+  try {
+    const reviews = await review_db.find({});
+    res.json({ reviews });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching reviews");
+  }
+});
+
+app.delete("/deleteallreviews", async (req, res) => {
+  /// deletes all reviews in the db
+  try {
+    const result = await review_db.deleteMany({});
+    res.json({ message: `${result.deletedCount} reviews deleted.` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting reviews");
+  }
+});
+
+/////////////////////// reviews field ended //////////////////////////////////////////////////////////////////// review field ended ////////
 
 app.delete("/deleteads", async (req, res) => {
+  /// deletes an ad when given an id
   // works greatly with id
   try {
     const adId = req.body._id;
