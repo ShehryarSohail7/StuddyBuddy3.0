@@ -166,7 +166,15 @@
 </head>
 <body>
    
+    {{#if userTypeIsStudent}}
+    {{> navbar_student}}
+    {{else if userTypeIsTutor}}
+        {{> navbar_tutor}}
+    {{else if userTypeIsAdmin}}
+        {{> navbar_admin}}
+    {{/if}}
 
+    
     <div class="container">
         <h1>Settings</h1>
         <a href="/update_password" class="button1">Update Password<img src="/update_password_img.png" alt="Image description" class="update_password_img"></a><br>

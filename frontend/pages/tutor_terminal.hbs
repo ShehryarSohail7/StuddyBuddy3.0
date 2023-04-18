@@ -351,6 +351,9 @@ home postad viewMyAds appointments requests reviews settings
             if (page==="View my reviews"){
                 displayDeleteReview();
             }
+            if (page === "Settings") {
+                displaySettingsPage();
+            } 
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -1186,5 +1189,10 @@ home postad viewMyAds appointments requests reviews settings
         displayHomePage();
     }
     );
+
+
+function displaySettingsPage() {
+window.location.href = "/settings";
+}
 
 </script>
