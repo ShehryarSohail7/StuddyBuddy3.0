@@ -171,7 +171,7 @@
         <h1>Settings</h1>
         <a href="/update_password" class="button1">Update Password<img src="/update_password_img.png" alt="Image description" class="update_password_img"></a><br>
         {{!-- <a href="/">Signout</a><br> --}}
-        <a href="/" onclick="signOut()" class="button2">Signout<img src="/signout_img.png" alt="Image description" class="signout_img"></a><br>
+        <a onclick=signOut() class="button2">Signout <img src="/signout_img.png" alt="Image description" class="signout_img"></a><br>
     </div>
 
     <script>
@@ -183,6 +183,8 @@
         function signOut() {
             if (confirm("Are you sure you want to sign out?")) {
                 window.location.href = "/";
+            }else{
+                window.location.href = "/settings";
             }
         }
     </script>
