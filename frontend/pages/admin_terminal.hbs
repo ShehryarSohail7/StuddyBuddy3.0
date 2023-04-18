@@ -23,10 +23,8 @@ background: #FFD059;
             position: absolute;
             width: 1280px;
             height: 35px;
-            left: 490px;
+            left: 420px;
             top: 30px;
-            background-color: #ffffff;
-            overflow: hidden;
         }
 .review-box {
     border: 1px solid #ccc;
@@ -59,27 +57,78 @@ background: #FFD059;
 
         /* Style for Announcement Cards */
         .announcement-card {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            width: 100%;
+            position: relative;
+            top: 150px;
+            width: 1000px;
+            height: 100px;
             margin: 10px;
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #fff;
+            font-family: "TS Safaa";
+            font-style: normal;
+            background-color: #ffd0598b;
             padding: 20px;
+            border-radius: 20px;
+            
+            {{!-- box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); --}}
+        }
+        .announcments_heading{
+            position: absolute;
+            top: 80px;
+            text-align: center;
+            font-family: "Inter";
+            font-size: 10px;
+            font-weight: 200;
+            font-style: medium;
+            align-items: center;
         }
 
         .announcement-card h1 {
-            font-size: 28px;
-            color: #333;
+            font-size: 15px;
+            font-style: normal;
+            font-weight: 500;
+            color: #000000;
             margin-bottom: 10px;
         }
 
         .announcement-card p {
-            font-size: 16px;
+            font-size: 10px;
             color: #999;
             margin-bottom: 0;
         }
-
+        .Add_announcement_button{
+            position: absolute;
+            top: 150px;
+            width: 220px;
+            height: 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'TS Safaa';
+            font-style: normal;
+            font-weight: 500;
+            font-size: 15px;
+            text-align: center;
+            color: #000000;
+            background: #FFD059;
+            border: none;
+            align-items: center;
+        }
+        .delete_annoucements_button{
+            position: relative;
+            top: 100px;
+            left: 435px;
+            top: -10px;
+            width: 100px;
+            height: 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'TS Safaa';
+            font-style: normal;
+            font-weight: 500;
+            font-size: 15px;
+            text-align: center;
+            color: #000000;
+            background: #FFD059;
+            border: none;
+        }
         /* Style for Tutors Cards */
         .tutors-row {
             display: flex;
@@ -110,10 +159,7 @@ background: #FFD059;
             margin: 10px;
             color: gray;
         }
-        .Add_announcement_button{
-            position: absolute;
-            top: 400px;
-        }
+        
         .logo{
             position: absolute;
             width: 175px;
@@ -378,11 +424,14 @@ background: #FFD059;
             `;
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
+            <div class="announcments_heading">
+                <h1>Announcements</h1>
+                </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>
             <p>${data.announcements[i].createdAt}</p>
             <br>
-            <button onclick="deleteAnnouncement('${data.announcements[i]._id}')">Delete announcement</button>
+            <button onclick="deleteAnnouncement('${data.announcements[i]._id}')" class="delete_annoucements_button">Delete</button>
           </div>`;
                 }
                 document.getElementById("announcement-data").innerHTML = html;
@@ -401,19 +450,53 @@ background: #FFD059;
         // create the pop-up dialog
         const popup = document.createElement("div");
         popup.classList.add("popup");
-        popup.style.position = "relative";
-        popup.style.top = "200px";
+        popup.style.position = "absolute";
+        popup.style.top = "120px";
+        popup.style.zIndex = "9999"
 
+        const popup_box = document.createElement("div");
+        popup_box.style.backgroundColor = "white";
+        popup_box.style.border = "1px solid black";
+        popup_box.style.padding = "10px";
+        popup_box.style.background = "#FFF1CD";
+        popup_box.style.borderRadius = "10px"
+     
         // create the input field
         const input = document.createElement("input");
         input.type = "text";
         input.placeholder = "Enter your announcement here...";
         input.required = true; // add required attribute
+        input.style.height = "30px";
+        input.style.width = "500px";
+        input.style.borderRadius ="5px";
+        input.style.borderStyle = "solid";
+        input.style.borderColor = "grey";
+        input.style.fontFamily = "TS Safaa";
+        input.style.fontSize = "15px";
+        input.style.fontStyle = "normal";
+        input.style.marginBottom = "10px";
         popup.appendChild(input);
+        // add the input field to the container
+        popup_box.appendChild(input);
 
         // create the submit button
         const button = document.createElement("button");
         button.textContent = "Submit";
+        button.style.position = "relative";
+        button.style.left = "170px";
+        button.style.top = "0px";
+        button.style.width = "150px";
+        button.style.height = "30px";
+        button.style.background = "#FFD059";
+        button.style.borderRadius = "100px";
+        button.style.fontFamily = "TS Safaa";
+        button.style.fontSize = "15px";
+        button.style.fontWeight = "500";
+        button.style.fontStyle = "normal";
+        button.style.textAlign = "center";
+        button.style.border = "none";
+        button.style.color = "black";
+        button.style.textDecoration = "none";
         button.onclick = () => {
             const content = input.value.trim();
             if (content.length === 0) {
@@ -422,13 +505,26 @@ background: #FFD059;
                 error.textContent = "Announcement cannot be empty.";
                 error.classList.add("error-message");
                 popup.appendChild(error);
+                popup_box.appendChild(error);
+                error.style.textAlign = "center";
+                error.style.fontFamily = "TS Safaa";
                 return;
             }
+
             saveAnnouncement(content);
             popup.remove();
             addAnnouncementButton.disabled = false; // enable the "Add Announcement" button
         };
+        input,button.style.display = "block";
+        
         popup.appendChild(button);
+        // add the button to the container
+        popup_box.appendChild(button);
+
+        // add the container to the popup
+        popup.appendChild(popup_box);
+
+        
 
         // add the pop-up dialog to the page
         const announcementsDiv = document.getElementById("announcement-data");
