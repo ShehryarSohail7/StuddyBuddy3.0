@@ -985,13 +985,20 @@
         reviewsData.forEach((review) => {
             const reviewCard = document.createElement("div");
             reviewCard.classList.add("review-card");
+            reviewCard.style.position = "relative";
+            reviewCard.style.top = "-20px";
 
             const content = document.createElement("p");
             content.innerText = review.content;
+            content.style.fontFamily = "TS Safaa";
+            content.style.fontStyle = "normal";
+            content.style.width = "85%";
             reviewCard.appendChild(content);
 
             const tutorEmail = document.createElement("p");
             tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
+            tutorEmail.style.position = "relative";
+            tutorEmail.style.top = "15px";
             reviewCard.appendChild(tutorEmail);
 
             const studentEmail = document.createElement("p");
@@ -1000,6 +1007,13 @@
 
             const removeReviewBtn = document.createElement("button");
             removeReviewBtn.innerText = "Remove Review";
+            removeReviewBtn.style.position = "relative";
+            removeReviewBtn.style.top = "-70px";
+            removeReviewBtn.style.left = "850px";
+            removeReviewBtn.style.borderRadius = "30px";
+            removeReviewBtn.style.border = "none";
+            removeReviewBtn.style.background = "#FFD059";
+            removeReviewBtn.style.fontFamily = "TS Safaa";
             removeReviewBtn.addEventListener("click", async () => {
                 try {
                     const deleteResponse = await fetch(`/deleteReviewById/${review._id}`, { method: "DELETE" });
@@ -1025,36 +1039,36 @@
         // Add styles to the review cards
         const reviewCards = document.querySelectorAll(".review-card");
         reviewCards.forEach((card) => {
-            card.style.width = "300px";
-            card.style.height = "300px";
-            card.style.backgroundColor = "#fff";
+            card.style.width = "1000px";
+            card.style.height = "100px";
+            card.style.backgroundColor = "#ffd0598b";
             card.style.border = "1px solid #ccc";
-            card.style.borderRadius = "10px";
+            card.style.borderRadius = "20px";
             card.style.boxShadow = "2px 2px 10px #ccc";
-            card.style.margin = "20px";
+            card.style.margin = "10px";
             card.style.padding = "10px";
-            card.style.display = "flex";
             card.style.flexDirection = "column";
-            card.style.justifyContent = "space-between";
         });
 
         // Add styles to the review content
         const contents = document.querySelectorAll(".review-card p:first-child");
         contents.forEach((content) => {
-            content.style.fontSize = "16px";
-            content.style.fontWeight = "bold";
+            content.style.fontSize = "15px";
             content.style.marginBottom = "10px";
             content.style.overflow = "hidden";
             content.style.textOverflow = "ellipsis";
             content.style.whiteSpace = "nowrap";
+            content.style.fontFamily = "TS Safaa";
+            content.style.fontWeight = "500";
         });
 
         // Add styles to the review emails
         const emails = document.querySelectorAll(".review-card p:not(:first-child)");
         emails.forEach((email) => {
-            email.style.fontSize = "14px";
+            email.style.fontSize = "12px";
             email.style.color = "#888";
             email.style.marginTop = "10px";
+            email.style.fontFamily = "TS Safaa";
         });
     }
 
