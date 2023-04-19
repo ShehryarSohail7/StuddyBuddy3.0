@@ -884,27 +884,52 @@ home postad viewMyAds appointments requests reviews settings
             for (let i = 0; i < data.length; i++) {
                 const requestBox = document.createElement("div");
                 requestBox.style.position = "relative";
-                requestBox.style.top = "0px";
-                requestBox.style.backgroundColor = "#f5f5f5";
-                requestBox.style.border = "1px solid #ddd";
+                requestBox.style.left = "30px";
+                requestBox.style.top = "100px";
+                requestBox.style.backgroundColor = "#ffd0598b";
+                requestBox.style.border = "2px solid #FFD059";
                 requestBox.style.padding = "10px";
-                requestBox.style.borderRadius = "5px";
+                requestBox.style.margin = "10px";
+                requestBox.style.borderRadius = "20px";
+                requestBox.style.width = "30%";
+                requestBox.style.textAlign = "center";
+                requestBox.style.display = "inline-block";
+                requestBox.style.boxSizing = "border-box";
+                requestBox.style.fontFamily = "TS Safaa";
+                
+
+
 
                 const idRequest = document.createElement("p");
                 idRequest.textContent= `Request ID : ${data[i]._id}`;
+                idRequest.style.lineHeight = "1.2";
                 const name= document.createElement("p");
                 name.textContent= `Email of student : ${data[i].username}`;
+                name.style.lineHeight = "1.2";
                 const coursesLabel = document.createElement("p");
                 coursesLabel.textContent = `Courses requested: ${data[i].courses}`;
+                coursesLabel.style.lineHeight = "1.2";
                 const daysLabel = document.createElement("p");
                 daysLabel.textContent = `Days per week: ${data[i].days}`;
+                daysLabel.style.lineHeight = "1.2";
                 const hoursLabel = document.createElement("p");
                 hoursLabel.textContent = `Hours per day: ${data[i].hours}`;
+                hoursLabel.style.lineHeight = "1.2";
                 const bidLabel = document.createElement("p");
                 bidLabel.textContent = `Bid: ${data[i].bid}`;
-             const acceptBtn = document.createElement('button');
+                bidLabel.style.lineHeight = "1.2";
+                const acceptBtn = document.createElement('button');
                 acceptBtn.style.width = '100px';
                 acceptBtn.style.height = '50px';
+                acceptBtn.style.width = '100px';
+                acceptBtn.style.height = '50px';
+                acceptBtn.style.borderRadius = "30px";
+                acceptBtn.style.border= "none";
+                acceptBtn.style.background = "#FFD059";
+                acceptBtn.style.fontFamily = "TS Safaa";
+                acceptBtn.style.fontWeight = "500";
+                acceptBtn.style.textAlign = "center";
+                {{!-- acceptBtn.style.marginRight = "30px"; --}}
                 const acceptText = document.createTextNode('Accept');
                 acceptBtn.appendChild(acceptText);
                  acceptBtn.onclick = async () => {
@@ -976,8 +1001,16 @@ home postad viewMyAds appointments requests reviews settings
               
                 /// decline function functionality
                 const declineBtn = document.createElement('button');
-           declineBtn.style.width = '100px';
+
+                declineBtn.style.width = '100px';
                 declineBtn.style.height = '50px';
+                declineBtn.style.borderRadius = "30px";
+                declineBtn.style.border= "none";
+                declineBtn.style.background = "#FFD059";
+                declineBtn.style.fontFamily = "TS Safaa";
+                declineBtn.style.fontWeight = "500";
+                declineBtn.style.textAlign = "center";
+                declineBtn.style.marginLeft = "30px";
                 const declineText = document.createTextNode('Decline');
                 declineBtn.onclick = function () {
                     const email = localStorage.getItem('username');
@@ -1012,6 +1045,7 @@ home postad viewMyAds appointments requests reviews settings
                 if (data[i].desc) {
                     const descLabel = document.createElement("p");
                     descLabel.textContent = `Description: ${data[i].desc}`;
+                    descLabel.style.lineHeight = "1.2";
                     requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel, descLabel, acceptBtn, declineBtn);
                 } else {
                     requestBox.append(idRequest,name,coursesLabel, daysLabel, hoursLabel, bidLabel, acceptBtn, declineBtn);
