@@ -30,7 +30,7 @@ background: #FFD059;
     position: relative;
     top: 100px;
     left: 100px;
-    background: #ffd0598b;
+    background: #fcd7f1;
     border-radius: 20px;
     padding: 10px;
     margin: 10px;
@@ -63,9 +63,14 @@ background: #FFD059;
     top: -70px;
     left: 850px;
     border-radius: 30px;
+    transition: all 0.2s ease-in-out;
     border: none;
     background: #FFD059;
     font-family: "TS Safaa";
+}
+
+.btn:hover{
+    transform: scale(1.2)
 }
 
         .navbar a {
@@ -99,7 +104,7 @@ background: #FFD059;
             margin: 10px;
             font-family: "TS Safaa";
             font-style: normal;
-            background-color: #ffd0598b;
+            background-color: #fcd7f1;
             padding: 20px;
             border-radius: 20px;
             
@@ -137,6 +142,7 @@ background: #FFD059;
             border-radius: 30px;
             text-decoration: none;
             font-family: 'TS Safaa';
+            transition: all 0.2s ease-in-out;
             font-style: normal;
             font-weight: 500;
             font-size: 15px;
@@ -146,7 +152,11 @@ background: #FFD059;
             border: none;
             align-items: center;
         }
-        .delete_annoucements_button{
+
+        .Add_announcement_button:hover{
+            transform: scale(1.2);
+        }
+        .delete_announcements_button{
             position: relative;
             top: 100px;
             left: 435px;
@@ -156,6 +166,7 @@ background: #FFD059;
             border-radius: 30px;
             text-decoration: none;
             font-family: 'TS Safaa';
+            transition: all 0.2s ease-in-out;
             font-style: normal;
             font-weight: 500;
             font-size: 15px;
@@ -164,6 +175,10 @@ background: #FFD059;
             background: #FFD059;
             border: none;
         }
+        .delete_announcements_button:hover{
+            transform: scale(1.2);
+        }
+
         /* Style for Tutors Cards */
         .tutors-row {
             display: flex;
@@ -315,7 +330,7 @@ background: #FFD059;
                 </div>
             <div class="homepage">
                 <img src="/admin.png" alt="Image description" class="admin">
-                <h1 style="text-align: center;">Welcome Admin!</h1>
+                <h1 style="text-align: center; font-family:'TS Safaa'; font-weight:550; top: 32%; font-size:180%;">Welcome, Admin!</h1>
                 <div class="tutors-row" id="tutors-data"></div>
             </div>
         `;
@@ -460,13 +475,13 @@ background: #FFD059;
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
             <div class="announcments_heading">
-                <h1>Announcements</h1>
+                 <h1 style="font-family:'TS Safaa';">Announcements</h1>
                 </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>
             <p>${data.announcements[i].createdAt}</p>
             <br>
-            <button onclick="deleteAnnouncement('${data.announcements[i]._id}')" class="delete_annoucements_button">Delete</button>
+            <button onclick="deleteAnnouncement('${data.announcements[i]._id}')" class="delete_announcements_button">Delete</button>
           </div>`;
                 }
                 document.getElementById("announcement-data").innerHTML = html;

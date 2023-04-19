@@ -417,8 +417,8 @@ home postad viewMyAds appointments requests reviews settings
             const { name } = data;
             document.getElementById("tutors-data").innerHTML = `
       <div class="homepage">
-        {{!-- <img src="${tutor.photo}" alt="${tutor.photo} class="pfp""> --}}
-        <h1 style="text-align: center;">Welcome, ${name}!</h1>
+        <img src="/tutorpic.png" style="position: absolute; float: left; left: 9%; max-width: 28%; top:30%;">
+        <h1 style="text-align: center; font-family:'TS Safaa'; font-weight:550; top: 32%; font-size:180%;">Welcome, ${name}!</h1>
         <p >You’re just a few steps away from finding students 
         for yourself. Decide what you want to teach and post an advertisement for it to get started!</p>
         <div class="tutors-row" id="tutors-data"></div>
@@ -484,7 +484,7 @@ home postad viewMyAds appointments requests reviews settings
             document.getElementById("tutors-data").innerHTML = `
       
       <div class="remove_ad_text">
-        <h1 style="text-align: center;">${username}, Your Ads</h1>
+        <h1 style="text-align: center; font-family: 'TS Safaa', cursive; ">${username}, Your Ads</h1>
         <div class="tutors-row" id="ads-data">${adsHTML}</div>
       </div>
     `;
@@ -1234,7 +1234,7 @@ home postad viewMyAds appointments requests reviews settings
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
             <div class="announcments_heading">
-                <h1>Announcements</h1>
+                <h1 style="font-family:'TS Safaa';">Announcements</h1>
                 </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>

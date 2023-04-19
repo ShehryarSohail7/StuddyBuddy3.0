@@ -57,7 +57,7 @@
             margin: 10px;
             font-family: "TS Safaa";
             font-style: normal;
-            background-color: #ffd0598b;
+            background-color: #fcd7f1;
             padding: 20px;
             border-radius: 20px;
         }
@@ -133,7 +133,7 @@
             position: relative;
             top: 70px;
             left: 30px;
-            background-color: #ffd0598b;
+            background-color: #fcd7f1;
             border: 1px solid #ddd;
             padding: 10px;
             margin: 10px;
@@ -385,9 +385,13 @@
             const response = await fetch(`/usernameStudent/${email}`);
             const data = await response.json();
             const { name } = data;
+           
             document.getElementById("tutors-data").innerHTML = `
       <div class="homepage">
-        <h1 style="text-align: center;">Welcome ${name}!</h1>
+       <img src="/studentpic.png" style="position: absolute; float: left; left: 8%; max-width: 30%; top:30%;">
+        <h1 style="text-align: center; font-family:'TS Safaa'; font-weight:550; top: 32%; font-size:180%;">Welcome, ${name}!</h1>
+       
+
         <p>You’re just a few steps away from finding the perfect tutor for yourself. Browse through our gallery of available tutors now!</p>
         <div class="tutors-row" id="tutors-data"></div>
       </div>
@@ -845,6 +849,7 @@
         const heading = document.createElement("h2");
         heading.innerText = "All Reviews";
         heading.style.textAlign = "center";
+        heading.style.fontFamily = "TS Safaa";
         popupContent.appendChild(heading);
 
         const reviewsContainer = document.createElement("div");
@@ -1147,7 +1152,7 @@
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
              <div class="announcments_heading">
-                <h1>Announcements</h1>
+                <h1 style="font-family:'TS Safaa';">Announcements</h1>
                 </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>
