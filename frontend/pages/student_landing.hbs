@@ -129,15 +129,34 @@
         }
 
 
-.appointment-box {
-  background-color: #f2f2f2;
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px;
-  width: 30%;
-  box-sizing: border-box;
-  display: inline-block;
-}
+        .appointment-box {
+            position: relative;
+            top: 70px;
+            left: 30px;
+            background-color: #ffd0598b;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            width: 30%;
+            box-sizing: border-box;
+            display: inline-block;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .appointment-box h1{
+            font-family: "TS Safaa";
+            font-size: 15px;
+            font-weight: 500;
+            font-style: medium;
+        }
+
+        .appointment-box p{
+            font-family: "TS Safaa";
+            font-size: 10px;
+            font-weight: 500;
+            font-style: normal;
+            color: #999;
+        }
         .card img {
             width: 100%;
             height: auto;
@@ -1069,14 +1088,13 @@
                     const checkboxId = `ad-${ad._id}-checkbox`;
                     return `
                     <div class="appointment-box">
-                  
+                        <h1>Appointment confirmed</h1>
                         <p>Tutor email: ${ad.studentEmail}</p>
                         <p>Courses: ${ad.courses}</p>
                         <p>Days: ${ad.days}</p>
                         <p>Hours: ${ad.hours}</p>
                         <p>Bid: ${ad.bid}</p>
                         <p>Description: ${ad.desc}</p>
-                        <h2>Appointment confirmed</h2>
                         <input type="checkbox" id="${checkboxId}" name="${checkboxId}">
                     </div>
                 `;
