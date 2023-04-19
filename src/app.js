@@ -217,11 +217,11 @@ app.post("/login", async (request, resolve) => {
       student_db.find({ email }).then((result) => {
         // const matchingEmails = result.filter((result) => result.email === email);
         // const emails = matchingEmails.map((matchingEmail) => matchingEmail.email);
-        if (password !== confirm_password) {
-          const message = "your password and confirm password are different";
-          const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
-          resolve.send(script);
-        } else {
+        // if (password !== confirm_password) {
+        //   const message = "your password and confirm password are different";
+        //   const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
+        //   resolve.send(script);
+        // } else {
           if (result.length === 0) {
             const message = "no such email exists";
             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
@@ -251,17 +251,17 @@ app.post("/login", async (request, resolve) => {
               resolve.render("student_landing");
             }
           }
-        }
+        //} 
       });
     } else if (user_type === "tutor") {
       tutor_db.find({ email }).then((result) => {
         // const matchingEmails = result.filter((result) => result.email === email);
         // const emails = matchingEmails.map((matchingEmail) => matchingEmail.email);
-        if (password !== confirm_password) {
-          const message = "your password and confirm password are different";
-          const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
-          resolve.send(script);
-        } else {
+        // if (password !== confirm_password) {
+        //   const message = "your password and confirm password are different";
+        //   const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
+        //   resolve.send(script);
+        // } else {
           if (result.length === 0) {
             const message = "no such email exists";
             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
@@ -289,17 +289,17 @@ app.post("/login", async (request, resolve) => {
               resolve.render("tutor_terminal");
             }
           }
-        }
+        //}
       });
     } else if (user_type === "admin") {
       admin_db.find({ email }).then((result) => {
         // const matchingEmails = result.filter((result) => result.email === email);
         // const emails = matchingEmails.map((matchingEmail) => matchingEmail.email);
-        if (password !== confirm_password) {
-          const message = "your password and confirm password are different";
-          const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
-          resolve.send(script);
-        } else {
+        // if (password !== confirm_password) {
+        //   const message = "your password and confirm password are different";
+        //   const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
+        //   resolve.send(script);
+        // } else {
           if (result.length === 0) {
             const message = "no such email exists";
             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
@@ -327,7 +327,7 @@ app.post("/login", async (request, resolve) => {
               resolve.render("admin_terminal");
             }
           }
-        }
+        //}
       });
     }
   } catch (error) {
