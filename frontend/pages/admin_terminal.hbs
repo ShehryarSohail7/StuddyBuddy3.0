@@ -27,10 +27,44 @@ background: #FFD059;
             top: 30px;
         }
 .review-box {
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    position: relative;
+    top: 100px;
+    left: 100px;
+    background: #ffd0598b;
+    border-radius: 20px;
     padding: 10px;
+    margin: 10px;
+    width: 1000px;
+    height: 100px;
+    {{!-- text-align: center; --}}
+    display: flex;
+    flex-direction: column;
+    
+}
+.review-box-content h1{
+    font-family: "TS Safaa";
+    font-weight: 500;
+    font-size: 12px;
+    font-style: normal;
+    color: #999;
+    line-height: 1.2;
+}
+.review-box-content p{
+    font-family: "TS Safaa";
+    font-weight: 500;
+    font-size: 15px;
     margin-bottom: 10px;
+    font-style: normal;
+    line-height: 1.2;
+}
+.btn{
+    position: relative;
+    top: -50px;
+    left: 850px;
+    border-radius: 30px;
+    border: none;
+    background: #FFD059;
+    font-family: "TS Safaa";
 }
 
         .navbar a {
@@ -357,10 +391,10 @@ background: #FFD059;
                 const reviewBox = document.createElement('div');
                 reviewBox.classList.add('card', 'mb-3', 'review-box');
                 reviewBox.innerHTML = `
-        <div class="card-body">
-          <h4 class="card-title">Tutor email: ${review.tutorEmail}</h5>
-          <h4 class="card-subtitle mb-2 text-muted">Student email: ${review.studentEmail}</h6>
-          <p class="card-text">Review Content: ${review.content}</p>
+        <div class="review-box-content">
+            <p class="card-text">Review: ${review.content}</p>
+          <h1>Tutor email: ${review.tutorEmail}</h1>
+          <h1>Student email: ${review.studentEmail}</h1>
           <button class="btn btn-danger btn-sm remove-review" data-review-id="${review._id}">Remove Review</button>
         </div>
       `;
