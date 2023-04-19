@@ -88,13 +88,31 @@
         }
 
         .appointment-box {
-        background-color: #f2f2f2;
-        border: 1px solid #ddd;
-        padding: 10px;
-        margin: 10px;
-        width: 30%;
-        box-sizing: border-box;
-        display: inline-block;
+            position: relative;
+            left: 30px;
+            background-color: #f8b9e684;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            width: 30%;
+            box-sizing: border-box;
+            display: inline-block;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .appointment-box h1{
+            font-family: "TS Safaa";
+            font-size: 15px;
+            font-weight: 500;
+            font-style: medium;
+        }
+
+        .appointment-box p{
+            font-family: "TS Safaa";
+            font-size: 10px;
+            font-weight: 500;
+            font-style: normal;
+            color: #999;
         }
 
         /* Style for Tutors Cards */
@@ -727,7 +745,7 @@ home postad viewMyAds appointments requests reviews settings
         submitButton.style.top = "230px";
         submitButton.style.width = "300px";
         submitButton.style.height = "47px";
-        submitButton.style.background = "#FFA7E6";
+        submitButton.style.background = "#FFD059";
         submitButton.style.borderRadius = "100px";
         submitButton.style.fontFamily = "TS Safaa";
         submitButton.style.fontSize = "15px";
@@ -735,14 +753,14 @@ home postad viewMyAds appointments requests reviews settings
         submitButton.style.fontStyle = "normal";
         submitButton.style.textAlign = "center";
         submitButton.style.border = "none";
-        submitButton.style.color = "white";
+        submitButton.style.color = "black";
         submitButton.style.textDecoration = "none";
 
         submitButton.addEventListener("mouseover", function() {
-            submitButton.style.background = "#FFD059";
+            submitButton.style.background = "#FFA7E6";
         });
         submitButton.addEventListener("mouseout", function() {
-            submitButton.style.background = "#FFA7E6";
+            submitButton.style.background = "#FFD059";
         });
 
         // Add a submit event listener to the form
@@ -866,7 +884,7 @@ home postad viewMyAds appointments requests reviews settings
             for (let i = 0; i < data.length; i++) {
                 const requestBox = document.createElement("div");
                 requestBox.style.position = "relative";
-                requestBox.style.top = "200px";
+                requestBox.style.top = "0px";
                 requestBox.style.backgroundColor = "#f5f5f5";
                 requestBox.style.border = "1px solid #ddd";
                 requestBox.style.padding = "10px";
@@ -1034,14 +1052,13 @@ home postad viewMyAds appointments requests reviews settings
                     const checkboxId = `ad-${ad._id}-checkbox`;
                     return `
                     <div class="appointment-box">
-                  
+                        <h1>Appointment confirmed</h1>
                         <p>Student email: ${ad.studentEmail}</p>
                         <p>Courses: ${ad.courses}</p>
                         <p>Days: ${ad.days}</p>
                         <p>Hours: ${ad.hours}</p>
                         <p>Bid: ${ad.bid}</p>
                         <p>Description: ${ad.desc}</p>
-                        <h2>Appointment confirmed</h2>
                         <input type="checkbox" id="${checkboxId}" name="${checkboxId}">
                     </div>
                 `;
@@ -1082,11 +1099,12 @@ home postad viewMyAds appointments requests reviews settings
         document.getElementById("tutors-data").innerHTML = "";
         document.querySelector('.deletereviews').innerHTML = "";
         const appointmentsContainer = document.querySelector(".appointments-container");
-        appointmentsContainer.innerHTML = '<h1 style="text-align: center;">All Reviews</h1><br>';
+        appointmentsContainer.innerHTML = '<h1 style="text-align: center; font-family: TS Safaa; font-weight: 500; font-size: 25px;">All Reviews</h1><br>';
 
         const email = localStorage.getItem("username");
         if (!email) {
             console.error("Email of tutor not found in database, database error");
+            {{!-- error.style.fontFamily = "TS Safaa"; --}}
             return;
         }
 
@@ -1099,13 +1117,19 @@ home postad viewMyAds appointments requests reviews settings
         reviewsData.forEach((review) => {
             const reviewCard = document.createElement("div");
             reviewCard.classList.add("review-card");
+            reviewCard.style.position = "relative";
+            reviewCard.style.top = "-20px";
 
             const content = document.createElement("p");
             content.innerText = review.content;
+            content.style.fontFamily = "TS Safaa";
+            content.style.fontStyle = "normal";
             reviewCard.appendChild(content);
 
             const tutorEmail = document.createElement("p");
             tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
+            tutorEmail.style.position = "relative";
+            tutorEmail.style.top = "15px";
             reviewCard.appendChild(tutorEmail);
 
             const studentEmail = document.createElement("p");
@@ -1122,36 +1146,39 @@ home postad viewMyAds appointments requests reviews settings
         // Add styles to the review cards
         const reviewCards = document.querySelectorAll(".review-card");
         reviewCards.forEach((card) => {
-            card.style.width = "300px";
-            card.style.height = "300px";
-            card.style.backgroundColor = "#fff";
+            card.style.width = "1000px";
+            card.style.height = "100px";
+            card.style.backgroundColor = "#f8b9e684";
             card.style.border = "1px solid #ccc";
-            card.style.borderRadius = "10px";
+            card.style.borderRadius = "20px";
             card.style.boxShadow = "2px 2px 10px #ccc";
-            card.style.margin = "20px";
+            card.style.margin = "10px";
             card.style.padding = "10px";
-            card.style.display = "flex";
+            card.style.textAlign = "center";
+            {{!-- card.style.display = "flex"; --}}
             card.style.flexDirection = "column";
-            card.style.justifyContent = "space-between";
+            {{!-- card.style.justifyContent = "space-between"; --}}
         });
 
         // Add styles to the review content
         const contents = document.querySelectorAll(".review-card p:first-child");
         contents.forEach((content) => {
-            content.style.fontSize = "16px";
-            content.style.fontWeight = "bold";
+            content.style.fontSize = "15px";
             content.style.marginBottom = "10px";
             content.style.overflow = "hidden";
             content.style.textOverflow = "ellipsis";
             content.style.whiteSpace = "nowrap";
+            content.style.fontFamily = "TS Safaa";
+            content.style.fontWeight = "500";
         });
 
         // Add styles to the review emails
         const emails = document.querySelectorAll(".review-card p:not(:first-child)");
         emails.forEach((email) => {
-            email.style.fontSize = "14px";
+            email.style.fontSize = "12px";
             email.style.color = "#888";
             email.style.marginTop = "10px";
+            email.style.fontFamily = "TS Safaa";
         });
     }
 
