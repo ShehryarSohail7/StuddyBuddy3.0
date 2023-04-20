@@ -3,6 +3,10 @@ const path = require("path");
 const app = express();
 const hbs = require("hbs");
 
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 require("./db/conn");
 // Databases connected (All collections)
 const tutor_db = require("./models/tutor");
