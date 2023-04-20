@@ -801,6 +801,10 @@ for yourself. Decide what you want to teach and post an advertisement for it to 
     };
 
     function removeAd(adId) {
+        confirmation = confirm("Are you sure you want to delete this ad?");
+        if (confirmation == false) {
+            return;
+        }
         fetch('/deleteads', {
             method: 'DELETE',
             headers: {
@@ -813,6 +817,7 @@ for yourself. Decide what you want to teach and post an advertisement for it to 
                     throw new Error('Network response was not ok');
                 }
                 displayAds();
+                alert('Ad deleted successfully');
                 console.log('Ad deleted successfully');
             })
             .catch(error => {
