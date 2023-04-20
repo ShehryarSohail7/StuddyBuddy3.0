@@ -10,13 +10,13 @@
 
     <style>
         /* Style for Navbar */
-        .top_border{
+        .top_border {
             position: absolute;
             width: 1280px;
             height: 35px;
             left: 0px;
             top: -3px;
-            background: #FFD059;
+            background: #FFA7E6;
         }
 
         .navbar {
@@ -39,30 +39,30 @@
         }
 
         .navbar a:hover {
-            background-color: #FFD059;
+            background-color: #FFA7E6;
             color: black;
         }
 
         .navbar a.active {
-            background-color: #FFD059;
+            background-color: #FFA7E6;
             color: black;
         }
 
         /* Style for Announcement Cards */
         .announcement-card {
             position: relative;
-            top: 50px;
+            top: 70px;
             width: 1000px;
             height: 100px;
             margin: 10px;
             font-family: "TS Safaa";
             font-style: normal;
-            background-color: #ffd0598b;
+            background-color: #fcd7f1;
             padding: 20px;
             border-radius: 20px;
         }
 
-        .announcments_heading{
+        .announcments_heading {
             position: absolute;
             top: 80px;
             text-align: center;
@@ -72,6 +72,7 @@
             font-style: medium;
             align-items: center;
         }
+
         .announcement-card h1 {
             font-size: 15px;
             font-style: normal;
@@ -130,13 +131,33 @@
 
 
         .appointment-box {
-            background-color: #f2f2f2;
+            position: relative;
+            top: 70px;
+            left: 30px;
+            background-color: #fcd7f1;
             border: 1px solid #ddd;
             padding: 10px;
             margin: 10px;
             width: 30%;
             box-sizing: border-box;
             display: inline-block;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .appointment-box h1 {
+            font-family: "TS Safaa";
+            font-size: 15px;
+            font-weight: 500;
+            font-style: medium;
+        }
+
+        .appointment-box p {
+            font-family: "TS Safaa";
+            font-size: 10px;
+            font-weight: 500;
+            font-style: normal;
+            color: #999;
         }
 
         .card img {
@@ -186,15 +207,16 @@
             text-align: center;
         }
 
-        .logo{
+        .logo {
             position: absolute;
             width: 175px;
             height: 45px;
             left: 7px;
             top: 35px;
 
-            }
-        .homepage h1{
+        }
+
+        .homepage h1 {
             position: absolute;
             width: 300px;
             height: 300px;
@@ -205,7 +227,8 @@
             font-family: 'Inter';
             font-style: bold;
         }
-        .homepage p{
+
+        .homepage p {
             position: absolute;
             width: 400px;
             height: 150px;
@@ -216,26 +239,27 @@
             font-family: 'TS Safaa';
             font-style: normal;
         }
+
         .hp_error {
             border: 2px solid #FFD059;
             border-radius: 10px;
-            padding: 10px; 
+            padding: 10px;
             background: #FFF1CD;
             position: absolute;
-            top : 200px;
+            top: 200px;
             width: 500px;
             height: 100px;
             text-align: center;
         }
 
-        .hp_error h1{
+        .hp_error h1 {
             text-decoration: none;
             font-size: 15px;
             font-family: 'TS Safaa';
             font-style: normal;
         }
 
-        .hp_error p{
+        .hp_error p {
             text-decoration: none;
             font-size: 15px;
             font-family: 'TS Safaa';
@@ -249,6 +273,8 @@
 
         <img src="/logo.png" alt="Image description" class="logo">
     </div>
+
+
     <div class="navbar">
         <a href="#" id="home-link">Home</a>
         <a href="#" id="ads-link">Search a Tutor</a>
@@ -363,9 +389,13 @@
             const response = await fetch(`/usernameStudent/${email}`);
             const data = await response.json();
             const { name } = data;
+
             document.getElementById("tutors-data").innerHTML = `
       <div class="homepage">
-        <h1 style="text-align: center;">Welcome ${name}</h1>
+       <img src="/studentpic.png" style="position: absolute; float: left; left: 8%; max-width: 30%; top:30%;">
+        <h1 style="text-align: center; font-family:'TS Safaa'; font-weight:550; top: 32%; font-size:180%;">Welcome, ${name}!</h1>
+       
+
         <p>You’re just a few steps away from finding the perfect tutor for yourself. Browse through our gallery of available tutors now!</p>
         <div class="tutors-row" id="tutors-data"></div>
       </div>
@@ -823,6 +853,7 @@
         const heading = document.createElement("h2");
         heading.innerText = "All Reviews";
         heading.style.textAlign = "center";
+        heading.style.fontFamily = "TS Safaa";
         popupContent.appendChild(heading);
 
         const reviewsContainer = document.createElement("div");
@@ -963,13 +994,20 @@
         reviewsData.forEach((review) => {
             const reviewCard = document.createElement("div");
             reviewCard.classList.add("review-card");
+            reviewCard.style.position = "relative";
+            reviewCard.style.top = "-20px";
 
             const content = document.createElement("p");
             content.innerText = review.content;
+            content.style.fontFamily = "TS Safaa";
+            content.style.fontStyle = "normal";
+            content.style.width = "85%";
             reviewCard.appendChild(content);
 
             const tutorEmail = document.createElement("p");
             tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
+            tutorEmail.style.position = "relative";
+            tutorEmail.style.top = "15px";
             reviewCard.appendChild(tutorEmail);
 
             const studentEmail = document.createElement("p");
@@ -978,6 +1016,13 @@
 
             const removeReviewBtn = document.createElement("button");
             removeReviewBtn.innerText = "Remove Review";
+            removeReviewBtn.style.position = "relative";
+            removeReviewBtn.style.top = "-70px";
+            removeReviewBtn.style.left = "850px";
+            removeReviewBtn.style.borderRadius = "30px";
+            removeReviewBtn.style.border = "none";
+            removeReviewBtn.style.background = "#FFD059";
+            removeReviewBtn.style.fontFamily = "TS Safaa";
             removeReviewBtn.addEventListener("click", async () => {
                 try {
                     const deleteResponse = await fetch(`/deleteReviewById/${review._id}`, { method: "DELETE" });
@@ -1003,36 +1048,36 @@
         // Add styles to the review cards
         const reviewCards = document.querySelectorAll(".review-card");
         reviewCards.forEach((card) => {
-            card.style.width = "300px";
-            card.style.height = "300px";
-            card.style.backgroundColor = "#fff";
+            card.style.width = "1000px";
+            card.style.height = "100px";
+            card.style.backgroundColor = "#ffd0598b";
             card.style.border = "1px solid #ccc";
-            card.style.borderRadius = "10px";
+            card.style.borderRadius = "20px";
             card.style.boxShadow = "2px 2px 10px #ccc";
-            card.style.margin = "20px";
+            card.style.margin = "10px";
             card.style.padding = "10px";
-            card.style.display = "flex";
             card.style.flexDirection = "column";
-            card.style.justifyContent = "space-between";
         });
 
         // Add styles to the review content
         const contents = document.querySelectorAll(".review-card p:first-child");
         contents.forEach((content) => {
-            content.style.fontSize = "16px";
-            content.style.fontWeight = "bold";
+            content.style.fontSize = "15px";
             content.style.marginBottom = "10px";
             content.style.overflow = "hidden";
             content.style.textOverflow = "ellipsis";
             content.style.whiteSpace = "nowrap";
+            content.style.fontFamily = "TS Safaa";
+            content.style.fontWeight = "500";
         });
 
         // Add styles to the review emails
         const emails = document.querySelectorAll(".review-card p:not(:first-child)");
         emails.forEach((email) => {
-            email.style.fontSize = "14px";
+            email.style.fontSize = "12px";
             email.style.color = "#888";
             email.style.marginTop = "10px";
+            email.style.fontFamily = "TS Safaa";
         });
     }
 
@@ -1066,14 +1111,13 @@
                     const checkboxId = `ad-${ad._id}-checkbox`;
                     return `
                     <div class="appointment-box">
-                  
+                        <h1>Appointment confirmed</h1>
                         <p>Tutor email: ${ad.studentEmail}</p>
                         <p>Courses: ${ad.courses}</p>
                         <p>Days: ${ad.days}</p>
                         <p>Hours: ${ad.hours}</p>
                         <p>Bid: ${ad.bid}</p>
                         <p>Description: ${ad.desc}</p>
-                        <h2>Appointment confirmed</h2>
                         <input type="checkbox" id="${checkboxId}" name="${checkboxId}">
                     </div>
                 `;
@@ -1111,8 +1155,8 @@
             `;
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
-            <div class="announcments_heading">
-                <h1>Announcements</h1>
+             <div class="announcments_heading">
+                <h1 style="font-family:'TS Safaa';">Announcements</h1>
                 </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>

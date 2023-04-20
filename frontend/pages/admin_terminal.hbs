@@ -9,6 +9,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
+
+        @media (max-width: 768px) {
+              overflow-x: hidden;
         /* Style for Navbar */
          .top_border{
             position: absolute;
@@ -228,7 +231,266 @@ background: #FFD059;
             }
         .hp_background{
             position: absolute;
-            width: 1280px;
+            width: 100%;
+            height: 100%;
+            top: 80px;
+            background-color: #ffd0595a;
+            opacity: 0.5;
+        }
+        .homepage h1{
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            left: 600px;
+            top: 210px;
+            text-decoration: none;
+            font-size: 30px;
+            font-family: 'Inter';
+            font-style: bold;
+            text-align: center;
+        
+        }
+        }
+
+    @media (max-width: 1500px) {
+
+                     body {
+    font-size: 18px;
+    overflow-x: hidden;
+  
+  }
+  #home-link,
+#ads-link,
+#reviews-link,
+#resources-link,
+#announcements-link,
+#setti {
+  font-size: 20px; /* Change the value to adjust the size */
+}
+
+        /* Style for Navbar */
+           .top_border {
+    position: absolute;
+    width: 100%;
+    height: 35px;
+    left: 0px;
+    top: -3px;
+    background: #FFD059;
+  }
+  .navbar {
+    position: absolute;
+    width: 100%;
+    height: 35px;
+    left: 420px;
+    top: 30px;
+  }
+
+.review-box {
+    position: relative;
+    top: 100px;
+    left: 100px;
+    background: #fcd7f1;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+    width: 1000px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+}
+
+.review-box-content h1 {
+    font-family: "TS Safaa";
+    font-weight: 500;
+    font-size: 16px; /* Increased font size */
+    font-style: normal;
+    color: #999;
+    line-height: 1.2;
+}
+
+.review-box-content p {
+    font-family: "TS Safaa";
+    font-weight: 500;
+    font-size: 18px; /* Increased font size */
+    margin-bottom: 10px;
+    font-style: normal;
+    line-height: 1.2;
+    width: 85%;
+}
+
+.btn{
+    position: relative;
+    top: -70px;
+    left: 850px;
+    border-radius: 30px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    background: #FFD059;
+    font-family: "TS Safaa";
+}
+
+.btn:hover{
+    transform: scale(1.2)
+}
+
+        .navbar a {
+            float: left;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 10px;
+            font-family: 'TS Safaa';
+            font-style: normal;
+        }
+
+        .navbar a:hover {
+            background-color: #FFD059;
+            color: black;
+        }
+
+        .navbar a.active {
+            background-color: #FFD059;
+            color: rgb(0, 0, 0);
+            font-style: bold;
+        }
+
+        /* Style for Announcement Cards */
+       .announcement-card {
+  position: relative;
+  top: 150px;
+  width: 1000px;
+  height: 100px;
+  margin: 10px;
+  font-family: "TS Safaa";
+  font-style: normal;
+  background-color: #fcd7f1;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.announcments_heading {
+  position: absolute;
+  top: 80px;
+  text-align: center;
+  font-family: "Inter";
+  font-size: 10px;
+  font-weight: 200;
+  font-style: medium;
+  align-items: center;
+}
+
+.announcement-card h1 {
+  font-size: 18px; /* increased font size */
+  font-style: normal;
+  font-weight: 500;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+.announcement-card p {
+  font-size: 12px; /* increased font size */
+  color: #999;
+  margin-bottom: 0;
+}
+
+        .Add_announcement_button{
+            position: absolute;
+            top: 150px;
+            width: 220px;
+            height: 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'TS Safaa';
+            transition: all 0.2s ease-in-out;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 15px;
+            text-align: center;
+            color: #000000;
+            background: #FFD059;
+            border: none;
+            align-items: center;
+        }
+
+        .Add_announcement_button:hover{
+            transform: scale(1.2);
+        }
+        .delete_announcements_button{
+            position: relative;
+            top: 100px;
+            left: 435px;
+            top: -10px;
+            width: 100px;
+            height: 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'TS Safaa';
+            transition: all 0.2s ease-in-out;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 15px;
+            text-align: center;
+            color: #000000;
+            background: #FFD059;
+            border: none;
+        }
+        .delete_announcements_button:hover{
+            transform: scale(1.2);
+        }
+
+        /* Style for Tutors Cards */
+        .tutors-row {
+            
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tutors-card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            width: 300px;
+            margin: 10px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .tutors-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .tutors-card h4 {
+            color: #4CAF50;
+        }
+
+        .tutors-card p {
+            text-align: justify;
+            margin: 10px;
+            color: gray;
+        }
+        
+        .logo{
+            position: absolute;
+            width: 175px;
+            height: 45px;
+            left: 7px;
+            top: 35px;
+
+            }
+         .admin{
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            left: 200px;
+            top: 150px;
+
+            }
+        .hp_background{
+            overflow: hidden;
+            position: absolute;
+            width: 100%;
             height: 450px;
             top: 80px;
             background-color: #ffd0595a;
@@ -247,6 +509,7 @@ background: #FFD059;
             text-align: center;
         
         }
+        }
     </style>
 </head>
 
@@ -263,7 +526,7 @@ background: #FFD059;
         <a href="#" id="resources-link">Resources</a>
         <a href="#" id="announcements-link">Announcements</a>
         {{!-- <a href="#" id="settings-link">Settings</a> --}}
-        <a href="/frontend/pages/settings.hbs">Settings</a>
+        <a href="/frontend/pages/settings.hbs" id="setti">Settings</a>
     </div>
 
     <!-- Content -->
