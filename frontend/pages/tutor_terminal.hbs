@@ -1167,6 +1167,7 @@
         // Add code to display reviews page here
     }
     async function displayRequestsPage() {
+        
          document.querySelector('.deletereviews').innerHTML = "";
         document.getElementById("requests-container").innerHTML = "";
            document.getElementById("tutors-data").innerHTML = "";
@@ -1421,6 +1422,7 @@
 
 
     function displayResourcesPage() {
+        
           document.getElementById("requests-container").innerHTML = "";
         document.querySelector('.deletereviews').innerHTML = "";
         document.getElementById("tutors-data").innerHTML = "";
@@ -1457,6 +1459,8 @@
     }
 
     async function displayDeleteReview() {
+        document.getElementById("requests-container").innerHTML="";
+        document.querySelector(".appointments-container").innerHTML="";
          document.getElementById("ad-form-container").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.querySelector('.deletereviews').innerHTML = "";

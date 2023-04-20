@@ -1034,4 +1034,9 @@ background: #FFD059;
     function displaySettingsPage() {
         window.location.href = "/settings";
     }
+
+     window.addEventListener('popstate', (event) => {
+            displayHomePage();
+        }
+        
 </script>
