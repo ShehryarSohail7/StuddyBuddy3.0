@@ -3,10 +3,6 @@ const path = require("path");
 const app = express();
 const hbs = require("hbs");
 
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
 require("./db/conn");
 // Databases connected (All collections)
 const tutor_db = require("./models/tutor");
@@ -226,36 +222,36 @@ app.post("/login", async (request, resolve) => {
         //   const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
         //   resolve.send(script);
         // } else {
-          if (result.length === 0) {
-            const message = "no such email exists";
+        if (result.length === 0) {
+          const message = "no such email exists";
+          const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
+          resolve.send(script);
+        } else {
+          const pass = result[0];
+          if (pass.password !== password) {
+            const message = "password is incorrect";
             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
             resolve.send(script);
           } else {
-            const pass = result[0];
-            if (pass.password !== password) {
-              const message = "password is incorrect";
-              const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
-              resolve.send(script);
-            } else {
-              //storing login details
-              store_email = pass.email;
-              store_password = pass.password;
-              console.log(store_email);
-              console.log(store_password);
-              // transfer of variables to another file
-              module.exports = {
-                store_email: store_email,
-                store_password: store_password,
-                user_type: user_type,
-              };
-              // const { store_email, store_password } = require('./app');
-              const message =
-                " ==>Student login successful-here we enter the student terminal";
-              // resolve.send(email + message); //change this to render to new webpage (student terminal)
-              resolve.render("student_landing");
-            }
+            //storing login details
+            store_email = pass.email;
+            store_password = pass.password;
+            console.log(store_email);
+            console.log(store_password);
+            // transfer of variables to another file
+            module.exports = {
+              store_email: store_email,
+              store_password: store_password,
+              user_type: user_type,
+            };
+            // const { store_email, store_password } = require('./app');
+            const message =
+              " ==>Student login successful-here we enter the student terminal";
+            // resolve.send(email + message); //change this to render to new webpage (student terminal)
+            resolve.render("student_landing");
           }
-        //} 
+        }
+        //}
       });
     } else if (user_type === "tutor") {
       tutor_db.find({ email }).then((result) => {
@@ -266,33 +262,33 @@ app.post("/login", async (request, resolve) => {
         //   const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
         //   resolve.send(script);
         // } else {
-          if (result.length === 0) {
-            const message = "no such email exists";
+        if (result.length === 0) {
+          const message = "no such email exists";
+          const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
+          resolve.send(script);
+        } else {
+          const pass = result[0];
+          if (pass.password !== password) {
+            const message = "password is incorrect";
             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
             resolve.send(script);
           } else {
-            const pass = result[0];
-            if (pass.password !== password) {
-              const message = "password is incorrect";
-              const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
-              resolve.send(script);
-            } else {
-              store_email = pass.email;
-              store_password = pass.password;
-              console.log(store_email);
-              console.log(store_password);
-              // transfer of variables to another file
-              module.exports = {
-                store_email: store_email,
-                store_password: store_password,
-                user_type: user_type,
-              };
-              const message =
-                " ==>Tutor login successful-here we enter the Tutor terminal";
-              // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
-              resolve.render("tutor_terminal");
-            }
+            store_email = pass.email;
+            store_password = pass.password;
+            console.log(store_email);
+            console.log(store_password);
+            // transfer of variables to another file
+            module.exports = {
+              store_email: store_email,
+              store_password: store_password,
+              user_type: user_type,
+            };
+            const message =
+              " ==>Tutor login successful-here we enter the Tutor terminal";
+            // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+            resolve.render("tutor_terminal");
           }
+        }
         //}
       });
     } else if (user_type === "admin") {
@@ -304,33 +300,33 @@ app.post("/login", async (request, resolve) => {
         //   const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
         //   resolve.send(script);
         // } else {
-          if (result.length === 0) {
-            const message = "no such email exists";
+        if (result.length === 0) {
+          const message = "no such email exists";
+          const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
+          resolve.send(script);
+        } else {
+          const pass = result[0];
+          if (pass.password !== password) {
+            const message = "password is incorrect";
             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
             resolve.send(script);
           } else {
-            const pass = result[0];
-            if (pass.password !== password) {
-              const message = "password is incorrect";
-              const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
-              resolve.send(script);
-            } else {
-              store_email = pass.email;
-              store_password = pass.password;
-              console.log(store_email);
-              console.log(store_password);
-              // transfer of variables to another file
-              module.exports = {
-                store_email: store_email,
-                store_password: store_password,
-                user_type: user_type,
-              };
-              const message =
-                " ==>Admin login successful-here we enter the Admin terminal";
-              // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
-              resolve.render("admin_terminal");
-            }
+            store_email = pass.email;
+            store_password = pass.password;
+            console.log(store_email);
+            console.log(store_password);
+            // transfer of variables to another file
+            module.exports = {
+              store_email: store_email,
+              store_password: store_password,
+              user_type: user_type,
+            };
+            const message =
+              " ==>Admin login successful-here we enter the Admin terminal";
+            // resolve.send(email + message); //change this to render to new webpage (tutor terminal)
+            resolve.render("admin_terminal");
           }
+        }
         //}
       });
     }
@@ -520,6 +516,24 @@ app.post("/addann", async (req, res) => {
   }
 });
 
+app.post("/addrec", async (req, res) => {
+  // addrec just like add ann
+  try {
+    const newAnnouncement = new resources_db({
+      content: req.body.contentt,
+      createdAt: new Date(),
+    });
+
+    await newAnnouncement.save();
+
+    res.status(201).json({ message: "resource added successfully." });
+  } catch (err) {
+    // Send a response indicating an error occurred
+    console.log(err);
+    res.status(500).json({ message: "Failed to add resource." });
+  }
+});
+
 app.get("/viewann", async (req, res) => {
   try {
     // Find all the announcements in the database and sort them by createdAt date in descending order
@@ -536,6 +550,23 @@ app.get("/viewann", async (req, res) => {
   }
 });
 
+app.get("/viewrec", async (req, res) => {
+  // just like viewann
+  try {
+    // Find all the announcements in the database and sort them by createdAt date in descending order
+    const announcements = await resources_db
+      .find()
+      .select("content createdAt")
+      .sort({ createdAt: -1 });
+
+    // Send the announcements back as a response
+    res.status(200).json({ announcements });
+  } catch (err) {
+    // Send a response indicating an error occurred
+    res.status(500).json({ message: "Failed to get resources." });
+  }
+});
+
 app.delete("/deleteann", async (req, res) => {
   // works greatly with id
   try {
@@ -545,6 +576,22 @@ app.delete("/deleteann", async (req, res) => {
       return res.status(404).send("announcement not found");
     }
     res.send("announcement deleted successfully");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error");
+  }
+});
+
+app.delete("/deleterec", async (req, res) => {
+  // delete resource like delete announcement
+  // works greatly with id
+  try {
+    const adId = req.body._id;
+    const deletedAd = await resources_db.findByIdAndDelete(adId);
+    if (!deletedAd) {
+      return res.status(404).send("resource not found");
+    }
+    res.send("resource deleted successfully");
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal server error");
@@ -682,13 +729,6 @@ app.get("/usernameStudent/:email", async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 });
-
-
-
-
-
-
-
 
 app.get("/adss/:username", async (req, res) => {
   // returns all ads associated to a particular email

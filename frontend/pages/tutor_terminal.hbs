@@ -10,6 +10,9 @@
 
     <style>
          @media (max-width: 1300px) {
+        body{
+            overflow: hidden;
+        }
         /* Style for Navbar */
           .top_border{
             position: absolute;
@@ -21,6 +24,7 @@
         }
         .navbar {
             position: absolute;
+            margin-left: -70px;
             width: 1280px;
             height: 35px;
             left: 350px;
@@ -298,6 +302,11 @@
 
 
                  @media (max-width: 3000px) {
+
+                                  body {
+
+    overflow-x: hidden;
+  }
         /* Style for Navbar */
           .top_border{
             position: absolute;
@@ -308,6 +317,7 @@
             background: #FFD059;
         }
         .navbar {
+            margin-left: -70px;
             position: absolute;
             width: 1280px;
             height: 35px;
@@ -604,6 +614,7 @@
         <a href="#" id="requests-link">Requests</a>
         <a href="#" id="announcements-link">View Announcements</a>
         <a href="#" id="reviews-link">View my reviews</a>
+        <a href="#" id="announcements-link">Resources</a>
         {{!-- <a href="#" id="settings-link">Settings</a> --}}
         <a href="/frontend/pages/settings.hbs" id="sett">Settings</a>
     </div>
@@ -676,7 +687,9 @@
             if (page === "Settings") {
                 displaySettingsPage();
             } 
-
+            if (page === "Resources") {
+                displayResourcesPage();
+            }
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
         });
@@ -1408,13 +1421,39 @@
 
 
     function displayResourcesPage() {
-         document.querySelector('.deletereviews').innerHTML = "";
-           document.getElementById("tutors-data").innerHTML = "";
+          document.getElementById("requests-container").innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        document.getElementById("tutors-data").innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.querySelector(".search-container").style.display = "none";
         document.getElementById("ad-form-container").innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
         const appointmentsContainer = document.querySelector(".appointments-container");
         appointmentsContainer.innerHTML = "";
+        fetch("/viewrec")
+            .then((response) => response.json())
+            .then((data) => {
+                let html = ` 
+         
+            `;
+                for (let i = 0; i < data.announcements.length; i++) {
+                    html += `
+            <div class="announcments_heading">
+                <h1>Resources</h1>
+                </div>
+          <div class="announcement-card">
+            <h1>${data.announcements[i].content}</h1>
+            <p>${data.announcements[i].createdAt}</p>
+            <br>
+          
+          </div>`;
+                }
+                document.getElementById("announcement-data").innerHTML = html;
+            })
+            .catch((err) => {
+                // Display an error message if the request fails
+                console.log("failure");
+            });
     }
 
     async function displayDeleteReview() {

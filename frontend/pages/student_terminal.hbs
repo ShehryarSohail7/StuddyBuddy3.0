@@ -10,6 +10,9 @@
 
     <style>
         @media (max-width: 1300px) {
+            body {
+                overflow-x: hidden;
+            }
 
             /* Style for Navbar */
             .top_border {
@@ -277,6 +280,9 @@
         }
 
         @media (max-width: 3000px) {
+            body {
+                overflow-x: hidden;
+            }
 
             .top_border {
                 position: absolute;
@@ -664,13 +670,9 @@
             const response = await fetch(`/usernameStudent/${email}`);
             const data = await response.json();
             const { name } = data;
-
             document.getElementById("tutors-data").innerHTML = `
       <div class="homepage">
-       <img src="/studentpic.png" style="position: absolute; float: left; left: 8%; max-width: 30%; top:30%;">
-        <h1 style="text-align: center; font-family:'TS Safaa'; font-weight:550; top: 32%; font-size:180%;">Welcome, ${name}!</h1>
-       
-
+        <h1 style="text-align: center;">Welcome ${name}!</h1>
         <p>You’re just a few steps away from finding the perfect tutor for yourself. Browse through our gallery of available tutors now!</p>
         <div class="tutors-row" id="tutors-data"></div>
       </div>
@@ -1128,7 +1130,6 @@
         const heading = document.createElement("h2");
         heading.innerText = "All Reviews";
         heading.style.textAlign = "center";
-        heading.style.fontFamily = "TS Safaa";
         popupContent.appendChild(heading);
 
         const reviewsContainer = document.createElement("div");
@@ -1240,7 +1241,37 @@
     }
 
     function displayResourcesPage() {
-        // Add code to display resources page here
+        document.querySelector('.search-cost').innerHTML = "";
+        document.querySelector('.search-containerr').innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
+        document.querySelector('.search-container').style.display = 'none';
+        document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
+        fetch("/viewrec")
+            .then((response) => response.json())
+            .then((data) => {
+                let html = `
+         
+            `;
+                for (let i = 0; i < data.announcements.length; i++) {
+                    html += `
+             <div class="announcments_heading">
+                <h1>Resources</h1>
+                </div>
+          <div class="announcement-card">
+            <h1>${data.announcements[i].content}</h1>
+            <p>${data.announcements[i].createdAt}</p>
+            <br>
+          
+          </div>`;
+                }
+                document.getElementById("announcement-data").innerHTML = html;
+            })
+            .catch((err) => {
+                // Display an error message if the request fails
+                console.log("failure");
+            });
     }
 
     async function displayDeleteReview() {
@@ -1271,7 +1302,6 @@
             reviewCard.classList.add("review-card");
             reviewCard.style.position = "relative";
             reviewCard.style.top = "-20px";
-            reviewCard.style.width = "100";
 
             const content = document.createElement("p");
             content.innerText = review.content;
@@ -1282,10 +1312,8 @@
 
             const tutorEmail = document.createElement("p");
             tutorEmail.innerText = `Tutor email: ${review.tutorEmail}`;
-            tutorEmail.style.fontSize = "20px";
             tutorEmail.style.position = "relative";
             tutorEmail.style.top = "15px";
-
             reviewCard.appendChild(tutorEmail);
 
             const studentEmail = document.createElement("p");
@@ -1403,12 +1431,10 @@
 
                 // Group appointments into rows with a maximum of three boxes per row
                 const rows = [];
-                const itemsPerRow = 2;
-                for (let i = 0; i < appointmentBoxes.length; i += itemsPerRow) {
-                    const rowItems = appointmentBoxes.slice(i, i + itemsPerRow).join("");
-                    rows.push(`<div class="row" style="width:100%;">${rowItems}</div>`);
+                for (let i = 0; i < appointmentBoxes.length; i += 2) {
+                    const row = appointmentBoxes.slice(i, i + 2).join("");
+                    rows.push(`<div class="row" style="width:100%;">${row}</div>`);
                 }
-
 
 
                 appointmentsContainer.innerHTML = rows.join("");
@@ -1436,7 +1462,7 @@
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
              <div class="announcments_heading">
-                <h1 style="font-family:'TS Safaa';">Announcements</h1>
+                <h1>Announcements</h1>
                 </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>

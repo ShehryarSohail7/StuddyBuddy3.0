@@ -570,7 +570,10 @@ background: #FFD059;
             }
             else if (page === "Settings") {
                 displaySettingsPage();
-            } 
+            }
+            else if (page == "Resources") {
+                displayResourcesPage();
+            }
 
             // Push state to browser history
             window.history.pushState({}, page, `/${page.toLowerCase()}`);
@@ -584,16 +587,16 @@ background: #FFD059;
     });
 
     function displayHomePage() {
-         document.getElementById("announcement-data").innerHTML = "";
-         document.querySelector('.reviews').innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
-
+        document.querySelector('.reviews').innerHTML = "";
+        document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector('.reviews').innerHTML = "";
         document.getElementById("tutors-data").innerHTML = `
         <div class="hp_background">
                 </div>
             <div class="homepage">
                 <img src="/admin.png" alt="Image description" class="admin">
-                <h1 style="text-align: center; font-family:'TS Safaa'; font-weight:550; top: 32%; font-size:180%;">Welcome, Admin!</h1>
+                <h1 style="text-align: center;">Welcome Admin!</h1>
                 <div class="tutors-row" id="tutors-data"></div>
             </div>
         `;
@@ -601,10 +604,11 @@ background: #FFD059;
 
 
     ///////////////////
-  function displayAdsPage() {
-    document.getElementById("announcement-data").innerHTML = "";
+    function displayAdsPage() {
+        document.getElementById("announcement-data").innerHTML = "";
         // Delete all existing HTML in the tutors-data element
         displayHomePage();
+        document.querySelector('.reviews').innerHTML = "";
         document.getElementById("tutors-data").innerHTML = '';
 
         fetch('/ads')
@@ -658,7 +662,6 @@ background: #FFD059;
 
     // create review container
     async function getAllReviews() {
-         document.querySelector('.reviews').innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.getElementById("tutors-data").innerHTML = "";
         document.querySelector('.reviews').innerHTML = "";
@@ -712,23 +715,38 @@ background: #FFD059;
     }
 
 
-
-
-
-
-
-        
-
-
     function displayResourcesPage() {
         // Add code to display resources page here
-        document.querySelector('.reviews').innerHTML="";
-         document.getElementById("announcement-data").innerHTML = "";
+        document.querySelector('.reviews').innerHTML = "";
+        document.getElementById("tutors-data").innerHTML = "";
+        fetch("/viewrec")
+            .then((response) => response.json())
+            .then((data) => {
+                let html = `
+            <button id="add-announcement-button" onclick="displayPopup1()" class="Add_announcement_button">Add Resources</button>
+            `;
+                for (let i = 0; i < data.announcements.length; i++) {
+                    html += `
+            <div class="announcments_heading">
+                <h1>Resources</h1>
+                </div>
+          <div class="announcement-card">
+            <h1>${data.announcements[i].content}</h1>
+            <p>${data.announcements[i].createdAt}</p>
+            <br>
+            <button onclick="deleteResource('${data.announcements[i]._id}')" class="delete_annoucements_button">Delete</button>
+          </div>`;
+                }
+                document.getElementById("announcement-data").innerHTML = html;
+            })
+            .catch((err) => {
+                // Display an error message if the request fails
+                console.log("failure");
+            });
     }
 
-    function displayAnnouncementsPage() 
-    {
-        document.querySelector('.reviews').innerHTML="";
+    function displayAnnouncementsPage() {
+        document.querySelector('.reviews').innerHTML = "";
         document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
         fetch("/viewann")
             .then((response) => response.json())
@@ -739,13 +757,13 @@ background: #FFD059;
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
             <div class="announcments_heading">
-                 <h1 style="font-family:'TS Safaa';">Announcements</h1>
+                <h1>Announcements</h1>
                 </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>
             <p>${data.announcements[i].createdAt}</p>
             <br>
-            <button onclick="deleteAnnouncement('${data.announcements[i]._id}')" class="delete_announcements_button">Delete</button>
+            <button onclick="deleteAnnouncement('${data.announcements[i]._id}')" class="delete_annoucements_button">Delete</button>
           </div>`;
                 }
                 document.getElementById("announcement-data").innerHTML = html;
@@ -774,7 +792,7 @@ background: #FFD059;
         popup_box.style.padding = "10px";
         popup_box.style.background = "#FFF1CD";
         popup_box.style.borderRadius = "10px"
-     
+
         // create the input field
         const input = document.createElement("input");
         input.type = "text";
@@ -782,7 +800,7 @@ background: #FFD059;
         input.required = true; // add required attribute
         input.style.height = "30px";
         input.style.width = "500px";
-        input.style.borderRadius ="5px";
+        input.style.borderRadius = "5px";
         input.style.borderStyle = "solid";
         input.style.borderColor = "grey";
         input.style.fontFamily = "TS Safaa";
@@ -829,8 +847,8 @@ background: #FFD059;
             popup.remove();
             addAnnouncementButton.disabled = false; // enable the "Add Announcement" button
         };
-        input,button.style.display = "block";
-        
+        input, button.style.display = "block";
+
         popup.appendChild(button);
         // add the button to the container
         popup_box.appendChild(button);
@@ -838,33 +856,142 @@ background: #FFD059;
         // add the container to the popup
         popup.appendChild(popup_box);
 
-        
+
 
         // add the pop-up dialog to the page
         const announcementsDiv = document.getElementById("announcement-data");
         announcementsDiv.insertBefore(popup, announcementsDiv.firstChild);
     }
 
-        function saveAnnouncement(content)
-        {
-            // send a POST request to the backend to save the new announcement
-            fetch("/addann", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ contentt: content })
+
+    function displayPopup1() {
+        // disable the "Add resource" button
+        const addAnnouncementButton = document.getElementById("add-announcement-button");
+        addAnnouncementButton.disabled = true;
+
+        // create the pop-up dialog
+        const popup = document.createElement("div");
+        popup.classList.add("popup");
+        popup.style.position = "absolute";
+        popup.style.top = "120px";
+        popup.style.zIndex = "9999"
+
+        const popup_box = document.createElement("div");
+        popup_box.style.backgroundColor = "white";
+        popup_box.style.border = "1px solid black";
+        popup_box.style.padding = "10px";
+        popup_box.style.background = "#FFF1CD";
+        popup_box.style.borderRadius = "10px"
+
+        // create the input field
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Enter your resource link here...";
+        input.required = true; // add required attribute
+        input.style.height = "30px";
+        input.style.width = "500px";
+        input.style.borderRadius = "5px";
+        input.style.borderStyle = "solid";
+        input.style.borderColor = "grey";
+        input.style.fontFamily = "TS Safaa";
+        input.style.fontSize = "15px";
+        input.style.fontStyle = "normal";
+        input.style.marginBottom = "10px";
+        popup.appendChild(input);
+        // add the input field to the container
+        popup_box.appendChild(input);
+
+        // create the submit button
+        const button = document.createElement("button");
+        button.textContent = "Submit";
+        button.style.position = "relative";
+        button.style.left = "170px";
+        button.style.top = "0px";
+        button.style.width = "150px";
+        button.style.height = "30px";
+        button.style.background = "#FFD059";
+        button.style.borderRadius = "100px";
+        button.style.fontFamily = "TS Safaa";
+        button.style.fontSize = "15px";
+        button.style.fontWeight = "500";
+        button.style.fontStyle = "normal";
+        button.style.textAlign = "center";
+        button.style.border = "none";
+        button.style.color = "black";
+        button.style.textDecoration = "none";
+        button.onclick = () => {
+            const content = input.value.trim();
+            if (content.length === 0) {
+                // if the announcement is empty or whitespace-only, show an error message
+                const error = document.createElement("p");
+                error.textContent = "Resource link cannot be empty.";
+                error.classList.add("error-message");
+                popup.appendChild(error);
+                popup_box.appendChild(error);
+                error.style.textAlign = "center";
+                error.style.fontFamily = "TS Safaa";
+                return;
+            }
+
+            saveResource(content);
+            popup.remove();
+            addAnnouncementButton.disabled = false; // enable the "Add Announcement" button
+        };
+        input, button.style.display = "block";
+
+        popup.appendChild(button);
+        // add the button to the container
+        popup_box.appendChild(button);
+
+        // add the container to the popup
+        popup.appendChild(popup_box);
+
+
+
+        // add the pop-up dialog to the page
+        const announcementsDiv = document.getElementById("announcement-data");
+        announcementsDiv.insertBefore(popup, announcementsDiv.firstChild);
+    }
+
+    function saveAnnouncement(content) {
+        // send a POST request to the backend to save the new announcement
+        fetch("/addann", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ contentt: content })
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                // refresh the announcements list
+                displayAnnouncementsPage();
             })
-                .then((response) => response.json())
-                .then((data) => {
-                    // refresh the announcements list
-                    displayAnnouncementsPage();
-                })
-                .catch((err) => {
-                    // Display an error message if the request fails
-                    console.log("failure");
-                });
-        }
+            .catch((err) => {
+                // Display an error message if the request fails
+                console.log("failure");
+            });
+    }
+
+    function saveResource(content) {
+        // send a POST request to the backend to save the new announcement
+        fetch("/addrec", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ contentt: content })
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                // refresh the announcements list
+                displayResourcesPage();
+            })
+            .catch((err) => {
+                // Display an error message if the request fails
+                console.log("failure");
+            });
+    }
 
     function deleteAnnouncement(id) {
         fetch("/deleteann", {
@@ -884,8 +1011,27 @@ background: #FFD059;
                 console.log("failure");
             });
     }
-    
+
+    function deleteResource(id) {
+        fetch("/deleterec", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ _id: id }),
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                console.log(data);
+                displayResourcesPage(); // refresh the list of announcements after successful deletion
+            })
+            .catch((err) => {
+                // Display an error message if the request fails
+                console.log("failure");
+            });
+    }
+
     function displaySettingsPage() {
-      window.location.href = "/settings";
-        }
+        window.location.href = "/settings";
+    }
 </script>
