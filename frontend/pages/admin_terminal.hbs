@@ -10,7 +10,7 @@
 
     <style>
 
-        @media (max-width: 768px) {
+        @media (max-width: 1300px) {
               overflow-x: hidden;
         /* Style for Navbar */
          .top_border{
@@ -252,7 +252,7 @@ background: #FFD059;
         }
         }
 
-    @media (max-width: 1500px) {
+    @media (max-width: 3000px) {
 
                      body {
     font-size: 18px;
@@ -658,6 +658,7 @@ background: #FFD059;
 
     // create review container
     async function getAllReviews() {
+         document.querySelector('.reviews').innerHTML = "";
         document.getElementById("announcement-data").innerHTML = "";
         document.getElementById("tutors-data").innerHTML = "";
         document.querySelector('.reviews').innerHTML = "";
