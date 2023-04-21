@@ -1050,7 +1050,37 @@
     }
 
     function displayResourcesPage() {
-        // Add code to display resources page here
+         document.querySelector('.search-cost').innerHTML = "";
+        document.querySelector('.search-containerr').innerHTML = "";
+        document.querySelector('.deletereviews').innerHTML = "";
+        const appointmentsContainer = document.querySelector(".appointments-container");
+        appointmentsContainer.innerHTML = "";
+        document.querySelector('.search-container').style.display = 'none';
+        document.getElementById("tutors-data").innerHTML = "";  // setting html other than announcements to null
+        fetch("/viewrec")
+            .then((response) => response.json())
+            .then((data) => {
+                let html = `
+         
+            `;
+                for (let i = 0; i < data.announcements.length; i++) {
+                    html += `
+             <div class="announcments_heading">
+                <h1>Resources</h1>
+                </div>
+          <div class="announcement-card">
+            <h1>${data.announcements[i].content}</h1>
+            <p>${data.announcements[i].createdAt}</p>
+            <br>
+          
+          </div>`;
+                }
+                document.getElementById("announcement-data").innerHTML = html;
+            })
+            .catch((err) => {
+                // Display an error message if the request fails
+                console.log("failure");
+            });
     }
 
     async function displayDeleteReview() {
@@ -1180,8 +1210,8 @@
        
 
 
-    function displayConfirmedAppts()
-    {                 document.getElementById("announcement-data").innerHTML = "";
+    function displayConfirmedAppts(){
+                     document.getElementById("announcement-data").innerHTML = "";
         document.querySelector('.search-cost').innerHTML = "";
      document.querySelector('.search-containerr').innerHTML = "";
          document.querySelector('.search-container').style.display = 'none';
@@ -1220,8 +1250,8 @@
 
                 // Group appointments into rows with a maximum of three boxes per row
               const rows = [];
-                for (let i = 0; i < appointmentBoxes.length; i += 3) {
-                    const row = appointmentBoxes.slice(i, i + 3).join("");
+                for (let i = 0; i < appointmentBoxes.length; i += 2) {
+                    const row = appointmentBoxes.slice(i, i + 2).join("");
                     rows.push(`<div class="row" style="width:100%;">${row}</div>`);
                 }
 
@@ -1230,7 +1260,7 @@
             })
             .catch(err => {
                 console.error(err);
-                alert("An error occurred while fetching appointments.");
+                alert("No appointments found.");
             });
     }
 

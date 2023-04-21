@@ -447,13 +447,25 @@
         }
 
         .card {
-            width: calc(33.33% - 10px);
+            {{!-- width: calc(33.33% - 10px);
             margin: 20px;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
             transition: 0.3s;
             background:  linear-gradient(to bottom, white 50%, rgba(128, 128, 128, 0.31) 50%) no-repeat;
             border-radius: 10px;
-            
+             --}}
+
+            width: calc(26.33% - 40px);
+            height: 410px;
+            margin: 20px;
+            box-shadow: 0 4px 8px 0 #FFA7E6;
+            transition: 0.3s;
+            position: relative;
+            top: 10%;
+            border-radius: 30px;
+            justify-content: center;
+            margin-top: 140px;
+
         }
         {{!-- .view_backgound{
             position: absolute;
@@ -464,8 +476,8 @@
             opacity: 0.5;
         } --}}
 
-        .card:hover {
-            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        {{!-- .card:hover {
+            box-shadow: 0 8px 16px 0 rgb(250, 226, 17);
         }
 
         .card img {
@@ -480,7 +492,7 @@
             font-style: normal;
             text-align: center;
             margin: 0;
-        }
+        } --}}
         .remove_ad_button{
             position: relative;
             left: 25px;
@@ -518,11 +530,20 @@
         }
 
         .tutors-card {
-            width: calc(33.33% - 40px);
+             width: calc(26.33% - 40px);
+            height: 410px;
             margin: 20px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px 0 #ffeda7;
             transition: 0.3s;
+            position: relative;
+            top: 10%;
+            border-radius: 30px;
+            justify-content: center;
+            margin-top: 140px;
+
         }
+
+
 
         .tutors-card:hover {
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
