@@ -9,83 +9,82 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
-        /* Style for Navbar */
-        .top_border{
-            position: absolute;
-            width: 1280px;
-            height: 35px;
-            left: 0px;
-            top: -3px;
-            background: #FFA7E6;
-        }
+        @media (max-width: 1330px) {
+            body {
+                overflow-x: hidden;
+            }
 
-        .navbar {
-            position: absolute;
-            width: 1280px;
-            height: 35px;
-            left: 350px;
-            top: 30px;
-        }
+            /* Style for Navbar */
+            .top_border {
+                position: absolute;
+                width: 1280px;
+                height: 35px;
+                left: 0px;
+                top: -3px;
+                background: #FFA7E6;
+            }
 
-        .navbar a {
-            float: left;
-            color: black;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 10px;
-            font-family: 'TS Safaa';
-            font-style: normal;
-        }
+            .navbar {
+                position: absolute;
+                width: 1280px;
+                height: 35px;
+                left: 350px;
+                top: 30px;
+            }
 
-        .navbar a:hover {
-            background-color: #FFA7E6;
-            color: black;
-        }
+            .navbar a {
+                float: left;
+                color: black;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                font-size: 10px;
+                font-family: 'TS Safaa';
+                font-style: normal;
+            }
 
-        .navbar a.active {
-            background-color: #FFA7E6;
-            color: black;
-        }
+            .navbar a:hover {
+                background-color: #FFA7E6;
+                color: black;
+            }
 
-        /* Style for Announcement Cards */
-        .announcement-card {
-            position: relative;
-            top: 70px;
-            width: 1000px;
-            height: 100px;
-            margin: 10px;
-            font-family: "TS Safaa";
-            font-style: normal;
-            background-color: #fcd7f1;
-            padding: 20px;
-            border-radius: 20px;
-        }
+            .navbar a.active {
+                background-color: #FFA7E6;
+                color: black;
+            }
 
-        .announcments_heading{
-            position: absolute;
-            top: 80px;
-            text-align: center;
-            font-family: "Inter";
-            font-size: 10px;
-            font-weight: 200;
-            font-style: medium;
-            align-items: center;
-        }
+            /* Style for Announcement Cards */
+            .announcement-card {
+                position: relative;
+                top: 70px;
+                width: 1000px;
+                height: 100px;
+                margin: 10px;
+                font-family: "TS Safaa";
+                font-style: normal;
+                background-color: #fcd7f1;
+                padding: 20px;
+                border-radius: 20px;
+            }
 
-        .announcement-card h1 {
-            font-size: 15px;
-            font-style: normal;
-            font-weight: 500;
-            color: #000000;
-            margin-bottom: 10px;
-        }
+            .announcments_heading {
+                position: absolute;
+                top: 80px;
+                text-align: center;
+                font-family: "Inter";
+                font-size: 10px;
+                font-weight: 200;
+                font-style: medium;
+                align-items: center;
+            }
 
-        .announcement-card p {
-            font-size: 10px;
-            color: #999;
-            margin-bottom: 0;
-        }
+            .announcement-card h1 {
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 500;
+                color: #000000;
+                margin-bottom: 10px;
+            }
 
         /* Style for Tutors Cards */
         .tutors-row {
@@ -112,51 +111,40 @@
 
 
 
-        .appointment-box {
-            position: relative;
-            top: 70px;
-            left: 30px;
-            background-color: #fcd7f1;
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin: 10px;
-            width: 30%;
-            box-sizing: border-box;
-            display: inline-block;
-            border-radius: 20px;
-            text-align: center;
-        }
-        .appointment-box h1{
-            font-family: "TS Safaa";
-            font-size: 15px;
-            font-weight: 500;
-            font-style: medium;
-        }
+            .appointment-box {
+                position: relative;
+                top: 70px;
+                left: 30px;
+                background-color: #fcd7f1;
+                border: 1px solid #ddd;
+                padding: 10px;
+                margin: 10px;
+                width: 30%;
+                box-sizing: border-box;
+                display: inline-block;
+                border-radius: 20px;
+                text-align: center;
+            }
 
-        .appointment-box p{
-            font-family: "TS Safaa";
-            font-size: 10px;
-            font-weight: 500;
-            font-style: normal;
-            color: #999;
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-        }
+            .appointment-box h1 {
+                font-family: "TS Safaa";
+                font-size: 15px;
+                font-weight: 500;
+                font-style: medium;
+            }
 
-        .card p {
-            margin: 10px;
-            font-size: 18px;
-            text-align: center;
-        }
+            .appointment-box p {
+                font-family: "TS Safaa";
+                font-size: 10px;
+                font-weight: 500;
+                font-style: normal;
+                color: #999;
+            }
 
-        .tutors-header {
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-        }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
 
         .tutors-container {
             display: flex;
@@ -235,41 +223,26 @@
             top: 35px;
 
             }
-        .homepage h1{
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            left: 600px;
-            top: 210px;
-            text-decoration: none;
-            font-size: 30px;
-            font-family: 'Inter';
-            font-style: bold;
-        }
+
+            .homepage h1 {
+                position: absolute;
+                width: 300px;
+                height: 300px;
+                left: 600px;
+                top: 210px;
+                text-decoration: none;
+                font-size: 30px;
+                font-family: 'Inter';
+                font-style: bold;
+            }
+
+
         .homepage p{
             position: absolute;
             width: 400px;
             height: 150px;
             left: 600px;
             top: 250px;
-            text-decoration: none;
-            font-size: 15px;
-            font-family: 'TS Safaa';
-            font-style: normal;
-        }
-        .hp_error {
-            border: 2px solid #FFD059;
-            border-radius: 10px;
-            padding: 10px; 
-            background: #FFF1CD;
-            position: absolute;
-            top : 200px;
-            width: 500px;
-            height: 100px;
-            text-align: center;
-        }
-
-        .hp_error h1{
             text-decoration: none;
             font-size: 15px;
             font-family: 'TS Safaa';
@@ -283,6 +256,32 @@
             font-style: normal;
         }
 
+            .hp_error {
+                border: 2px solid #FFD059;
+                border-radius: 10px;
+                padding: 10px;
+                background: #FFF1CD;
+                position: absolute;
+                top: 200px;
+                width: 500px;
+                height: 100px;
+                text-align: center;
+            }
+
+            .hp_error h1 {
+                text-decoration: none;
+                font-size: 15px;
+                font-family: 'TS Safaa';
+                font-style: normal;
+            }
+
+            .hp_error p {
+                text-decoration: none;
+                font-size: 15px;
+                font-family: 'TS Safaa';
+                font-style: normal;
+            }
+        }
     </style>
 </head>
 
@@ -323,20 +322,15 @@
                 <!-- tutors data will be displayed here -->
             </div> 
 
-    <div class="container">
-        <h1 style="text-align: center;"></h1>
-        <div class="tutors-row" id="tutors-data"></div>
-    </div>
+        <div class="container">
+            <h1 style="text-align: center;"></h1>
+            <div class="tutors-row" id="announcement-data"></div>
+        </div>
 
-    <div class="container">
-        <h1 style="text-align: center;"></h1>
-        <div class="tutors-row" id="announcement-data"></div>
-    </div>
+        <div class="appointments-container"></div>
 
-<div class="appointments-container"></div>
-
-<div class="deletereviews"> </div>
-    {{!-- <div id="content"></div> --}}
+        <div class="deletereviews"> </div>
+        {{!-- <div id="content"></div> --}}
 
 </body>
 
@@ -1283,10 +1277,11 @@ let lastFunctionName = 'displayHomePage';
 // Update the pushState function to store the name of the current function in the history state object
 window.history.pushState({ functionName: lastFunctionName }, page, `/${page.toLowerCase()}`);
 
-// Add code to the popstate event listener to execute the last executed function again
-window.addEventListener('popstate', (event) => {
- displayHomePage();
-}
-);
+    // Add code to the popstate event listener to execute the last executed function again
+    window.addEventListener('popstate', (event) => {
+        displayHomePage();
+    }
+
+    );
 
 </script>
