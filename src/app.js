@@ -69,6 +69,40 @@ app.get("/signup_follow", (request, resolve) => {
   resolve.render("signup_follow");
 });
 
+
+const crypto = require('crypto');
+const cipher_key = 'secret password'; //our secret key for encryption and decryption
+function encrypt(text, password) {
+const iv = crypto.randomBytes(16);
+const key = crypto.scryptSync(password, 'salt', 32);
+const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+let encrypted = cipher.update(text);
+encrypted = Buffer.concat([encrypted, cipher.final()]);
+return iv.toString('hex') + ':' + encrypted.toString('hex');
+}
+
+function decrypt(text, password) {
+const parts = text.split(':');
+const iv = Buffer.from(parts.shift(), 'hex');
+const encryptedText = Buffer.from(parts.join(':'), 'hex');
+const key = crypto.scryptSync(password, 'salt', 32);
+const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+let decrypted = decipher.update(encryptedText);
+decrypted = Buffer.concat([decrypted, decipher.final()]);
+return decrypted.toString();
+}
+
+
+//testing the encryption and decryption
+// const plaintext = 'Hello, world!';
+
+
+// const ciphertext = encrypt(plaintext, cipher_key);
+// console.log('Ciphertext:', ciphertext);
+
+// const decryptedText = decrypt(ciphertext, cipher_key);
+// console.log('Decrypted text:', decryptedText);
+
 // app.get("/signup_student", (request, resolve) => {
 //   //to go to that page
 //   resolve.render("signup_student");
@@ -138,7 +172,8 @@ app.post(
       const capture_data = new student_db({
         name: request.body.name,
         email: request.body.email,
-        password: request.body.password,
+        // password: request.body.password,
+        password: encrypt(request.body.password, cipher_key),
         photo: request.file
           ? request.file.path
           : "signup_uploads\\default123.jpg",
@@ -178,7 +213,8 @@ app.post("/signup_tutor", upload.single("photo"), async (request, resolve) => {
     const capture_data = new tutor_db({
       name: request.body.name,
       email: request.body.email,
-      password: request.body.password,
+      // password: request.body.password,
+      password: encrypt(request.body.password, cipher_key),
       photo: request.file
         ? request.file.path
         : "signup_uploads\\default123.jpg",
@@ -232,14 +268,15 @@ app.post("/login", async (request, resolve) => {
           resolve.send(script);
         } else {
           const pass = result[0];
-          if (pass.password !== password) {
+          decrypt_pass = decrypt(pass.password, cipher_key)
+          if (decrypt_pass !== password) {
             const message = "password is incorrect";
             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
             resolve.send(script);
           } else {
             //storing login details
             store_email = pass.email;
-            store_password = pass.password;
+            store_password = decrypt_pass;
             console.log(store_email);
             console.log(store_password);
             // transfer of variables to another file
@@ -253,7 +290,6 @@ app.post("/login", async (request, resolve) => {
               " ==>Student login successful-here we enter the student terminal";
             // resolve.send(email + message); //change this to render to new webpage (student terminal)
             // resolve.render("student_landing");
-            console.log("student_landing")
             resolve.render("student_landing");
           }
         }
@@ -274,13 +310,14 @@ app.post("/login", async (request, resolve) => {
           resolve.send(script);
         } else {
           const pass = result[0];
-          if (pass.password !== password) {
+          decrypt_pass = decrypt(pass.password, cipher_key)
+          if (decrypt_pass !== password) {
             const message = "password is incorrect";
             const script = `<script>alert('${message}'); window.location.href = '/login';</script>`;
             resolve.send(script);
           } else {
             store_email = pass.email;
-            store_password = pass.password;
+            store_password = decrypt_pass;
             console.log(store_email);
             console.log(store_password);
             // transfer of variables to another file
