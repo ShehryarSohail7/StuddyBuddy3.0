@@ -209,6 +209,10 @@ app.get("/login", (request, resolve) => {
   resolve.render("login");
 });
 
+app.get("/student_landing", (request, resolve) => {
+  resolve.render("student_landing");
+});
+
 // create a new user for our database
 app.post("/login", async (request, resolve) => {
   try {
@@ -248,6 +252,8 @@ app.post("/login", async (request, resolve) => {
             const message =
               " ==>Student login successful-here we enter the student terminal";
             // resolve.send(email + message); //change this to render to new webpage (student terminal)
+            // resolve.render("student_landing");
+            console.log("student_landing")
             resolve.render("student_landing");
           }
         }
