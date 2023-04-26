@@ -69,7 +69,7 @@
 
             .announcments_heading {
                 position: absolute;
-                top: 80px;
+                top: 35px;
                 text-align: center;
                 font-family: "Inter";
                 font-size: 10px;
@@ -271,7 +271,7 @@
 
                    @media (min-width: 1331px) and (max-width: 3000px) {
 
-            body {
+         body {
                 overflow-x: hidden;
             }
 
@@ -330,7 +330,7 @@
 
             .announcments_heading {
                 position: absolute;
-                top: 80px;
+                top: 35px;
                 text-align: center;
                 font-family: "Inter";
                 font-size: 10px;
@@ -1177,6 +1177,8 @@
 
         const heading = document.createElement("h2");
         heading.innerText = "All Reviews";
+        heading.style.top = "10px";
+        heading.style.fontSize = "10px"; 
         heading.style.textAlign = "center";
         heading.style.fontFamily = "TS Safaa";
         popupContent.appendChild(heading);
@@ -1339,7 +1341,7 @@
         document.getElementById("tutors-data").innerHTML = "";
         document.querySelector('.deletereviews').innerHTML = "";
         const appointmentsContainer = document.querySelector(".appointments-container");
-        appointmentsContainer.innerHTML = '<h1 style="text-align: center;">All Reviews</h1><br>';
+        appointmentsContainer.innerHTML = '<h1 style="text-align: center; margin:50px; font-size: 25px;">All Reviews</h1><br>';
 
         const email = localStorage.getItem("username");
         if (!email) {
