@@ -1,7 +1,31 @@
 <!-- navbar.hbs -->
-<nav>
-  <ul>
-    <li><a href="/student_terminal">Home</a></li>
-    <li><a href="/settings">Settings</a></li>
-  </ul>
-</nav>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .button {
+        display: inline-block;
+        background-color: #FFD059;
+        color: black;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        {{!-- Brute Force Spacing --}}
+        <li><a>Home</a></li>
+        <li><a>Home</a></li>
+        <li><a>Home</a></li>
+        <li><a>Home</a></li> 
+        {{!-- Brute Force Spacing --}}
+        <a href="/student_terminal" class="button">Home</a>
+      </ul>
+    </nav>
+  </body>
+</html>
