@@ -93,8 +93,8 @@ return decrypted.toString();
 }
 
 
-async function email_verify(given_email) {
-  const apiKey = `3cbd2dbe8939a64e599f3a8ad85f7b21138628dd`
+async function hunter_api(given_email) {
+  const apiKey = `3cbd2dbe8939a64e599f3a8ad85f7b21138628dd` //cater this in future
   const url = `https://api.hunter.io/v2/email-verifier?email=${given_email}&api_key=${apiKey}`;
   const response = await fetch(url);
   const data = await response.json();
@@ -113,14 +113,11 @@ async function email_verify(given_email) {
     }
   }
 }
-
-async function main() {
-  const given_email = "example@example.com";
-  const result = await email_verify(given_email);
-  console.log(result,1);
-}
-
-main();
+// testing hunter_api
+// const given_email = "shehryarsohail77@gmail.com";
+// hunter_api(given_email).then(result => {
+//   console.log(result,2);
+// });
 
 app.get("/signup_student", (request, resolve) => {
   //to go to that page
@@ -133,16 +130,17 @@ app.post(
   upload.single("photo"),
   async (request, resolve) => {
     try {
-      // console.log("yeh hai request", request.name);
-      // console.log(request.file);
-      // if (email_verify(request.body.email)) {
-      //   console.log(email_verify(request.body.email))
-      //   const message = "This is not a valid email account, please enter an email that exists";
-      //   const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
-      //   resolve.send(script);
-      //   return;
-      // }
-      const capture_data = new student_db({
+
+        const result = await hunter_api(request.body.email); //hunter_api in action
+        console.log(result);
+        if (result) {
+          const message = "This is not a valid email account, please enter an email that exists";
+          const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
+          resolve.send(script);
+          return;
+        }
+
+  const capture_data = new student_db({
         name: request.body.name,
         email: request.body.email,
         // password: request.body.password,
@@ -182,7 +180,15 @@ app.get("/signup_tutor", (request, resolve) => {
 // create a new user for our database
 app.post("/signup_tutor", upload.single("photo"), async (request, resolve) => {
   try {
-    console.log(request.file);
+    const result = await hunter_api(request.body.email); //hunter_api in action
+    console.log(result);
+    if (result) {
+      const message = "This is not a valid email account, please enter an email that exists";
+      const script = `<script>alert('${message}'); window.location.href = '/signup_tutor';</script>`;
+      resolve.send(script);
+      return;
+    }
+    // console.log(request.file);
     const capture_data = new tutor_db({
       name: request.body.name,
       email: request.body.email,
