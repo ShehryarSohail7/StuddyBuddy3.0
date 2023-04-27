@@ -656,7 +656,7 @@ app.post("/postad", async (req, res) => {
     const savedAds = await newAds.save();
 
     // Send a success response with the saved object
-    res.status(201).json("Ad addedd successfully");
+    res.status(201).json("Ad added successfully");
   } catch (err) {
     // Handle any errors and send an error response
     console.error(err);
