@@ -93,68 +93,34 @@ return decrypted.toString();
 }
 
 
-//testing the encryption and decryption
-// const plaintext = 'Hello, world!';
+async function email_verify(given_email) {
+  const apiKey = `3cbd2dbe8939a64e599f3a8ad85f7b21138628dd`
+  const url = `https://api.hunter.io/v2/email-verifier?email=${given_email}&api_key=${apiKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  console.log(data.data);
 
+  if (data.data === undefined){
+    console.log("This is an Invalid Email");
+    return true;
+  }else{
+    if (data.data.status === "valid"){
+      console.log("This email already exists");
+      return false;
+    } else {
+      console.log("This is a new Email Address");
+      return true;
+    }
+  }
+}
 
-// const ciphertext = encrypt(plaintext, cipher_key);
-// console.log('Ciphertext:', ciphertext);
+async function main() {
+  const given_email = "example@example.com";
+  const result = await email_verify(given_email);
+  console.log(result,1);
+}
 
-// const decryptedText = decrypt(ciphertext, cipher_key);
-// console.log('Decrypted text:', decryptedText);
-
-// app.get("/signup_student", (request, resolve) => {
-//   //to go to that page
-//   resolve.render("signup_student");
-// });
-
-// // create a new user for our database
-// app.post("/signup_student", async (request, resolve) => {
-//   try {
-//     console.log("kasdjfakdsfj", request.body);
-//     const capture_data = new student_db({
-//       name: request.body.name,
-//       email: request.body.email,
-//       password: request.body.password,
-//       // photo: request.file.path
-//       photo: request.file
-//         ? request.file.path
-//         : "signup_uploads\\default123.jpg",
-//       // Set the image attribute to the path of the uploaded file, or the
-//       // default image path if no file was uploaded
-//     });
-//     const signup_saved = await capture_data.save();
-//     const message = "Sign up as Student Successful";
-//     const script = `<script>alert('${message}'); window.location.href = '/';</script>`;
-
-//     // resolve.status(201).render(script)
-//     resolve.send(script);
-//   } catch (error) {
-//     console.log(error);
-//     //error response design
-//     // resolve.status(400).send(error)                         //one way
-
-//     // console.error(error);                                   //second way
-//     // if (error.code === 11000) {
-//     //     resolve.status(400).send("Email already exists");
-//     // } else {
-//     //     resolve.status(400).send("Signup failed");
-//     // }
-
-//     if (error.code === 11000) {
-//       // third way
-//       // display an alert message to the user
-//       const message = "Email already exists";
-//       const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
-//       resolve.send(script);
-//     } else {
-//       // display an alert message to the user
-//       const message = "Signup failed";
-//       const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
-//       resolve.send(script);
-//     }
-//   }
-// });
+main();
 
 app.get("/signup_student", (request, resolve) => {
   //to go to that page
@@ -167,8 +133,15 @@ app.post(
   upload.single("photo"),
   async (request, resolve) => {
     try {
-      console.log("yeh hai request", request.name);
-      console.log(request.file);
+      // console.log("yeh hai request", request.name);
+      // console.log(request.file);
+      // if (email_verify(request.body.email)) {
+      //   console.log(email_verify(request.body.email))
+      //   const message = "This is not a valid email account, please enter an email that exists";
+      //   const script = `<script>alert('${message}'); window.location.href = '/signup_student';</script>`;
+      //   resolve.send(script);
+      //   return;
+      // }
       const capture_data = new student_db({
         name: request.body.name,
         email: request.body.email,
@@ -179,7 +152,7 @@ app.post(
           : "signup_uploads\\default123.jpg",
       });
       const signup_saved = await capture_data.save();
-      const message = "Sign up as studnet Successful";
+      const message = "Sign up as student Successful";
       const script = `<script>alert('${message}'); window.location.href = '/';</script>`;
 
       // resolve.status(201).render(script)
@@ -1107,13 +1080,15 @@ app.post("/update_password", async (request, resolve) => {
         if (user_type === "student") {
           const updatedStudent = await student_db.findOneAndUpdate(
             { email: store_email },
-            { password: new_pass },
+            // { password: new_pass },
+            { password: encrypt(new_pass, cipher_key) },
             { new: true } // Return the updated document
           );
         } else if (user_type === "tutor") {
           const updatedTutor = await tutor_db.findOneAndUpdate(
             { email: store_email },
-            { password: new_pass },
+            // { password: new_pass },
+            { password: encrypt(new_pass, cipher_key) },
             { new: true } // Return the updated document
           );
         } else if (user_type === "admin") {
