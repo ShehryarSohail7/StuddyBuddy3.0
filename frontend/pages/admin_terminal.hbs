@@ -195,20 +195,38 @@ background: #FFD059;
         .tutors-card {
              margin-top: 65px; 
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            width: 300px;
-            margin: 10px;
+            width: 250px;
+            height: 380px;
+            margin: 15px;
             text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'TS Safaa';
+            border-radius: 30px;
         }
 
+        
+
+        .rmv{
+            background-color: rgb(98, 97, 97);
+            color:#ffffff;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .rmv:hover{
+            background-color: white;
+            color:rgb(98, 97, 97);
+        }
+
+
+     
         .tutors-card img {
             width: 100%;
-            height: auto;
+            height: 50%;
+            border-radius: 30px;
         }
 
         .tutors-card h4 {
             
-            color: #4CAF50;
+            color: black;
         }
 
         .tutors-card p {
@@ -250,7 +268,7 @@ background: #FFD059;
             top: 210px;
             text-decoration: none;
             font-size: 30px;
-            font-family: 'Inter';
+            font-family: 'TS Safaa';
             font-style: bold;
             text-align: center;
         
@@ -629,7 +647,7 @@ background: #FFD059;
                 <p>${ad.subject} - ${ad.class}</p>
                 <p>${ad.price}</p>
                 <form onsubmit="try { removeAd('${ad._id}'); } catch(err) { console.error(err); } return false;">
-                    <button type="submit" style="padding: 5px;margin-bottom:5px">Remove Ad</button>
+                    <button type="submit" class="rmv" style="font-family: 'TS Safaa'; border-radius: 15px; padding: 5px;margin-bottom:5px">Remove Ad</button>
                 </form>
             </div>`;
                     if (index % 3 === 2 || index === data.length - 1) {
@@ -676,6 +694,7 @@ background: #FFD059;
         document.getElementById("announcement-data").innerHTML = "";
         document.getElementById("tutors-data").innerHTML = "";
         document.querySelector('.reviews').innerHTML = "";
+        
         try {
             const response = await fetch('/viewallreviews');
             const data = await response.json();

@@ -215,7 +215,7 @@
                 width: 300px;
                 height: 300px;
                 left: 600px;
-                top: 210px;
+                top: 200px;
                 text-decoration: none;
                 font-size: 30px;
                 font-family: 'Inter';
@@ -228,7 +228,7 @@
             width: 400px;
             height: 150px;
             left: 600px;
-            top: 250px;
+            top: 300px;
             text-decoration: none;
             font-size: 15px;
             font-family: 'TS Safaa';
@@ -1181,6 +1181,8 @@
         heading.style.fontSize = "10px"; 
         heading.style.textAlign = "center";
         heading.style.fontFamily = "TS Safaa";
+        heading.style.fontWeight = "600";
+
         popupContent.appendChild(heading);
 
         const reviewsContainer = document.createElement("div");
@@ -1315,7 +1317,7 @@
                 for (let i = 0; i < data.announcements.length; i++) {
                     html += `
              <div class="announcments_heading">
-                <h1>Resources</h1>
+                <h1 style="font-family: 'TS Safaa'; font-weight:600;">Resources</h1>
                 </div>
           <div class="announcement-card">
             <h1>${data.announcements[i].content}</h1>
@@ -1341,7 +1343,7 @@
         document.getElementById("tutors-data").innerHTML = "";
         document.querySelector('.deletereviews').innerHTML = "";
         const appointmentsContainer = document.querySelector(".appointments-container");
-        appointmentsContainer.innerHTML = '<h1 style="text-align: center; margin:50px; font-size: 25px;">All Reviews</h1><br>';
+        appointmentsContainer.innerHTML = '<h1 style="text-align: center; margin:50px; font-weight: 600;">All Reviews</h1><br>';
 
         const email = localStorage.getItem("username");
         if (!email) {
